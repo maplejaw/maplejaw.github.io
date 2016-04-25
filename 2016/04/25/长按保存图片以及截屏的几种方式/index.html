@@ -64,7 +64,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android,知识整理," />
+  <meta name="keywords" content="Android,保存图片,长按保存,ImageView" />
 
 
 
@@ -86,13 +86,13 @@ view长按保存图片的几种方式如果是网络图片，我们可以直接�
 1234567891011121314151617181920212223242526272829303132333">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android长按保存图片以及截屏分享总结">
-<meta property="og:url" content="http://yoursite.com/2016/04/25/长按保存图片以及截屏的几种方式/index.html">
+<meta property="og:url" content="http://www.maplejaw.com/2016/04/25/长按保存图片以及截屏的几种方式/index.html">
 <meta property="og:site_name" content="maplejaw的技术博客">
 <meta property="og:description" content="在日常开发中，可能会需要做长按保存图片这个功能，又或者需要做个截屏分享功能。最近正好在研究这些东西，写篇博客整理一下。
 
 view长按保存图片的几种方式如果是网络图片，我们可以直接选择将图片下载下来后保存，这种方式，简单暴力，可以直接获得原图，本质其实就是下载文件。代码如下：
 1234567891011121314151617181920212223242526272829303132333">
-<meta property="og:updated_time" content="2016-04-25T13:49:50.277Z">
+<meta property="og:updated_time" content="2016-04-25T14:08:12.771Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android长按保存图片以及截屏分享总结">
 <meta name="twitter:description" content="在日常开发中，可能会需要做长按保存图片这个功能，又或者需要做个截屏分享功能。最近正好在研究这些东西，写篇博客整理一下。
@@ -340,10 +340,10 @@ view长按保存图片的几种方式如果是网络图片，我们可以直接�
 </li>
 </ul>
 <ol>
-<li><p>手写针对整个DecorView开启绘制缓存，然后根据传入Rect，进行区域截屏。</p>
+<li><p>首先针对整个DecorView开启绘制缓存，然后根据传入的Rect进行区域截屏。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Bitmap <span class="title">snapShotByFinger</span><span class="params">(Activity activity,Rect rect)</span> </span>&#123;</span><br><span class="line">    View view = activity.getWindow().getDecorView();</span><br><span class="line">    view.setDrawingCacheEnabled(<span class="keyword">true</span>);</span><br><span class="line">    view.buildDrawingCache();</span><br><span class="line">    Bitmap bitmap = view.getDrawingCache();</span><br><span class="line">    Bitmap bm = Bitmap.createBitmap(bitmap, rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top);</span><br><span class="line">    bitmap.recycle();</span><br><span class="line">    view.destroyDrawingCache();</span><br><span class="line">    <span class="keyword">return</span> bm;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>Rect主要通过TouchEvent来获得</p>
+<li><p>Rect需要通过TouchEvent来获得</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> left,top;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">dispatchTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (event.getAction())&#123;</span><br><span class="line">        <span class="keyword">case</span> MotionEvent.ACTION_DOWN:<span class="comment">//手指按下时，记录当前坐标</span></span><br><span class="line">            left = (<span class="keyword">int</span>) event.getRawX();</span><br><span class="line">            top = (<span class="keyword">int</span>) event.getRawY();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> MotionEvent.ACTION_UP:<span class="comment">//手指抬起时，记录当前坐标，然后进行换算，计算Rect；</span></span><br><span class="line">           <span class="keyword">int</span> right = (<span class="keyword">int</span>) event.getRawX();</span><br><span class="line">           <span class="keyword">int</span> bottom = (<span class="keyword">int</span>) event.getRawY();</span><br><span class="line">            Rect rect=<span class="keyword">new</span> Rect();</span><br><span class="line">            <span class="keyword">if</span>(right&gt;left)&#123;</span><br><span class="line">                <span class="keyword">if</span>(bottom&gt;top)&#123;</span><br><span class="line">                    rect.set(left,top,right,bottom);</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    rect.set(left,bottom,right,top);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(bottom&gt;top)&#123;</span><br><span class="line">                    rect.set(right,top,left,bottom);</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    rect.set(right,bottom,left,top);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//截屏，保存图片</span></span><br><span class="line">            String path = Environment.getExternalStorageDirectory().toString()+<span class="string">"/12345.png"</span>;</span><br><span class="line">            Util.saveBitmap(Util.snapShotByFinger(WebViewActivity.<span class="keyword">this</span>,rect),path);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">super</span>.dispatchTouchEvent(event);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
@@ -379,8 +379,8 @@ view长按保存图片的几种方式如果是网络图片，我们可以直接�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/24/test/" rel="next" title="写篇博客测试测试">
-                <i class="fa fa-chevron-left"></i> 写篇博客测试测试
+              <a href="/2016/04/24/一个图片选择库/" rel="next" title="一个图片选择库">
+                <i class="fa fa-chevron-left"></i> 一个图片选择库
               </a>
             
           </div>
