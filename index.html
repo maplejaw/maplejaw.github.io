@@ -272,8 +272,7 @@
 
       
         
-          
-            <blockquote>
+          <blockquote>
 <p>一直对于自定义view没有进行深入研究过，最近抽空开始整理整理自定义view相关的知识，以便可以有个系统的深入的认识，也希望能够给初学者一点启示。</p>
 </blockquote>
 <p>本篇主要介绍自定义view中一些相关API以及相关知识点。</p>
@@ -281,35 +280,11 @@
 <li>Paint，画笔类。<br>常用API如下：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置画笔的颜色</span></span><br><span class="line">mPaint.setColor(<span class="keyword">int</span> color);</span><br><span class="line"><span class="comment">//设置填充风格,Paint.Style.FILL(仅填充)，Paint.Style.STROKE(仅描边),Paint.Style.FILL_AND_STROKE（同时描边和填充）</span></span><br><span class="line">mPaint.setStyle();</span><br><span class="line"><span class="comment">//设置描边宽度</span></span><br><span class="line">mPaint.setStrokeWidth() </span><br><span class="line"><span class="comment">//设置字体大小</span></span><br><span class="line">mPaint.setTextSize();</span><br><span class="line"><span class="comment">//重置画笔</span></span><br><span class="line">mPaint.reset();</span><br><span class="line"><span class="comment">//设置滤镜</span></span><br><span class="line">mPaint.setColorFilter();</span><br><span class="line"><span class="comment">//设置混合模式</span></span><br><span class="line">mPaint.setXfermode();</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<ul>
-<li>Canvas ，画布类。<br>常用API如下：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//绘制矩形</span></span><br><span class="line">canvas.drawRect();</span><br><span class="line"><span class="comment">//绘制圆</span></span><br><span class="line">canvas.drawCircle();</span><br><span class="line"><span class="comment">//给画布填充颜色</span></span><br><span class="line">canvas.drawColor();</span><br><span class="line"><span class="comment">//绘制扇形，弧</span></span><br><span class="line">canvas.drawArc();</span><br><span class="line"><span class="comment">//绘制椭圆</span></span><br><span class="line">canvas.drawOval();</span><br><span class="line"><span class="comment">//绘制圆角矩形</span></span><br><span class="line">canvas.drawRoundRect();</span><br><span class="line"><span class="comment">//绘制线条</span></span><br><span class="line">canvas.drawLine();</span><br><span class="line"><span class="comment">//绘制bitmap</span></span><br><span class="line">canvas.drawBitmap();</span><br><span class="line"><span class="comment">//绘制点</span></span><br><span class="line">canvas.drawPoint();</span><br><span class="line"><span class="comment">//绘制路径</span></span><br><span class="line">canvas.drawPath();</span><br><span class="line"><span class="comment">//画文字</span></span><br><span class="line">canvas.drawText();</span><br><span class="line"></span><br><span class="line"><span class="comment">//保存画布状态</span></span><br><span class="line">canvas.save();</span><br><span class="line"><span class="comment">//旋转画布</span></span><br><span class="line">canvas.rotate();</span><br><span class="line"><span class="comment">//平移画布</span></span><br><span class="line">canvas.translate();</span><br><span class="line"><span class="comment">//裁切画布</span></span><br><span class="line">canvas.clipRect()</span><br><span class="line"><span class="comment">//恢复画布状态</span></span><br><span class="line">canvas.restore();</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>API还是挺多的，但也比较清晰。</p>
-<h2 id="自定义View流程"><a href="#自定义View流程" class="headerlink" title="自定义View流程"></a>自定义View流程</h2><p>流程一般如下，但由于实际需求不同，并不是每个步骤都需要重写。</p>
-<ol>
-<li>编写自定义属性</li>
-<li>在构造函数中获取自定义属性</li>
-<li>在<code>onMeasure</code>中测量宽高，如有需要务必考虑支持padding属性和wrap_content，margin不用管，它是由父布局控制的。</li>
-<li>重写<code>onDraw</code>来进行绘制，以达到我们所需要的效果。</li>
-</ol>
-<h2 id="自定义ViewGroup流程"><a href="#自定义ViewGroup流程" class="headerlink" title="自定义ViewGroup流程"></a>自定义ViewGroup流程</h2><p>流程一般如下，但由于实际需求不同，并不是每个步骤都需要重写。</p>
-<ol>
-<li>编写自定义属性</li>
-<li>在构造函数中获取自定义属性</li>
-<li>在<code>onMeasure</code>中测量宽高，并测量子view宽高。</li>
-<li>重写<code>onLayout</code>来对子View进行布局。</li>
-<li>如有需要重写<code>onDraw</code>来进行添加效果，绝大多数并不需要。</li>
-</ol>
-<h2 id="invalidate，postInvalidate和requestLayout之间的区别"><a href="#invalidate，postInvalidate和requestLayout之间的区别" class="headerlink" title="invalidate，postInvalidate和requestLayout之间的区别"></a>invalidate，postInvalidate和requestLayout之间的区别</h2><ul>
-<li><p>invalidate和postInvalidate的区别在于，invalidate只能在UI线程中调用，而postInvalidate可以在线程中调用。<br>invalidate不能直接在线程中调用，因为他是违背了单线程模型：Android UI操作并不是线程安全的，并且这些操作必须在UI线程中调用。鉴于此，如果在子线程中想刷新界面，需要配合handler来调用invalidate的刷新，这样就比较繁琐。所以，在子线程中调用postInvalidate比较方便。postInvalidate里面会封装一个Message后利用Handler提交到MessageQueue中，由UI线程的Looper从MessageQueue中一一取出进行处理，处理完之后才会进行下一次处理。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postInvalidate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      postInvalidateDelayed(<span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postInvalidateDelayed</span><span class="params">(<span class="keyword">long</span> delayMilliseconds)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">final</span> AttachInfo attachInfo = mAttachInfo;</span><br><span class="line">      <span class="keyword">if</span> (attachInfo != <span class="keyword">null</span>) &#123;</span><br><span class="line">          attachInfo.mViewRootImpl.dispatchInvalidateDelayed(<span class="keyword">this</span>, delayMilliseconds);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dispatchInvalidateDelayed</span><span class="params">(View view, <span class="keyword">long</span> delayMilliseconds)</span> </span>&#123;</span><br><span class="line">      Message msg = mHandler.obtainMessage(MSG_INVALIDATE, view);</span><br><span class="line">      mHandler.sendMessageDelayed(msg, delayMilliseconds);<span class="comment">//这里使用了Handler进行处理</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>invalidate和requestLayout的区别在于，invalidate只刷新draw相关的部分（dispatchDraw，draw，onDraw），requestLayout会刷新measure（measure，onMeasure），layout(layout,onLayout)相关部分。<br>当一个view调用requestLayout的时候，会给当前的View设置一个FORCE_LAYOUT标记。由此向ViewParent请求布局。这样从这个view开始向上，最终到达ViewRootImpl。然后ViewRootImpl由上往下根据标记位重新布局。<br>当view确定自身已经不再适合现有的区域时，该view本身调用这个方法要求parent（父类的视图）重新调用他的onMeasure onLayout来重新设置自己位置。特别是当view的layoutparameter发生改变，并且它的值还没能应用到view上时，这时候适合调用这个方法。</p>
-</li>
-</ul>
-
-          
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/05/05/自定义View系列（一）基本概念/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
