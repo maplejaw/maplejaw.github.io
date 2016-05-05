@@ -64,7 +64,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="maplejaw, Android" />
+  <meta name="keywords" content="Android,自定义View" />
 
 
 
@@ -80,15 +80,28 @@
 
 
 
-<meta name="description" content="不忘初心，方得始终">
-<meta property="og:type" content="website">
-<meta property="og:title" content="maplejaw的技术博客">
-<meta property="og:url" content="http://www.maplejaw.com/index.html">
+<meta name="description" content="一直对于自定义view没有进行深入研究过，最近抽空开始整理整理自定义view相关的知识，以便可以有个系统的深入的认识，也希望能够给初学者一点启示。
+
+本篇主要介绍自定义view中一些相关API以及相关知识点。
+初识Canvas和Paint
+Paint，画笔类。常用API如下：1234567891011121314//设置画笔的颜色mPaint.setColor(int color);//设置填充">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自定义View系列（一）基本概念">
+<meta property="og:url" content="http://www.maplejaw.com/2016/05/05/自定义View系列（一）基本概念/index.html">
 <meta property="og:site_name" content="maplejaw的技术博客">
-<meta property="og:description" content="不忘初心，方得始终">
+<meta property="og:description" content="一直对于自定义view没有进行深入研究过，最近抽空开始整理整理自定义view相关的知识，以便可以有个系统的深入的认识，也希望能够给初学者一点启示。
+
+本篇主要介绍自定义view中一些相关API以及相关知识点。
+初识Canvas和Paint
+Paint，画笔类。常用API如下：1234567891011121314//设置画笔的颜色mPaint.setColor(int color);//设置填充">
+<meta property="og:updated_time" content="2016-05-05T11:52:56.344Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="maplejaw的技术博客">
-<meta name="twitter:description" content="不忘初心，方得始终">
+<meta name="twitter:title" content="自定义View系列（一）基本概念">
+<meta name="twitter:description" content="一直对于自定义view没有进行深入研究过，最近抽空开始整理整理自定义view相关的知识，以便可以有个系统的深入的认识，也希望能够给初学者一点启示。
+
+本篇主要介绍自定义view中一些相关API以及相关知识点。
+初识Canvas和Paint
+Paint，画笔类。常用API如下：1234567891011121314//设置画笔的颜色mPaint.setColor(int color);//设置填充">
 
 
 
@@ -106,7 +119,7 @@
   };
 </script>
 
-  <title> maplejaw的技术博客 </title>
+  <title> 自定义View系列（一）基本概念 | maplejaw的技术博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -127,9 +140,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -206,9 +217,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
   
@@ -228,10 +239,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2016/05/05/自定义View系列（一）基本概念/" itemprop="url">
-                  自定义View系列（一）基本概念
-                </a>
+                自定义View系列（一）基本概念
               
             
           </h1>
@@ -271,9 +279,7 @@
       
 
       
-        
-          
-            <blockquote>
+        <blockquote>
 <p>一直对于自定义view没有进行深入研究过，最近抽空开始整理整理自定义view相关的知识，以便可以有个系统的深入的认识，也希望能够给初学者一点启示。</p>
 </blockquote>
 <p>本篇主要介绍自定义view中一些相关API以及相关知识点。</p>
@@ -309,233 +315,59 @@
 </li>
 </ul>
 
-          
-        
       
     </div>
     
     <div>
       
+        
+      
     </div>
 
     <div>
+      
+        
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/25/长按保存图片以及截屏的几种方式 - 副本/" itemprop="url">
-                  Android长按保存图片以及截屏分享总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-25T19:15:00+08:00" content="2016-04-25">
-              2016-04-25
-            </time>
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/Android/" rel="tag">#Android</a>
           
-            
-          
-
-          
-
-          
-          
-
+            <a href="/tags/自定义View/" rel="tag">#自定义View</a>
           
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <blockquote>
-<p>  在日常开发中，可能会需要做长按保存图片这个功能，又或者需要做个截屏分享功能。最近正好在研究这些东西，写篇博客整理一下。</p>
-</blockquote>
-<h2 id="view长按保存图片的几种方式"><a href="#view长按保存图片的几种方式" class="headerlink" title="view长按保存图片的几种方式"></a>view长按保存图片的几种方式</h2><p>如果是网络图片，我们可以直接选择将图片下载下来后保存，这种方式，简单暴力，可以直接获得原图，本质其实就是下载文件。代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span>  <span class="title">downloadBitmap</span><span class="params">(String urlString, File fileDir)</span> </span>&#123;</span><br><span class="line">    URL url = <span class="keyword">null</span>;</span><br><span class="line">    InputStream is = <span class="keyword">null</span>;</span><br><span class="line">    FileOutputStream fos = <span class="keyword">null</span>;</span><br><span class="line">    HttpURLConnection conn=<span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">boolean</span> isSuccess=<span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line"></span><br><span class="line">        url = <span class="keyword">new</span> URL(urlString);</span><br><span class="line">        <span class="comment">//开启连接</span></span><br><span class="line">       conn = (HttpURLConnection) url.openConnection();</span><br><span class="line">        <span class="comment">//设置超时的时间，5000毫秒即5秒</span></span><br><span class="line">        conn.setConnectTimeout(<span class="number">5000</span>);</span><br><span class="line">        <span class="comment">//设置获取图片的方式为GET</span></span><br><span class="line">        conn.setRequestMethod(<span class="string">"GET"</span>);</span><br><span class="line">        conn.connect();</span><br><span class="line">        <span class="comment">//响应码为200，则访问成功</span></span><br><span class="line">        <span class="keyword">if</span> (conn.getResponseCode() == <span class="number">200</span>) &#123;</span><br><span class="line">            <span class="comment">//获取连接的输入流，这个输入流就是图片的输入流</span></span><br><span class="line">            is = conn.getInputStream();</span><br><span class="line">            <span class="keyword">if</span> (!fileDir.exists()) &#123;</span><br><span class="line">                fileDir.mkdirs();</span><br><span class="line">            &#125;</span><br><span class="line">            String fileName = urlString.substring(urlString.lastIndexOf(<span class="string">"/"</span>) + <span class="number">1</span>); <span class="comment">//根据链接获取文件名</span></span><br><span class="line">            File file = <span class="keyword">new</span> File(fileDir, fileName);</span><br><span class="line">            fos = <span class="keyword">new</span> FileOutputStream(file);</span><br><span class="line">            <span class="keyword">int</span> len;</span><br><span class="line">            <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            <span class="comment">//将输入流写入到我们定义好的文件中</span></span><br><span class="line">            <span class="keyword">while</span> ((len = is.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                fos.write(buffer, <span class="number">0</span>, len);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//将缓冲刷入文件</span></span><br><span class="line">            fos.flush();</span><br><span class="line">            isSuccess=<span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(fos!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                fos.close();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(is!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                is.close();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(conn!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                conn.disconnect();</span><br><span class="line">            &#125;</span><br><span class="line">           </span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> isSuccess;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/25/长按保存图片以及截屏的几种方式 - 副本/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/25/长按保存图片以及截屏的几种方式 - 副本/" rel="next" title="Android长按保存图片以及截屏分享总结">
+                <i class="fa fa-chevron-left"></i> Android长按保存图片以及截屏分享总结
+              </a>
+            
           </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
 
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
+          <div class="post-nav-prev post-nav-item">
             
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/24/一个图片选择库/" itemprop="url">
-                  一个图片选择库
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-24T13:44:18+08:00" content="2016-04-24">
-              2016-04-24
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
+          </div>
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p>撸了一个高仿微信、QQ图片选择库，支持单选，多选，预览，拍照。<a href="https://github.com/maplejaw/ImagePicker"><strong>ImagePicker</strong></a></p>
-<h2 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h2><p><img src="https://raw.githubusercontent.com/maplejaw/ImagePicker/master/image/image1.png" width="60%" /><br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/24/一个图片选择库/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -543,6 +375,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -562,8 +398,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/avatar.jpeg"
@@ -617,6 +462,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#初识Canvas和Paint"><span class="nav-number">1.</span> <span class="nav-text">初识Canvas和Paint</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义View流程"><span class="nav-number">2.</span> <span class="nav-text">自定义View流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义ViewGroup流程"><span class="nav-number">3.</span> <span class="nav-text">自定义ViewGroup流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#invalidate，postInvalidate和requestLayout之间的区别"><span class="nav-number">4.</span> <span class="nav-text">invalidate，postInvalidate和requestLayout之间的区别</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -720,6 +576,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
