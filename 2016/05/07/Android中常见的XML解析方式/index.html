@@ -1,0 +1,617 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,xml" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="基本概念
+概念：extensive markup language(可扩展的标记语言)XML是一种通用的数据存储和交换格式，与平台无关，与编程语言无关，与操作系统无关。给数据集成和交互提供了极大的便利。将数据格式化成XML文件后，真正实现了数据跨平台的交互和共享。在不同语言中，xml的解析方式都一样。
+
+XML文件格式：1.每个xml文件中要有一个，且只能有一个xml根节点；2.xml文件的数据中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android中常见的XML解析方式">
+<meta property="og:url" content="http://www.maplejaw.com/2016/05/07/Android中常见的XML解析方式/index.html">
+<meta property="og:site_name" content="maplejaw的技术博客">
+<meta property="og:description" content="基本概念
+概念：extensive markup language(可扩展的标记语言)XML是一种通用的数据存储和交换格式，与平台无关，与编程语言无关，与操作系统无关。给数据集成和交互提供了极大的便利。将数据格式化成XML文件后，真正实现了数据跨平台的交互和共享。在不同语言中，xml的解析方式都一样。
+
+XML文件格式：1.每个xml文件中要有一个，且只能有一个xml根节点；2.xml文件的数据中">
+<meta property="og:updated_time" content="2016-05-07T11:36:41.786Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android中常见的XML解析方式">
+<meta name="twitter:description" content="基本概念
+概念：extensive markup language(可扩展的标记语言)XML是一种通用的数据存储和交换格式，与平台无关，与编程语言无关，与操作系统无关。给数据集成和交互提供了极大的便利。将数据格式化成XML文件后，真正实现了数据跨平台的交互和共享。在不同语言中，xml的解析方式都一样。
+
+XML文件格式：1.每个xml文件中要有一个，且只能有一个xml根节点；2.xml文件的数据中">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Android中常见的XML解析方式 | maplejaw的技术博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">maplejaw的技术博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android中常见的XML解析方式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-07T19:31:47+08:00" content="2016-05-07">
+              2016-05-07
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ol>
+<li><p><strong>概念</strong>：extensive markup language(可扩展的标记语言)<br>XML是一种通用的数据存储和交换格式，与平台无关，与编程语言无关，与操作系统无关。给数据集成和交互提供了极大的便利。<br>将数据格式化成XML文件后，真正实现了数据跨平台的交互和共享。在不同语言中，xml的解析方式都一样。</p>
+</li>
+<li><p><strong>XML文件格式</strong>：<br>1.每个xml文件中要有一个，且只能有一个xml根节点；<br>2.xml文件的数据中不可以 出现”&lt; “或者” &gt;”;</p>
+<a id="more"></a></li>
+<li><strong>XML的解析方式</strong>：<br>DOM（document object model  ：文档对象模型）：借助文档树模型对xml文档进行分析。<br>SAX（simple API for xml  ：xml的简单api）：利用事件流的形式解析XML<br>PULL：利用事件流模型来解析XML。<br>备注：DOM和SAX解析的优劣分析：DOM是将文档一次性读入到内存，然后以文档树模进行分析节点信息。获取到希望获取的数据；<br>而SAX是事件流的形式去分析xml文件。DOM可以做到对文档中部分节点的修改、删除和新增，而SAX无法做到。</li>
+</ol>
+<h2 id="PULL解析xml"><a href="#PULL解析xml" class="headerlink" title="PULL解析xml"></a>PULL解析xml</h2><ol>
+<li><p>PULL Parser中的几种event值<br>1、START_DOCUMENT: 0<br>2、END_DOCUMENT: 1<br>3、START_TAG: 2<br>4、END_TAG: 3<br>5、TEXT: 4</p>
+</li>
+<li><p>核心类：<br>XmlPullParserFactory<br>XmlPullParser</p>
+</li>
+<li><p>核心代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 实例化一个xml pull解析的工厂</span></span><br><span class="line"> XmlPullParserFactory factory = XmlPullParserFactory.newInstance();</span><br><span class="line"><span class="comment">// 实例化一个xml pull解析对象</span></span><br><span class="line">XmlPullParser parser = factory.newPullParser();</span><br><span class="line"><span class="comment">// xml解析对象接收输入流对象</span></span><br><span class="line">parser.setInput(instream, <span class="string">"utf-8"</span>);</span><br><span class="line"><span class="keyword">int</span> event = parser.getEventType();<span class="comment">//获取事件类型</span></span><br><span class="line"><span class="keyword">while</span> (event != XmlPullParser.END_DOCUMENT) &#123;</span><br><span class="line">  <span class="keyword">switch</span> (event) &#123;</span><br><span class="line">     <span class="keyword">case</span> XmlPullParser.START_DOCUMENT:</span><br><span class="line">           <span class="comment">//开始读取文档</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">     <span class="keyword">case</span> XmlPullParser.START_TAG:</span><br><span class="line">          <span class="comment">//读取元素开始标签</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">     <span class="keyword">case</span> XmlPullParser.TEXT:</span><br><span class="line">          <span class="comment">//读取文本</span></span><br><span class="line">       <span class="keyword">break</span>;</span><br><span class="line">     <span class="keyword">case</span> XmlPullParser.END_TAG:</span><br><span class="line">          <span class="comment">//读取闭合标签</span></span><br><span class="line">       <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line">  event = parser.next();<span class="comment">//获取下一次解析事件</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>常用api</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取属性名</span></span><br><span class="line">parser.getAttributeName()</span><br><span class="line"><span class="comment">//获取属性值</span></span><br><span class="line">parser.getAttributeValue()</span><br><span class="line"><span class="comment">//获取文本值</span></span><br><span class="line">parser.getText();</span><br><span class="line"><span class="comment">//获取标签名</span></span><br><span class="line">parser.getName();</span><br><span class="line"><span class="comment">//获取下一个文本解析事件，返回文本值(如果当前是START_TAG,且下一个节点是TEXT,则返回文本，如果下一个是END_TAG,返回null，否则则会抛出异常)</span></span><br><span class="line">parser.nextText();</span><br><span class="line"><span class="comment">//获取下一个标签解析事件，返回事件类型，如果下一个事件不是START_TAG或END_TAG，则抛出异常</span></span><br><span class="line">parser.nextTag();</span><br><span class="line"><span class="comment">//获取下一个解析事件，返回事件类型</span></span><br><span class="line">parser.next();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="SAX解析xml"><a href="#SAX解析xml" class="headerlink" title="SAX解析xml"></a>SAX解析xml</h2><p>SAX解析基本与PULL解析基本相同，也是通过事件流的形式解析xml，SAX的解析借助于DefaultHandler这个处理类。该类实现如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyXmlHandler</span> <span class="keyword">extends</span> <span class="title">DefaultHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 开始读取文档</span><br><span class="line">     *</span><br><span class="line">     * <span class="doctag">@throws</span> SAXException</span><br><span class="line">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startDocument</span><span class="params">()</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.startDocument();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 开始读取元素</span><br><span class="line">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startElement</span><span class="params">(String uri, String localName, String qName, Attributes attributes)</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.startElement(uri, localName, qName, attributes);</span><br><span class="line">        <span class="comment">//uri:命名空间</span></span><br><span class="line">        <span class="comment">//localName:不带前缀(命名空间)的标签名</span></span><br><span class="line">        <span class="comment">//qName:带前缀的标签名</span></span><br><span class="line">        <span class="comment">//attributes:属性集合</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 开始读取Text</span><br><span class="line">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">characters</span><span class="params">(<span class="keyword">char</span>[] ch, <span class="keyword">int</span> start, <span class="keyword">int</span> length)</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.characters(ch, start, length);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 结束读取元素</span><br><span class="line">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">endElement</span><span class="params">(String uri, String localName, String qName)</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.endElement(uri, localName, qName);</span><br><span class="line">        <span class="comment">//uri:命名空间</span></span><br><span class="line">        <span class="comment">//localName:不带前缀(命名空间)的标签名</span></span><br><span class="line">        <span class="comment">//qName:带前缀的标签名</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 结束读取文档</span><br><span class="line">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">endDocument</span><span class="params">()</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.endDocument();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>核心代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SAXParserFactory factory=SAXParserFactory.newInstance();</span><br><span class="line">SAXParser parser=factory.newSAXParser();</span><br><span class="line">MyXmlHandler handler=<span class="keyword">new</span> MyXmlHandler();<span class="comment">//继承自DefaultHandler</span></span><br><span class="line">parser.parse(in,handler);<span class="comment">//插入一个自定义的xml处理器</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="DOM解析xml"><a href="#DOM解析xml" class="headerlink" title="DOM解析xml"></a>DOM解析xml</h2><ol>
+<li><p>DOM树中对节点（NODE）的分类如下<br>1、文档节点，Document<br>2、元素节点，Element<br>3、属性节点，Attribute<br>4、文本节点，Text<br>5、注释节点，Comment</p>
+</li>
+<li><p>核心类：<br>DocumentBuilderFactory<br>DocumentBuilder<br>Doucment，一个xml就是一个Document<br>Element ,<xxx>…</xxx>就是一个元素<br>NodeList ，节点集合<br>Node，节点，包括文档、元素、属性、文本节点等</p>
+</li>
+<li><p>核心代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> DocumentBuilderFactory factory =  DocumentBuilderFactory.newInstance();</span><br><span class="line"> <span class="comment">// 使用工厂来实例化一个构造Document的对象</span></span><br><span class="line"> DocumentBuilder builder = factory.newDocumentBuilder();</span><br><span class="line"> <span class="comment">// 利用DocumentBuilder来构造一个Document对象</span></span><br><span class="line"> Document document = builder.parse(filename);</span><br><span class="line"> <span class="comment">// 获取Document文档的根节点对象</span></span><br><span class="line"> Element root = document.getDocumentElement();</span><br><span class="line"> <span class="comment">// 通过根节点，获取到根节点下面的所有二级子节点</span></span><br><span class="line">NodeList nodeList = root.getChildNodes();</span><br><span class="line"> <span class="comment">// 遍历子节点，获取内部的每一个节点</span></span><br><span class="line"> <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nodeList.getLength(); i++) &#123;</span><br><span class="line">     Node node = nodeList.item(i);</span><br><span class="line">     ...</span><br><span class="line"> &#125;</span><br><span class="line">  ...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>常用api</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取属性值</span></span><br><span class="line">element.getAttribute();</span><br><span class="line"><span class="comment">//获取属性节点,没有则null</span></span><br><span class="line">element.getAttributeNode();</span><br><span class="line"><span class="comment">//根据标签名返回当前节点下的后代(子子孙孙)节点</span></span><br><span class="line">element.getElementsByTagName();</span><br><span class="line"><span class="comment">//获取标签名</span></span><br><span class="line">element.getTagName();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//获取当前节点及其子节点的所有文本内容</span></span><br><span class="line">node.getTextContent();</span><br><span class="line"><span class="comment">//获取儿子子节点           </span></span><br><span class="line">node.getChildNodes();</span><br><span class="line"><span class="comment">//获取节点名字(属性节点返回属性名字，元素节点返回标签名，Text节点返回"#text",Document节点返回"#document")</span></span><br><span class="line">node.getNodeName();</span><br><span class="line"><span class="comment">//获取节点值(属性节点返回属性值，文本节点返回文本内容，Comment节点返回内容，CDATASection节点返回内容，其他节点返回null);</span></span><br><span class="line">node.getNodeValue();</span><br><span class="line"><span class="comment">//返回当前节点的第一个子节点          </span></span><br><span class="line">node.getFirstChild();</span><br><span class="line"><span class="comment">//返回当前节点的最后子节点</span></span><br><span class="line">node.getLastChild();</span><br><span class="line"><span class="comment">//获取节点类型</span></span><br><span class="line">node.getNodeType();</span><br><span class="line"><span class="comment">//返回下一个兄弟节点</span></span><br><span class="line">node.getNextSibling();</span><br><span class="line"><span class="comment">//返回上一个兄弟节点</span></span><br><span class="line">node.getPreviousSibling();</span><br><span class="line"><span class="comment">//不包含命名空间的名字</span></span><br><span class="line">node.getLocalName();</span><br><span class="line"><span class="comment">//以当前节点为根节点获取一个document对象</span></span><br><span class="line">node.getOwnerDocument();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="解析实战"><a href="#解析实战" class="headerlink" title="解析实战"></a>解析实战</h2><p>下面是一段显示近三日天气的xml，分别采用三种方式进行解析。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">weatherinfo</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">data</span> <span class="attr">d_id</span>=<span class="string">"01"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">date</span>&gt;</span>2016-05-07<span class="tag">&lt;/<span class="name">date</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">icon</span>&gt;</span>d04|n04<span class="tag">&lt;/<span class="name">icon</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">weather</span>&gt;</span>雷阵雨<span class="tag">&lt;/<span class="name">weather</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">temperature</span>&gt;</span>36℃~28℃<span class="tag">&lt;/<span class="name">temperature</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">winddirect</span>&gt;</span>西南风3-4级<span class="tag">&lt;/<span class="name">winddirect</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">data</span> <span class="attr">d_id</span>=<span class="string">"02"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">date</span>&gt;</span>2016-05-08<span class="tag">&lt;/<span class="name">date</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">icon</span>&gt;</span>d04|n04<span class="tag">&lt;/<span class="name">icon</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">weather</span>&gt;</span>雷阵雨<span class="tag">&lt;/<span class="name">weather</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">temperature</span>&gt;</span>32℃~26℃<span class="tag">&lt;/<span class="name">temperature</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">winddirect</span>&gt;</span>西风3-4级转西北3-4级<span class="tag">&lt;/<span class="name">winddirect</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">data</span> <span class="attr">d_id</span>=<span class="string">"03"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">date</span>&gt;</span>2016-05-09<span class="tag">&lt;/<span class="name">date</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">icon</span>&gt;</span>d04|n04<span class="tag">&lt;/<span class="name">icon</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">weather</span>&gt;</span>雷阵雨<span class="tag">&lt;/<span class="name">weather</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">temperature</span>&gt;</span>32℃~26℃<span class="tag">&lt;/<span class="name">temperature</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">winddirect</span>&gt;</span>西北风3-4级<span class="tag">&lt;/<span class="name">winddirect</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">data</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">weatherinfo</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>首先根据xml创建一个Weather类。实现如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Weather</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line">    <span class="keyword">private</span> String date;</span><br><span class="line">    <span class="keyword">private</span> String icon;</span><br><span class="line">    <span class="keyword">private</span> String weather;</span><br><span class="line">    <span class="keyword">private</span> String temperature;</span><br><span class="line">    <span class="keyword">private</span> String winddirect;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(String id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> date;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setDate</span><span class="params">(String date)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.date = date;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getIcon</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> icon;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setIcon</span><span class="params">(String icon)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.icon = icon;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getWeather</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> weather;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setWeather</span><span class="params">(String weather)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.weather = weather;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getTemperature</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> temperature;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTemperature</span><span class="params">(String temperature)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.temperature = temperature;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getWinddirect</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> winddirect;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setWinddirect</span><span class="params">(String winddirect)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.winddirect = winddirect;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>PULL解析</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;Weather&gt; <span class="title">pullParser</span><span class="params">(InputStream in)</span> <span class="keyword">throws</span> XmlPullParserException, IOException </span>&#123;</span><br><span class="line">       <span class="comment">//初始化核心类</span></span><br><span class="line">        XmlPullParserFactory factory=XmlPullParserFactory.newInstance();</span><br><span class="line">        XmlPullParser parser=factory.newPullParser();</span><br><span class="line">        parser.setInput(in,<span class="string">"utf-8"</span>);</span><br><span class="line">        <span class="comment">//初始化集合</span></span><br><span class="line">        List&lt;Weather&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        Weather weather=<span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">boolean</span> flag=<span class="keyword">false</span>;<span class="comment">//weather类实例化的标识</span></span><br><span class="line">        <span class="comment">//获取事件类型</span></span><br><span class="line">        <span class="keyword">int</span> type=parser.getEventType();</span><br><span class="line">        <span class="keyword">while</span>(type!=XmlPullParser.END_DOCUMENT)&#123;</span><br><span class="line">            <span class="keyword">switch</span> (type) &#123;</span><br><span class="line">                <span class="comment">//开始标签</span></span><br><span class="line">                <span class="keyword">case</span> XmlPullParser.START_TAG:</span><br><span class="line">                    <span class="comment">//如果开始标签是data，初始化Weather类</span></span><br><span class="line">                   <span class="keyword">if</span>(parser.getName().equals(<span class="string">"data"</span>))&#123;</span><br><span class="line">                         weather=<span class="keyword">new</span> Weather();</span><br><span class="line">                         <span class="comment">//读取属性值</span></span><br><span class="line">                         String id=parser.getAttributeValue(<span class="keyword">null</span>,<span class="string">"d_id"</span>);</span><br><span class="line">                         weather.setId(id);</span><br><span class="line">                         flag=<span class="keyword">true</span>;</span><br><span class="line">                         list.add(weather);</span><br><span class="line">                         </span><br><span class="line">                    &#125;</span><br><span class="line">                   <span class="keyword">if</span>(flag)&#123;<span class="comment">//如果Weather类已实例化，就开始设置值</span></span><br><span class="line">                       <span class="keyword">if</span>(parser.getName().equals(<span class="string">"date"</span>))&#123;</span><br><span class="line">                          <span class="comment">//读取当前START_TAG的下一个文本节点</span></span><br><span class="line">                           weather.setDate(parser.nextText());</span><br><span class="line">                       &#125;</span><br><span class="line">                       <span class="keyword">else</span> <span class="keyword">if</span>(parser.getName().equals(<span class="string">"weather"</span>))&#123;</span><br><span class="line">                           weather.setWeather(parser.nextText());</span><br><span class="line">                       &#125;</span><br><span class="line">                       <span class="keyword">else</span> <span class="keyword">if</span>(parser.getName().equals(<span class="string">"icon"</span>))&#123;</span><br><span class="line">                           weather.setIcon(parser.nextText());</span><br><span class="line">                       &#125;</span><br><span class="line">                       <span class="keyword">else</span> <span class="keyword">if</span>(parser.getName().equals(<span class="string">"temperature"</span>))&#123;</span><br><span class="line">                           weather.setTemperature(parser.nextText());</span><br><span class="line">                       &#125;</span><br><span class="line">                       <span class="keyword">else</span> <span class="keyword">if</span>(parser.getName().equals(<span class="string">"winddirect"</span>))&#123;</span><br><span class="line">                           weather.setWinddirect(parser.nextText());</span><br><span class="line">                       &#125;</span><br><span class="line">                   &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="comment">//闭合标签</span></span><br><span class="line">                <span class="keyword">case</span> XmlPullParser.END_TAG:</span><br><span class="line">                    <span class="keyword">if</span>(parser.getName().equals(<span class="string">"data"</span>))&#123;</span><br><span class="line">                        flag=<span class="keyword">false</span>;</span><br><span class="line">                        weather=<span class="keyword">null</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//开始下一次解析事件</span></span><br><span class="line">            type=parser.next();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>SAX解析</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;Weather&gt; <span class="title">saxParser</span><span class="params">(InputStream in)</span> <span class="keyword">throws</span> ParserConfigurationException, SAXException, IOException</span>&#123;</span><br><span class="line">       SAXParserFactory factory=SAXParserFactory.newInstance();</span><br><span class="line">       SAXParser parser=factory.newSAXParser();</span><br><span class="line">       XmlHandler handler=<span class="keyword">new</span> XmlHandler();<span class="comment">//继承自DefaultHandler</span></span><br><span class="line">       parser.parse(in,handler);<span class="comment">//插入一个自定义的xml处理器</span></span><br><span class="line">       <span class="keyword">return</span> handler.getList();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">XmlHandler</span> <span class="keyword">extends</span> <span class="title">DefaultHandler</span></span>&#123;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">private</span> List&lt;Weather&gt; list;</span><br><span class="line">       <span class="keyword">private</span> String tagName;</span><br><span class="line">       <span class="keyword">private</span> <span class="keyword">boolean</span> flag=<span class="keyword">false</span>;</span><br><span class="line">       <span class="keyword">private</span> Weather weather;</span><br><span class="line"></span><br><span class="line">       <span class="comment">/**</span><br><span class="line">        * 开始读取文档</span><br><span class="line">        * <span class="doctag">@throws</span> SAXException</span><br><span class="line">        */</span></span><br><span class="line">       <span class="meta">@Override</span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startDocument</span><span class="params">()</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">           <span class="keyword">super</span>.startDocument();</span><br><span class="line">           list=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">/**</span><br><span class="line">        * 开始读取元素</span><br><span class="line">        */</span></span><br><span class="line">       <span class="meta">@Override</span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startElement</span><span class="params">(String uri, String localName, String qName, Attributes attributes)</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">           <span class="keyword">super</span>.startElement(uri, localName, qName, attributes);</span><br><span class="line">           <span class="comment">//uri:命名空间</span></span><br><span class="line">           <span class="comment">//localName:不带前缀(命名空间)的标签名</span></span><br><span class="line">           <span class="comment">//qName:带前缀的标签名</span></span><br><span class="line">           <span class="comment">//attributes:属性集合</span></span><br><span class="line">           <span class="keyword">this</span>.tagName=localName;</span><br><span class="line">           <span class="keyword">if</span>(tagName.equals(<span class="string">"data"</span>))&#123;</span><br><span class="line">               weather=<span class="keyword">new</span> Weather();</span><br><span class="line">               String id=attributes.getValue(<span class="number">0</span>);</span><br><span class="line">               weather.setId(id);</span><br><span class="line">               flag=<span class="keyword">true</span>;</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="comment">//</span></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">/**</span><br><span class="line">        * 开始读取Text</span><br><span class="line">        */</span></span><br><span class="line">       <span class="meta">@Override</span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">characters</span><span class="params">(<span class="keyword">char</span>[] ch, <span class="keyword">int</span> start, <span class="keyword">int</span> length)</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">           <span class="keyword">super</span>.characters(ch, start, length);</span><br><span class="line"></span><br><span class="line">           String str=<span class="keyword">new</span> String(ch,start,length).trim();</span><br><span class="line">           <span class="keyword">if</span>(tagName!=<span class="keyword">null</span>)&#123;</span><br><span class="line">               <span class="keyword">if</span>(flag)&#123;</span><br><span class="line">                   <span class="keyword">if</span>(tagName.equals(<span class="string">"date"</span>))&#123;</span><br><span class="line">                       weather.setDate(str);</span><br><span class="line">                   &#125;<span class="keyword">else</span> <span class="keyword">if</span>(tagName.equals(<span class="string">"icon"</span>))&#123;</span><br><span class="line">                       weather.setIcon(str);</span><br><span class="line">                   &#125;<span class="keyword">else</span> <span class="keyword">if</span>(tagName.equals(<span class="string">"weather"</span>))&#123;</span><br><span class="line">                       weather.setWeather(str);</span><br><span class="line">                   &#125;<span class="keyword">else</span> <span class="keyword">if</span>(tagName.equals(<span class="string">"temperature"</span>))&#123;</span><br><span class="line">                       weather.setTemperature(str);</span><br><span class="line">                   &#125;<span class="keyword">else</span> <span class="keyword">if</span>(tagName.equals(<span class="string">"winddirect"</span>))&#123;</span><br><span class="line">                       weather.setWinddirect(str);</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">/**</span><br><span class="line">        * 结束读取元素</span><br><span class="line">        */</span></span><br><span class="line">       <span class="meta">@Override</span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">endElement</span><span class="params">(String uri, String localName, String qName)</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">           <span class="keyword">super</span>.endElement(uri, localName, qName);</span><br><span class="line">           <span class="keyword">if</span>(localName.equals(<span class="string">"data"</span>))&#123;</span><br><span class="line">               list.add(weather);</span><br><span class="line">               flag=<span class="keyword">false</span>;</span><br><span class="line">           &#125;</span><br><span class="line">           tagName=<span class="keyword">null</span>;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">/**</span><br><span class="line">        * 结束读取文档</span><br><span class="line">        */</span></span><br><span class="line">       <span class="meta">@Override</span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">endDocument</span><span class="params">()</span> <span class="keyword">throws</span> SAXException </span>&#123;</span><br><span class="line">           <span class="keyword">super</span>.endDocument();</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">       <span class="function"><span class="keyword">public</span> List&lt;Weather&gt; <span class="title">getList</span><span class="params">()</span></span>&#123;</span><br><span class="line">           <span class="keyword">return</span> list;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>DOM解析</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;Weather&gt; <span class="title">domParser</span><span class="params">(InputStream in)</span> <span class="keyword">throws</span> ParserConfigurationException, SAXException, IOException, XmlPullParserException </span>&#123;</span><br><span class="line">        <span class="comment">/**</span><br><span class="line">         * 初始化核心API</span><br><span class="line">         */</span></span><br><span class="line">        DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();</span><br><span class="line">        DocumentBuilder builder=factory.newDocumentBuilder();</span><br><span class="line">        Document document=builder.parse(in);</span><br><span class="line">        List&lt;Weather&gt; list=<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        NodeList nodes=document.getElementsByTagName(<span class="string">"data"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;nodes.getLength();i++ )&#123;</span><br><span class="line">            Element element= (Element) nodes.item(i);</span><br><span class="line">            Weather weather=<span class="keyword">new</span> Weather();</span><br><span class="line">            weather.setId(element.getAttribute(<span class="string">"d_id"</span>));</span><br><span class="line">            NodeList childs=element.getChildNodes();</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;childs.getLength();j++)&#123;</span><br><span class="line">                Node temp=childs.item(j);</span><br><span class="line">                <span class="keyword">if</span>(temp.getFirstChild()!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(temp.getNodeName().equals(<span class="string">"date"</span>))&#123;</span><br><span class="line">                        weather.setDate(temp.getFirstChild().getNodeValue());</span><br><span class="line">                    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(temp.getNodeName().equals(<span class="string">"icon"</span>))&#123;</span><br><span class="line">                        weather.setIcon(temp.getFirstChild().getNodeValue());</span><br><span class="line">                    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(temp.getNodeName().equals(<span class="string">"weather"</span>))&#123;</span><br><span class="line">                        weather.setWeather(temp.getFirstChild().getNodeValue());</span><br><span class="line">                    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(temp.getNodeName().equals(<span class="string">"temperature"</span>))&#123;</span><br><span class="line">                        weather.setTemperature(temp.getFirstChild().getNodeValue());</span><br><span class="line">                    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(temp.getNodeName().equals(<span class="string">"winddirect"</span>))&#123;</span><br><span class="line">                        weather.setWinddirect(temp.getFirstChild().getNodeValue());</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                &#125;&#125;</span><br><span class="line">            list.add(weather);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>END</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+            <a href="/tags/知识整理/" rel="tag">#知识整理</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/05/自定义View系列（一）基本概念/" rel="next" title="自定义View系列（一）基本概念">
+                <i class="fa fa-chevron-left"></i> 自定义View系列（一）基本概念
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.jpeg"
+               alt="maplejaw" />
+          <p class="site-author-name" itemprop="name">maplejaw</p>
+          <p class="site-description motion-element" itemprop="description">不忘初心，方得始终</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/maplejaw" target="_blank" title="github">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PULL解析xml"><span class="nav-number">2.</span> <span class="nav-text">PULL解析xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SAX解析xml"><span class="nav-number">3.</span> <span class="nav-text">SAX解析xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DOM解析xml"><span class="nav-number">4.</span> <span class="nav-text">DOM解析xml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解析实战"><span class="nav-number">5.</span> <span class="nav-text">解析实战</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">maplejaw</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
