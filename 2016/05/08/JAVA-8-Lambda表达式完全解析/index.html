@@ -1,0 +1,714 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java,lambda,lambda表达式" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="JAVA8 新特性
+在学习JAVA8 Lambda之前，必须先了解一下JAVA8中与Lambda相关的新特性，不然对于一些概念会感到比较陌生。
+
+1、 接口的默认方法和静态方法Java 8允许我们给接口添加一个默认方法，用default修饰即可。默认方法可以重写，也可以不用重写。这就是和抽象方法的区别，在用法上，没有其他区别。123456789101112131415161718192021222">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA 8 Lambda表达式完全解析">
+<meta property="og:url" content="http://www.maplejaw.com/2016/05/08/JAVA-8-Lambda表达式完全解析/index.html">
+<meta property="og:site_name" content="maplejaw的技术博客">
+<meta property="og:description" content="JAVA8 新特性
+在学习JAVA8 Lambda之前，必须先了解一下JAVA8中与Lambda相关的新特性，不然对于一些概念会感到比较陌生。
+
+1、 接口的默认方法和静态方法Java 8允许我们给接口添加一个默认方法，用default修饰即可。默认方法可以重写，也可以不用重写。这就是和抽象方法的区别，在用法上，没有其他区别。123456789101112131415161718192021222">
+<meta property="og:updated_time" content="2016-05-08T14:37:35.518Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JAVA 8 Lambda表达式完全解析">
+<meta name="twitter:description" content="JAVA8 新特性
+在学习JAVA8 Lambda之前，必须先了解一下JAVA8中与Lambda相关的新特性，不然对于一些概念会感到比较陌生。
+
+1、 接口的默认方法和静态方法Java 8允许我们给接口添加一个默认方法，用default修饰即可。默认方法可以重写，也可以不用重写。这就是和抽象方法的区别，在用法上，没有其他区别。123456789101112131415161718192021222">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> JAVA 8 Lambda表达式完全解析 | maplejaw的技术博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">maplejaw的技术博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JAVA 8 Lambda表达式完全解析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-08T22:16:14+08:00" content="2016-05-08">
+              2016-05-08
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="JAVA8-新特性"><a href="#JAVA8-新特性" class="headerlink" title="JAVA8 新特性"></a>JAVA8 新特性</h2><blockquote>
+<p>在学习JAVA8 Lambda之前，必须先了解一下JAVA8中与Lambda相关的新特性，不然对于一些概念会感到比较陌生。</p>
+</blockquote>
+<p>1、 接口的默认方法和静态方法<br>Java 8允许我们给接口添加一个默认方法，用<code>default</code>修饰即可。默认方法可以重写，也可以不用重写。这就是和抽象方法的区别，在用法上，没有其他区别。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IMyInterface</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">onMethond</span><span class="params">(String str)</span></span>;<span class="comment">//这是一个抽象方法</span></span><br><span class="line">	<span class="function"><span class="keyword">default</span> String <span class="title">onDefalutMethod</span><span class="params">()</span></span>&#123;<span class="comment">//这是一个默认方法	</span></span><br><span class="line">		<span class="keyword">return</span> <span class="string">"这是一个默认方法"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//重写默认方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyImpl1</span> <span class="keyword">implements</span> <span class="title">IMyInterface</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMethond</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">onDefalutMethod</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"重写默认方法"</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//不重写默认方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyImpl2</span> <span class="keyword">implements</span> <span class="title">IMyInterface</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMethond</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>此外Java 8还允许我们给接口添加一个静态方法，用<code>static</code>修饰即可。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IMyInterface</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">onMethond</span><span class="params">(String str)</span></span>;<span class="comment">//这是一个抽象方法</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">default</span> String <span class="title">onDefalutMethod</span><span class="params">()</span></span>&#123;<span class="comment">//这是一个默认方法	</span></span><br><span class="line">		<span class="keyword">return</span> <span class="string">"这是一个默认方法"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">static</span> String <span class="title">onStaticMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"这是一个静态方法"</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2、 函数式接口（Functional Interface）<br>什么叫函数式接口？他和普通接口有什么区别？<br>“函数式接口”是指仅仅只包含<strong>一个抽象方法</strong>的接口（可以包含默认方法和静态方法），其他特征和普通接口没有任何区别，Java中Runnalbe,Callable等就是个函数式接口；。我们可以给一个符合函数式接口添加<code>@FunctionalInterface</code>注解，这样就显式的指明该接口是一个函数式接口，如果不是，编译器会直接提示错误。当然你也可以不用添加此注解。添加的好处在于，由于Lambda表达式只支持函数式接口，如果恰好这个接口被应用于Lambda表达式，某天你手抖不小心添加了个抽象方法，编译器会提示错误。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//显式指明该接口是函数式接口</span></span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IMyInterface</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">onMethond</span><span class="params">(String str)</span></span>;<span class="comment">//这是一个抽象方法</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">default</span> String <span class="title">onDefalutMethod</span><span class="params">()</span></span>&#123;<span class="comment">//这是一个默认方法	</span></span><br><span class="line">		<span class="keyword">return</span> <span class="string">"这是一个默认方法"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">static</span> String <span class="title">onStaticMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"这是一个静态方法"</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3、方法与构造函数引用<br>Java 8 允许你使用<code>::</code>关键字来引用已有Java类或对象的方法或构造器。<code>::</code>必须配合函数式接口一起用。使用<code>::</code>操作符后，会返回一个函数式接口对象，这个接口可以自己定义，也可以直接使用系统提供的函数式接口，系统提供的后面会单独介绍。请注意，这一节的内容会让你觉得这些用法蛋疼无比，这是因为还没有开始介绍Lambda表达式，<code>::</code>和Lambda结合使用才是王道，希望你还能坚持到介绍Lambda表达式^_^。</p>
+<p>假如有个Person类如下,以下的例子都以这个Person类为基础讲解。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> String name;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">	</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">()</span></span>&#123;</span><br><span class="line">    	</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String name,<span class="keyword">int</span> age)</span></span>&#123;</span><br><span class="line">    	<span class="keyword">this</span>.name=name;</span><br><span class="line">    	<span class="keyword">this</span>.age=age;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> name;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.name = name;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> age;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.age = age;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">show</span><span class="params">(String str)</span></span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"-----&gt;输入"</span>+str);</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"-----&gt;返回"</span>+str;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>使用<code>::</code>关键字初始化构造函数,返回的是一个函数式接口，这个接口可以自己定义，也可以直接使用系统提供的函数式接口。现在先来定义一个函数式接口<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PersonSupply</span> </span>&#123;</span><br><span class="line">    <span class="function">Person <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line">PersonSupply sp=Person::<span class="keyword">new</span>;</span><br><span class="line">Person person=sp.get();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><code>PersonSupply sp=Person::new;</code>等价于下面<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PersonSupply sp=<span class="keyword">new</span> PersonSupply&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Person <span class="title">get</span><span class="params">()</span></span>&#123;</span><br><span class="line">      Person person=<span class="keyword">new</span> Person();</span><br><span class="line">      <span class="keyword">return</span> person;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>怎么定义这个函数式接口呢？首先我们要看<code>::</code>后面，可知，默认构造不需要参数，所以我们的get()定义为无参，但是我们需要Person对象，所以返回值为Person。<br>当然为了使这个接口更通用，我们可以定义成如下形式<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PersonSupply</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function">T <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PersonSupply&lt;Person&gt; sp=Person::<span class="keyword">new</span>;</span><br><span class="line">Person person=sp.get();</span><br></pre></td></tr></table></figure></p>
+<p>java自带<code>Supplier</code>的接口就是这样的，后面会做介绍。直接使用<code>Supplier</code>如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Supplier&lt;Person&gt; sp=Person::<span class="keyword">new</span>;</span><br><span class="line">Person person=sp.get();</span><br></pre></td></tr></table></figure></p>
+<p>怎么初始化带参构造函数？<br>首先写一个函数式接口,由于需要参数所以get()里面输入参数，返回Person，如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PersonSupply</span>&lt;<span class="title">P</span> <span class="keyword">extends</span> <span class="title">Person</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function">P <span class="title">get</span><span class="params">(String name, <span class="keyword">int</span> age)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PersonSupply&lt;Person&gt; sp=Person::<span class="keyword">new</span>;</span><br><span class="line">Person person=sp.get(<span class="string">"xx"</span>,<span class="number">28</span>);</span><br></pre></td></tr></table></figure></p>
+<p><code>PersonSupply&lt;Person&gt; sp=Person::new;</code>等价于下面<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PersonSupply&lt;Person&gt; sp=<span class="keyword">new</span> PersonSupply&lt;Person&gt;&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Person <span class="title">get</span><span class="params">(String name, <span class="keyword">int</span> age)</span></span>;&#123;</span><br><span class="line">      Person person=<span class="keyword">new</span> Person(name,age);</span><br><span class="line">      <span class="keyword">return</span> person;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>使用<code>::</code>关键字引用静态方法<br>同样，写一个函数式接口，该静态方法需要参数，所以get()里传入参数，需要返回参数，所以返回String。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PersonFactory</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">get</span><span class="params">(String str)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line">PersonFactory pf=Person::show;</span><br><span class="line">pf.show(<span class="string">"哈哈哈"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><code>PersonFactory pf=Person::show;</code>等价于下面<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PersonFactory pf=<span class="keyword">new</span> PersonFactory&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">get</span><span class="params">(String str)</span></span>&#123;</span><br><span class="line">      <span class="keyword">return</span> Person.show(str);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>使用<code>::</code>关键字引用普通方法比较特殊。<br>如果要调用的方法没有参数，可以用<code>Class::method</code>形式调用,但是这时需要传入一个Person实例，这时函数式接口这样写，在get()中传入Person类的实例，返回String。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PersonFactory</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">get</span><span class="params">(Person person)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"> PersonSupply&lt;Person&gt; sp=Person::<span class="keyword">new</span>;</span><br><span class="line"> Person person=sp.get(<span class="string">"xxx"</span>, <span class="number">12</span>);</span><br><span class="line"> PersonFactory pf=Person::getName;		</span><br><span class="line"> System.out.println(<span class="string">"---&gt;"</span>+sp.get(penson));</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><code>PersonFactory pf=Person::getName;</code>等价于下面<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PersonFactory pf=<span class="keyword">new</span> PersonFactory&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">get</span><span class="params">(Person person)</span></span>&#123;</span><br><span class="line">      <span class="keyword">return</span> person.getName();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>也可以以<code>instance::method</code>形式调用。这时get()不需要传参。返回String。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PersonFactory</span> </span>&#123;</span><br><span class="line">    <span class="function">String <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> PersonSupply&lt;Person&gt; sp=Person::<span class="keyword">new</span>;</span><br><span class="line"> Person person=sp.get(<span class="string">"xxx"</span>, <span class="number">12</span>);</span><br><span class="line"> PersonFactory pf=person::getName;		</span><br><span class="line"> System.out.println(<span class="string">"---&gt;"</span>+pf.get());</span><br></pre></td></tr></table></figure></p>
+<p><code>PersonFactory pf=person::getName;</code>等价于下面<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Person person=<span class="keyword">new</span> Person(<span class="string">"xxx"</span>,<span class="number">12</span>);</span><br><span class="line">PersonFactory pf=<span class="keyword">new</span> PersonFactory&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> String <span class="title">get</span><span class="params">( )</span></span>&#123;</span><br><span class="line">      <span class="keyword">return</span> person.getName();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果要调用的方法有参数，必须用<code>instance::method</code>形式调用,这时函数式接口这样写,set传入参数。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PersonFactory</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">set</span><span class="params">(String name)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PersonSupply&lt;Person&gt; sp=Person::<span class="keyword">new</span>;</span><br><span class="line">Person person=sp.get(<span class="string">"xxx"</span>, <span class="number">12</span>);</span><br><span class="line">PersonFactory pf=person::setName;</span><br><span class="line">pf.set(<span class="string">"xxx"</span>);</span><br></pre></td></tr></table></figure></p>
+<p><code>PersonFactory pf=person::setName;</code>等价于下面<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Person person=<span class="keyword">new</span> Person(<span class="string">"xxx"</span>,<span class="number">12</span>);</span><br><span class="line">PersonFactory pf=<span class="keyword">new</span> PersonFactory&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">      <span class="keyword">return</span> person.setName(name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>4、JAVA8 API内建的函数式接口<br>还记得前面提到的<code>Supplier</code>函数式接口吗，它就是API内建的函数式接口之一，下面将介绍一些常用的内建函数式接口。</p>
+<ul>
+<li><p>Supplier<br>Supplier 提供者，不接受参数，有返回值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Supplier&lt;Person&gt; Supplier=<span class="keyword">new</span> Supplier&lt;Person&gt;() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> Person <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> Person();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">Supplier&lt;Person&gt; sp=Person::<span class="keyword">new</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Function 一个参数，一个返回值。常用于数据处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Function&lt;String, Integer&gt; function=<span class="keyword">new</span> Function&lt;String, Integer&gt;()&#123;</span><br><span class="line"></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> Integer <span class="title">apply</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">			</span><br><span class="line">				<span class="keyword">return</span> Integer.parseInt(s);</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125; ;</span><br><span class="line">Function&lt;String, Integer&gt; function=Integer::parseInt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Consumer 消费者，只有一个参数，没有返回值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Consumer&lt;String&gt; consumer=<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">			</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Comparator 比较类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Comparator&lt;Integer&gt; comparator=<span class="keyword">new</span> Comparator&lt;Integer&gt;() &#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Integer o1, Integer o2)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		<span class="keyword">return</span> o1-o2;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Predicate<br>Predicate 接口，抽象方法只有一个参数，返回boolean类型。该接口包含多种默认方法来将Predicate组合成其他复杂的逻辑（比如：与，或，非）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Predicate&lt;String&gt; predicate=<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line">			</span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">test</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">return</span> t.startsWith(<span class="string">"h"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;;</span><br><span class="line"><span class="keyword">boolean</span> b=predicate.test(<span class="string">"hahaha"</span>);<span class="comment">//判断是否符合条件</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Predicate&lt;String&gt; predicate = String::isEmpty;</span><br><span class="line"><span class="keyword">boolean</span> b=predicate.test(<span class="string">"hahaha"</span>);<span class="comment">//判断是否符合条件</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>UnaryOperator 接收一个参数，返回一个参数，且参数类型相同</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">UnaryOperator&lt;String&gt; unaryOperator=<span class="keyword">new</span> UnaryOperator&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">apply</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">			<span class="keyword">return</span> s;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>BinaryOperator 接收两个参数，返回一个参数，且参数类型相同</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">BinaryOperator&lt;String&gt; binaryOperator=<span class="keyword">new</span> BinaryOperator&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">		</span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> String <span class="title">apply</span><span class="params">(String t, String u)</span> </span>&#123;</span><br><span class="line">				<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">				<span class="keyword">return</span> t+u;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>5、三个API</p>
+<ul>
+<li><p>Optional<br>Optional 这是个用来防止NullPointerException异常而引入的。Optional提供很多有用的方法，这样我们就不用显式进行空值检测。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Optional&lt;String&gt; optional = Optional.of(<span class="string">"给你一个值"</span>);</span><br><span class="line">		optional.isPresent(); <span class="comment">//判断是否为空值</span></span><br><span class="line">		optional.get();      <span class="comment">//获取值 ，如果空值直接抛异常。</span></span><br><span class="line">		optional.orElse(<span class="string">"返回空值"</span>);  <span class="comment">//获取值 ，如果空值返回指定的值。</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Stream（流）<br>最新添加的Stream API（java.util.stream）把真正的函数式编程风格引入到Java中。这是目前为止对Java类库最好的补充，因为Stream API可以极大提供Java程序员的生产力，让程序员写出高效率、干净、简洁的代码。<br>接触过RxJava的可能对下面的代码风格比较眼熟，Stream 的创建需要指定一个数据源，比如 java.util.Collection的子类，List或者Set， Map不支持。Stream的操作可以串行执行或者并行执行。<br>怎么用Stream？Stream必须有数据源。那就给一个数据源。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">		list.add(<span class="string">"ddd2"</span>);</span><br><span class="line">		list.add(<span class="string">"aaa2"</span>);</span><br><span class="line">		list.add(<span class="string">"bbb1"</span>);</span><br><span class="line">		list.add(<span class="string">"aaa1"</span>);</span><br><span class="line">		list.add(<span class="string">"aaa3"</span>);</span><br><span class="line">		list.add(<span class="string">"bbb3"</span>);</span><br><span class="line">		list.add(<span class="string">"ccc"</span>);</span><br><span class="line">		list.add(<span class="string">"bbb2"</span>);</span><br><span class="line">		list.add(<span class="string">"ddd1"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>forEach list新增的for循环方法,forEach是一个最终操作（只能放在最后）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">//遍历打印数据</span></span><br><span class="line">list.forEach(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">			 System.out.println(<span class="string">"----&gt;"</span>+t);</span><br><span class="line">				</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br></pre></td></tr></table></figure>
+<p>   打印结果如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> ----&gt;ddd2</span><br><span class="line"> ----&gt;aaa2</span><br><span class="line">----&gt;bbb1</span><br><span class="line">----&gt;aaa1</span><br><span class="line">----&gt;aaa3</span><br><span class="line">----&gt;bbb3</span><br><span class="line">----&gt;ccc</span><br><span class="line">----&gt;bbb2</span><br><span class="line">----&gt;ddd1</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>filter 过滤</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">list.stream()</span><br><span class="line">  .filter(<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">test</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">return</span> t.startsWith(<span class="string">"a"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;)</span><br><span class="line">.forEach(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">		 System.out.println(<span class="string">"----&gt;"</span>+t);</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br></pre></td></tr></table></figure>
+<pre><code>打印结果如下
+</code></pre><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> ----&gt;aaa2</span><br><span class="line"> ----&gt;aaa1</span><br><span class="line">----&gt;aaa3</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>Sort 排序<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">   list.stream()</span><br><span class="line">    .sorted()<span class="comment">//排序，如果不实现Comparator接口，则按默认规则排序</span></span><br><span class="line">     .filter(<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">test</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">return</span> t.startsWith(<span class="string">"a"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;)</span><br><span class="line">     .forEach(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">		 System.out.println(<span class="string">"----&gt;"</span>+t);</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">	</span><br><span class="line">list.stream()</span><br><span class="line">     .sorted(<span class="keyword">new</span> Comparator&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(String o1, String o2)</span> </span>&#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">			<span class="keyword">return</span> o1.compareTo(o2);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;)</span><br><span class="line">     .filter(<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">test</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">return</span> t.startsWith(<span class="string">"a"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;)</span><br><span class="line">     .forEach(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">		 System.out.println(<span class="string">"----&gt;"</span>+t);</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>map</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line">list.stream()</span><br><span class="line">   .sorted(<span class="keyword">new</span> Comparator&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(String o1, String o2)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		<span class="keyword">return</span> o1.compareTo(o2);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)</span><br><span class="line">    .filter(<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">test</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> t.startsWith(<span class="string">"a"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)</span><br><span class="line">    .map(<span class="keyword">new</span> Function&lt;String, String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">apply</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		<span class="keyword">return</span> t+<span class="string">"---&gt;被我处理过了"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)</span><br><span class="line">    .forEach(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">	 System.out.println(<span class="string">"----&gt;"</span>+t);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">----&gt;aaa1---&gt;被我处理过了</span><br><span class="line">----&gt;aaa2---&gt;被我处理过了</span><br><span class="line">----&gt;aaa3---&gt;被我处理过了</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Match 匹配，是一个最终操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">boolean</span> b= list.stream()</span><br><span class="line">		.anyMatch(<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">test</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">				<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">				<span class="keyword">return</span> t.startsWith(<span class="string">"a"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"-----&gt;"</span>+b);<span class="comment">//true</span></span><br><span class="line">  	<span class="keyword">boolean</span> b= list.stream()</span><br><span class="line">		.allMatch(<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">test</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">				<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">				<span class="keyword">return</span> t.startsWith(<span class="string">"a"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"-----&gt;"</span>+b);<span class="comment">//false</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>Count 计数,是一个最终操作</p>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">long</span> count = list.stream()</span><br><span class="line">      .filter(<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">test</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">return</span> t.startsWith(<span class="string">"a"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;)</span><br><span class="line">      .count();</span><br><span class="line">System.out.println(count);    <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Reduce 规约，最终操作</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">  	 Optional&lt;String&gt; optional = </span><br><span class="line">	    list</span><br><span class="line">	        .stream()</span><br><span class="line">	         .sorted()</span><br><span class="line">	        .reduce(<span class="keyword">new</span> BinaryOperator&lt;String&gt;() &#123;</span><br><span class="line">				</span><br><span class="line">				<span class="meta">@Override</span></span><br><span class="line">				<span class="function"><span class="keyword">public</span> String <span class="title">apply</span><span class="params">(String t, String u)</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">					<span class="keyword">return</span> t+u;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;);</span><br><span class="line">System.out.println(<span class="string">"----&gt;"</span>+optional.get());</span><br><span class="line"><span class="comment">//----&gt;aaa1aaa2aaa3bbb1bbb2bbb3cccddd1ddd2</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>findFirst 提取第一个，最终操作 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">  Optional&lt;String&gt; optional = </span><br><span class="line">	    list</span><br><span class="line">	        .stream()</span><br><span class="line">	         .sorted()</span><br><span class="line">	        .findFirst();</span><br><span class="line">System.out.println(<span class="string">"----&gt;"</span>+optional.get()); <span class="comment">//aaa1</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>parallelStream（并行流）<br>并行化之后和之前的代码区别并不大。并且并行操作下，速度会比串行快。但是需要注意的是不用在并行流下排序，并行流做不到排序。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">list.parallelStream()</span><br><span class="line">	    .filter(<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">test</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">				<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">				<span class="keyword">return</span> t.startsWith(<span class="string">"a"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;)</span><br><span class="line">	    .forEach(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">				<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">				System.out.println(<span class="string">"---&gt;"</span>+t);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">    </span><br><span class="line">list.parallelStream()</span><br><span class="line">	    .sorted()</span><br><span class="line">	    .forEach(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">				<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">				System.out.println(<span class="string">"---&gt;"</span>+t);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">		<span class="comment">//打印出来的并没有排序</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Lambda-表达式"><a href="#Lambda-表达式" class="headerlink" title="Lambda 表达式"></a>Lambda 表达式</h2><p>在上面你是不是觉得<code>::</code>有时候挺好用的？可以不用再new接口，再也不用写烦人的匿名内部类了，比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Supplier&lt;Person&gt; sp=Person::<span class="keyword">new</span>;</span><br></pre></td></tr></table></figure></p>
+<p>但是<code>::</code>的使用场景还是比较有限的。Lambda表达式的诞生就是为了解决匿名内部类中饱受诟病的问题的。</p>
+<ul>
+<li><p>什么是Lambda表达式<br>Lambda表达式是Java8的一个新特性，它提供了一种更加清晰和简明的方式使用函数式接口（以前被叫作单一方法接口）。使用Lambda表达式能够更加方便和简单的使用匿名内部类，比如对于集合的遍历、比较、过滤等等。</p>
+</li>
+<li><p>Lambda表达式格式<br>(type1 arg1, type2 arg2…) -&gt; { body }<br>每个lambda都包括以下三个部分：<br>参数列表：(type1 arg1, type2 arg2…)<br>箭头：    -&gt;<br>方法体：{ body }</p>
+<p>方法体既可以是一个表达式，也可以是一个语句块：</p>
+<ul>
+<li>表达式：表达式会被执行然后返回执行结果。</li>
+<li>语句块：语句块中的语句会被依次执行，就像方法中的语句一样,return语句会把控制权交给匿名方法的调用者。<br>表达式函数体适合小型lambda表达式，它消除了return关键字，使得语法更加简洁。</li>
+</ul>
+</li>
+</ul>
+<p>以下是一些例子<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">int</span> a, <span class="keyword">int</span> b) -&gt; &#123;  <span class="keyword">return</span> a + b; &#125;</span><br><span class="line">( a,  b) -&gt; &#123;  <span class="keyword">return</span> a + b; &#125;</span><br><span class="line">( a,  b) -&gt; a+b</span><br><span class="line">() -&gt; System.out.println(<span class="string">"s"</span>)</span><br><span class="line">(String s) -&gt; &#123; System.out.println(s); &#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>一个 Lambda 表达式可以有零个或多个参数</li>
+<li>参数的类型既可以明确声明，也可以根据上下文来推断。例如：(int a)与(a)效果相同</li>
+<li>所有参数需包含在圆括号内，参数之间用逗号相隔。例如：(a, b) 或 (int a, int b) </li>
+<li>空圆括号代表参数集为空。例如：()-&gt;{System.out.println(“s”);};</li>
+<li>当只有一个参数，且其类型可推导时，圆括号（）可省略。</li>
+<li>Lambda 表达式的主体可包含零条或多条语句</li>
+<li>如果 Lambda 表达式的主体只有一条语句，花括号{}可省略。匿名函数的返回类型与该主体表达式一致</li>
+<li>如果 Lambda 表达式的主体包含一条以上语句，则表达式必须包含在花括号{}中。</li>
+</ul>
+<p>Lambda表达式可以用来简化内部类写法，比如<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">//常规代码</span></span><br><span class="line">  Runnable runable=<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		</span><br><span class="line">		System.out.println(<span class="string">"---&gt;"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Lambda表达式</span></span><br><span class="line">Runnable runable=()-&gt;&#123;System.out.println(<span class="string">"---&gt;"</span>);&#125;;</span><br><span class="line"><span class="comment">//启动一个线程</span></span><br><span class="line"><span class="keyword">new</span> Thread(()-&gt;&#123;System.out.println(<span class="string">"---&gt;"</span>);&#125;).start();</span><br></pre></td></tr></table></figure></p>
+<p>还记得前面介绍的Predicate接口吗？现在我们再来用Lambda表达式写一遍。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//一般写法</span></span><br><span class="line">Predicate&lt;String&gt; predicate=<span class="keyword">new</span> Predicate&lt;String&gt;() &#123;</span><br><span class="line">			</span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">test</span><span class="params">(String t)</span> </span>&#123;</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">return</span> t.startsWith(<span class="string">"h"</span>);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125;;</span><br><span class="line"><span class="comment">//Lambda写法</span></span><br><span class="line">Predicate&lt;String&gt; predicate=(String s)-&gt;&#123;s.startsWith(<span class="string">"h"</span>);&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>你现在是不是觉得Lambda表达式太神奇了？居然可以写出这么简洁的代码。<br>还记得内部类使用局部变量时需要把变量声明为final吗，Lambda表达式则不需要。不过虽然不用声明final，但也不允许改变值。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String s=<span class="string">"sss"</span>;</span><br><span class="line"><span class="keyword">new</span> Thread(()-&gt;&#123;</span><br><span class="line">	System.out.println(s);</span><br><span class="line">&#125;).start();</span><br></pre></td></tr></table></figure></p>
+<p>此外，内部类引用外部类也不用使用MainActivity.this,这种操蛋的代码了。<br>在Lambda表达式中this,指的就是外部类，因为根本就没有内部类的概念啊。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">btn.setOnClickListener(()-&gt;&#123;</span><br><span class="line">   	Toast.makeToast(<span class="keyword">this</span>,<span class="string">"xxx"</span>,<span class="number">0</span>).show();</span><br><span class="line">   &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>现在回过头来把前面Stream中的代码用Lambda表达式再写一遍。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  list.stream()</span><br><span class="line">.sorted((s1,s2)-&gt;s1.compareTo(s2))</span><br><span class="line">.filter((s)-&gt;s.startsWith(<span class="string">"a"</span>))</span><br><span class="line">.map((s)-&gt;s+<span class="string">"被我处理过了"</span>)</span><br><span class="line">.forEach(s-&gt;System.out.println(s));</span><br></pre></td></tr></table></figure></p>
+<p>代码简洁的简直让人窒息。<br>打印结果如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">aaa1被我处理过了</span><br><span class="line">aaa2被我处理过了</span><br><span class="line">aaa3被我处理过了</span><br></pre></td></tr></table></figure></p>
+<p>关于Lambda表达式的介绍到此为止，想更深入了解推荐<a href="http://zh.lucida.me/blog/java-8-lambdas-insideout-language-features/" target="_blank" rel="external">【深入理解Java 8 Lambda】</a>这篇文章。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>当初学习Lambda表达式的时候，由于网上的资料比较零散，且直接用了JAVA8的新API来做演示，由于对新API不是很熟导致学习的时候走了一些弯路，看得一头雾水。所以决定把我的学习路线给记录下来，或许可以帮助部分人。<br>Lambda表达式是把双刃剑，让代码简洁的同时，降低了代码的可读性。但是作为程序员，追逐新技术的脚步不能停下。</p>
+<hr>
+<p>本文参考了<a href="http://zh.lucida.me/blog/java-8-lambdas-insideout-language-features/" target="_blank" rel="external">【深入理解Java 8 Lambda】</a>和<a href="http://www.jb51.net/article/48304.htm" target="_blank" rel="external">【JAVA8 十大新特性详解】</a>两篇文章</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag">#java</a>
+          
+            <a href="/tags/lambda/" rel="tag">#lambda</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/07/Android中常见的XML解析方式/" rel="next" title="Android中常见的XML解析方式">
+                <i class="fa fa-chevron-left"></i> Android中常见的XML解析方式
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.jpeg"
+               alt="maplejaw" />
+          <p class="site-author-name" itemprop="name">maplejaw</p>
+          <p class="site-description motion-element" itemprop="description">不忘初心，方得始终</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/maplejaw" target="_blank" title="github">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JAVA8-新特性"><span class="nav-number">1.</span> <span class="nav-text">JAVA8 新特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambda-表达式"><span class="nav-number">2.</span> <span class="nav-text">Lambda 表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">3.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">maplejaw</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
