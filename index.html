@@ -229,6 +229,112 @@
             
               
                 
+                <a class="post-title-link" href="/2016/05/15/Handler消息机制-源码解读/" itemprop="url">
+                  Handler消息机制 源码解读
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-15T14:37:47+08:00" content="2016-05-15">
+              2016-05-15
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="Handler消息机制的作用"><a href="#Handler消息机制的作用" class="headerlink" title="Handler消息机制的作用"></a>Handler消息机制的作用</h3><p>大家知道子线程没有办法对UI界面上的内容进行操作，如果操作，将抛出异常，为了让子线程能间接操作UI界面，Android中引入了Handler消息传递机制，通过Handler切换到主线程进行UI操作。</p>
+<h3 id="Handler、Looper、MessageQueue、Message的关系是什么？"><a href="#Handler、Looper、MessageQueue、Message的关系是什么？" class="headerlink" title="Handler、Looper、MessageQueue、Message的关系是什么？"></a>Handler、Looper、MessageQueue、Message的关系是什么？</h3><ul>
+<li><p>Handler用于发送和处理消息。而发出的Message经过一系列的周转后，最终会传递回Handler中，最后更新UI。 </p>
+</li>
+<li><p>Message是在线程之间传递的消息，它可以在内部携带少量的信息，用于在不同线程之前交换数据。 </p>
+</li>
+<li><p>MessageQueue是消息队列，用于存放Message。Message在消息队列中，等待Looper取出。每个线程中只会有一个MessageQueue对象。 </p>
+</li>
+<li><p>Looper是每个线程中的MessageQueue的管家，调用Looper的loop()方法后，就会进入一个无限循环中，每当MessageQueue中存在一个Message，Looper对象就会将其取出，传递到Handler中进行处理。每个线程中只会有一个Looper对象。</p>
+</li>
+</ul>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/05/15/Handler消息机制-源码解读/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/08/JAVA-8-Lambda表达式完全解析/" itemprop="url">
                   JAVA 8 Lambda表达式完全解析
                 </a>
@@ -748,7 +854,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -758,7 +864,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
