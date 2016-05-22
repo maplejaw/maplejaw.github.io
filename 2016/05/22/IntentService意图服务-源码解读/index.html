@@ -1,0 +1,596 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,IntentService,源码解读" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="基本概念IntentService作用IntentService是Service类的子类，常用来在后台执行耗时的异步请求。我们不用去关心Service的创建和销毁的细节。也不用单独开线程，只管处理自己的任务，处理完过后系统会自动销毁该服务，启动IntentService的方式和普通Service相同，但是使用起来却极其简单。使用示例如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IntentService意图服务 源码解读">
+<meta property="og:url" content="http://www.maplejaw.com/2016/05/22/IntentService意图服务-源码解读/index.html">
+<meta property="og:site_name" content="maplejaw的技术博客">
+<meta property="og:description" content="基本概念IntentService作用IntentService是Service类的子类，常用来在后台执行耗时的异步请求。我们不用去关心Service的创建和销毁的细节。也不用单独开线程，只管处理自己的任务，处理完过后系统会自动销毁该服务，启动IntentService的方式和普通Service相同，但是使用起来却极其简单。使用示例如下：">
+<meta property="og:updated_time" content="2016-05-22T06:20:50.763Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IntentService意图服务 源码解读">
+<meta name="twitter:description" content="基本概念IntentService作用IntentService是Service类的子类，常用来在后台执行耗时的异步请求。我们不用去关心Service的创建和销毁的细节。也不用单独开线程，只管处理自己的任务，处理完过后系统会自动销毁该服务，启动IntentService的方式和普通Service相同，但是使用起来却极其简单。使用示例如下：">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> IntentService意图服务 源码解读 | maplejaw的技术博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">maplejaw的技术博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                IntentService意图服务 源码解读
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-22T14:14:18+08:00" content="2016-05-22">
+              2016-05-22
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="IntentService作用"><a href="#IntentService作用" class="headerlink" title="IntentService作用"></a>IntentService作用</h3><p>IntentService是Service类的子类，常用来在后台执行耗时的异步请求。我们不用去关心Service的创建和销毁的细节。也不用单独开线程，只管处理自己的任务，处理完过后系统会自动销毁该服务，启动IntentService的方式和普通Service相同，但是使用起来却极其简单。使用示例如下：<br><a id="more"></a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//自定义一个IntentService</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyService</span> <span class="keyword">extends</span> <span class="title">IntentService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyService</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(<span class="string">"MyService"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onHandleIntent</span><span class="params">(Intent intent)</span> </span>&#123;</span><br><span class="line">         String url=intent.getStringExtra(<span class="string">"url"</span>);</span><br><span class="line">         <span class="comment">//在这处理你的任务</span></span><br><span class="line">          <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//启动IntentService</span></span><br><span class="line">  Intent intent=  <span class="keyword">new</span> Intent(<span class="keyword">this</span>,MyService.class);</span><br><span class="line">  intent.putExtra(<span class="string">"url"</span>,<span class="string">"......"</span>);</span><br><span class="line">  startService(intent);</span><br></pre></td></tr></table></figure></p>
+<h3 id="IntentService疑问"><a href="#IntentService疑问" class="headerlink" title="IntentService疑问"></a>IntentService疑问</h3><p>看完上面的基本概念后，你可能会产生如下疑问。</p>
+<ul>
+<li>IntentService构造方法传的那个参数是来干嘛的</li>
+<li>IntentService内部是怎么工作的？</li>
+<li>IntentService怎么做到任务结束后自动销毁？</li>
+</ul>
+<p>让我们带着疑问，再次去源码里探索吧。</p>
+<h2 id="初识API"><a href="#初识API" class="headerlink" title="初识API"></a>初识API</h2><h3 id="HandlerThread"><a href="#HandlerThread" class="headerlink" title="HandlerThread"></a>HandlerThread</h3><p>初看这个名字，心里在想，难道是内部自带Handler的线程？笔者怀着好奇的心，点开了HandlerThread这个类。因为HandlerThread继承于Thread，于是反射性的找到了<code>run</code>方法里面的源码进行研究，源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    mTid = Process.myTid();</span><br><span class="line">    Looper.prepare();<span class="comment">//初始化Looper</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">        mLooper = Looper.myLooper();</span><br><span class="line">        notifyAll();</span><br><span class="line">    &#125;</span><br><span class="line">    Process.setThreadPriority(mPriority);</span><br><span class="line">    </span><br><span class="line">    onLooperPrepared();</span><br><span class="line">    Looper.loop();<span class="comment">//开启Looper无限循环</span></span><br><span class="line">    mTid = -<span class="number">1</span>;<span class="comment">//这句话永远执行不到，除非Looper被退出</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>果然如此，很常规的<code>Looper</code>初始化。有<code>Looper</code>，肯定会有<code>Handler</code>,不然<code>Looper</code>岂不是浪费了。但是在<code>Looper.prepare();</code>和<code>Looper.loop()</code>之间，并没有看到<code>Handler</code>的踪影。笔者心想，莫非谷歌用了什么黑科技用法，于是快速把源码过了一遍。WTF！<code>Handler</code>呢？并没有找到啊。既然没有,干嘛叫<code>HandlerThread</code>，这名字取的只给1分。于是查看了API说明。说明如下：</p>
+<blockquote>
+<p>Handy class for starting a new thread that has a looper. The looper can then be  used to create handler classes. Note that start() must still be called.<br>大意：这个类用于创建一个拥有Looper的线程。这个Looper可以用来创建Handler类，虽然如此，start()仍然必须调用。</p>
+</blockquote>
+<p>看到这里算是明白了，原来这个线程只是用来提供Looper的啊，以免我们在子线程中使用Handler过于麻烦。必须调用start是因为，Looper的初始化在<code>run</code>方法内。使用示例如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//启动带Looper的线程</span></span><br><span class="line"> HandlerThread handlerThread=<span class="keyword">new</span> HandlerThread(<span class="string">"handlerThread"</span>);</span><br><span class="line"> handlerThread.start();</span><br><span class="line"> </span><br><span class="line"> <span class="comment">//初始化Handler</span></span><br><span class="line"> Handler handler=<span class="keyword">new</span> Handler(handlerThread.getLooper())&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</span><br><span class="line">               <span class="comment">// 在这里接收消息，这里的处理是在子线程中执行的。</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line"> handler.sendMessage(..)<span class="comment">//发送消息</span></span><br></pre></td></tr></table></figure></p>
+<p>笔者心想，由于线程的不稳定性，<code>handlerThread.getLooper()</code>会不会取到个空值啊。点进去一看，瞬间觉得自己想多了。可以看到，如果为空就将线程挂起等待，即时你手动唤醒，还有个while循环进行保障。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Looper <span class="title">getLooper</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="comment">//省略部分源码</span></span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (isAlive() &amp;&amp; mLooper == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                wait();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> mLooper;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当Looper初始化完毕，就会唤醒等待的线程，唤醒方法就在<code>run</code>方法中。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//...</span></span><br><span class="line">       <span class="comment">//省略部分源码</span></span><br><span class="line">       Looper.prepare();<span class="comment">//初始化Looper</span></span><br><span class="line">       </span><br><span class="line">       <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">           mLooper = Looper.myLooper();</span><br><span class="line">           notifyAll();<span class="comment">//唤醒等待线程</span></span><br><span class="line">       &#125;</span><br><span class="line">       <span class="comment">//...</span></span><br><span class="line">       <span class="comment">//省略部分源码</span></span><br><span class="line">       Looper.loop();<span class="comment">//开启Looper无限循环</span></span><br><span class="line">     </span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看出<code>handlerThread.getLooper()</code>是个阻塞方法。</p>
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><p>IntentService的用法，前面已经介绍过了，现在开始来梳理流程。<br>我们知道,只需在<code>onHandleIntent</code>里面编写耗时任务，系统就会自动开启线程去处理，处理完毕后，自动销毁Service。这一过程，尤其显得格外人性化。</p>
+<p>那么，IntentService内部流程是怎么样的？IntentService继承与Service，那我们就按照Service的生命周期来一步一步进行探索，由于源码比较简单，这里就快速过一遍。</p>
+<h3 id="onCreate"><a href="#onCreate" class="headerlink" title="onCreate"></a>onCreate</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate();</span><br><span class="line">    <span class="comment">//启动带Looper的线程</span></span><br><span class="line">    HandlerThread thread = <span class="keyword">new</span> HandlerThread(<span class="string">"IntentService["</span> + mName + <span class="string">"]"</span>);</span><br><span class="line">    thread.start();</span><br><span class="line"></span><br><span class="line">   <span class="comment">//初始化Handler</span></span><br><span class="line">    mServiceLooper = thread.getLooper();</span><br><span class="line">    mServiceHandler = <span class="keyword">new</span> ServiceHandler(mServiceLooper);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出，用了<code>HandlerThread</code>,同时也初始化了一个<code>Handler</code>。看完这里。我想你心里一定有谱了。大约明白了内部工作原理。通过<code>HandlerThread</code>,利用<code>Handler</code>发送消息转移到子线程中，然后处理任务。</p>
+<h3 id="onStartCommand"><a href="#onStartCommand" class="headerlink" title="onStartCommand"></a>onStartCommand</h3><p>为了验证我们的猜想。继续阅读源码，找到<code>onStartCommand</code>。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">onStartCommand</span><span class="params">(Intent intent, <span class="keyword">int</span> flags, <span class="keyword">int</span> startId)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        onStart(intent, startId);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> mRedelivery ? START_REDELIVER_INTENT : START_NOT_STICKY;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，内部调用了<code>onStart</code>。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onStart</span><span class="params">(Intent intent, <span class="keyword">int</span> startId)</span> </span>&#123;</span><br><span class="line">       Message msg = mServiceHandler.obtainMessage();</span><br><span class="line">       msg.arg1 = startId;</span><br><span class="line">       msg.obj = intent;</span><br><span class="line">       mServiceHandler.sendMessage(msg);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>在<code>onStart</code>内部，终于验证了我们的猜想。将<code>intent</code>和<code>startId</code>,发送到了子线程中。于是我们找到Handler内部的handleMessage方法一探究竟。</p>
+<h3 id="Handler内部的handleMessage"><a href="#Handler内部的handleMessage" class="headerlink" title="Handler内部的handleMessage"></a>Handler内部的handleMessage</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ServiceHandler</span> <span class="keyword">extends</span> <span class="title">Handler</span> </span>&#123;</span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="title">ServiceHandler</span><span class="params">(Looper looper)</span> </span>&#123;</span><br><span class="line">          <span class="keyword">super</span>(looper);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(Message msg)</span> </span>&#123;</span><br><span class="line">          onHandleIntent((Intent)msg.obj);</span><br><span class="line">          stopSelf(msg.arg1);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>看到这里，终于明白了<code>onHandleIntent</code>为什么不需再开线程。也明白了为什么可以自动销毁Service。<br>但是，机智的你可能心里在嘀咕。那个<code>HandlerThread</code>呢？里面是个死循环，不能自动停止，一直占有着资源怎么办？那么。我们再来看一下Service的最后一个生命周期。</p>
+<h3 id="onDestroy"><a href="#onDestroy" class="headerlink" title="onDestroy"></a>onDestroy</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    mServiceLooper.quit();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看出，在销毁的同时也退出了<code>Looper</code>循环。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><ul>
+<li><p>IntentService构造方法传的那个参数是来干嘛的<br>我们先来看一下IntentService的构造函数。可以看出最终传给了HandlerThread。而给Thread传一个名字更加便于调试，不然线程的默认名是<code>&quot;Thread-&quot; + id;</code>，不方便调试。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">IntentService</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>();</span><br><span class="line">    mName = name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//..</span></span><br><span class="line">    <span class="comment">//省略了部分源码</span></span><br><span class="line">    HandlerThread thread = <span class="keyword">new</span> HandlerThread(<span class="string">"IntentService["</span> + mName + <span class="string">"]"</span>);</span><br><span class="line">    thread.start();</span><br><span class="line">    <span class="comment">//..</span></span><br><span class="line">    <span class="comment">//省略了部分源码</span></span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为什么不在<code>onHandleIntent</code>中退出Looper？<br>那是因为跟普通Service一样，IntentService也可以启动多次。如果在结束服务之前又有新任务提交过来了，<code>stopSelf(int startId)</code>并不能结束服务。因为<code>startId</code>必须与最后一次启动相同时才会结束服务。所以在onDestory中退出更加合适。</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+            <a href="/tags/源码解读/" rel="tag">#源码解读</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/18/AsyncTask异步任务-源码解读/" rel="next" title="AsyncTask异步任务 源码解读">
+                <i class="fa fa-chevron-left"></i> AsyncTask异步任务 源码解读
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.jpeg"
+               alt="maplejaw" />
+          <p class="site-author-name" itemprop="name">maplejaw</p>
+          <p class="site-description motion-element" itemprop="description">不忘初心，方得始终</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/maplejaw" target="_blank" title="github">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IntentService作用"><span class="nav-number">1.1.</span> <span class="nav-text">IntentService作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IntentService疑问"><span class="nav-number">1.2.</span> <span class="nav-text">IntentService疑问</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初识API"><span class="nav-number">2.</span> <span class="nav-text">初识API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HandlerThread"><span class="nav-number">2.1.</span> <span class="nav-text">HandlerThread</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工作原理"><span class="nav-number">3.</span> <span class="nav-text">工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#onCreate"><span class="nav-number">3.1.</span> <span class="nav-text">onCreate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onStartCommand"><span class="nav-number">3.2.</span> <span class="nav-text">onStartCommand</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Handler内部的handleMessage"><span class="nav-number">3.3.</span> <span class="nav-text">Handler内部的handleMessage</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onDestroy"><span class="nav-number">3.4.</span> <span class="nav-text">onDestroy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">4.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">maplejaw</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
