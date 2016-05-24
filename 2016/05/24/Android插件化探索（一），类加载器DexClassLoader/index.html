@@ -92,7 +92,7 @@
 
 基本概念在Java环境中，有个概念叫做“类加载器”（ClassLoader）,其作用是动态装载Class文件。标准的Java SDK中有一个ClassLoader类，借助它可以装载想要的Class文件，每个ClassLoader对象在初始化时必须指定Class文件的路径
 没有使用过ClassLoader的读者可能会问：“在过去的程序开发中，当我们需">
-<meta property="og:updated_time" content="2016-05-24T13:34:46.241Z">
+<meta property="og:updated_time" content="2016-05-24T14:02:33.156Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android插件化探索（一），类加载器DexClassLoader">
 <meta name="twitter:description" content="本文部分内容参考自《Android内核剖析》
@@ -305,10 +305,11 @@
 <h2 id="初始API"><a href="#初始API" class="headerlink" title="初始API"></a>初始API</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//DexClassLoader的构造方法</span></span><br><span class="line">DexClassLoader (String dexPath, </span><br><span class="line">                String optimizedDirectory, </span><br><span class="line">                String libraryPath, </span><br><span class="line">                ClassLoader parent)</span><br></pre></td></tr></table></figure>
 <ul>
 <li>dexPath：  指目标类所在的jar/apk文件路径, 多个路径使用 File.pathSeparator分隔, Android里面默认为 “:” </li>
-<li>optimizedDirectory： 解压出的dex文件的存放路径，以免被注入攻击，不可存放在外置存储。<br>下面来看DexClassLoader的使用方法。</li>
+<li>optimizedDirectory： 解压出的dex文件的存放路径，以免被注入攻击，不可存放在外置存储。</li>
 <li>libraryPath ：目标类中的C/C++库存放路径。</li>
 <li>parent： 父类装载器</li>
 </ul>
+<p>下面来看DexClassLoader的使用方法。</p>
 <h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>DexClassLoader的使用方法一般有两种：</p>
 <ol>
 <li>从已安装的apk中读取dex</li>
