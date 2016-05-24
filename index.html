@@ -229,6 +229,117 @@
             
               
                 
+                <a class="post-title-link" href="/2016/05/24/Android插件化探索（一），类加载器DexClassLoader/" itemprop="url">
+                  Android插件化探索（一），类加载器DexClassLoader
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-24T21:31:02+08:00" content="2016-05-24">
+              2016-05-24
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/24/Android插件化探索（一），类加载器DexClassLoader/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/24/Android插件化探索（一），类加载器DexClassLoader/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>本文部分内容参考自《Android内核剖析》</p>
+</blockquote>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>在Java环境中，有个概念叫做“类加载器”（ClassLoader）,其作用是动态装载Class文件。标准的Java SDK中有一个ClassLoader类，借助它可以装载想要的Class文件，每个ClassLoader对象在初始化时必须指定Class文件的路径</p>
+<p>没有使用过ClassLoader的读者可能会问：“在过去的程序开发中，当我们需要某个类时，只需使用import关键字包含该类就可以了，为什么还要类加载器呢？”简单的讲，import中所引用的类文件有两个特点：</p>
+<ul>
+<li>必须存在于本地，当程序运行时需要该类时，内部类装载器会自动装载该类，这对程序员来讲是透明的，即程序员感知不到这一过程。</li>
+<li>编译时必须在现场，否则编译不过会因为找不到引用文件而正常编译。</li>
+</ul>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/05/24/Android插件化探索（一），类加载器DexClassLoader/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/22/IntentService意图服务-源码解读/" itemprop="url">
                   IntentService意图服务 源码解读
                 </a>
@@ -1105,7 +1216,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

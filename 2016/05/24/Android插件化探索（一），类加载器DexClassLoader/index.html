@@ -1,0 +1,690 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,插件化,源码解读" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本文部分内容参考自《Android内核剖析》
+
+基本概念在Java环境中，有个概念叫做“类加载器”（ClassLoader）,其作用是动态装载Class文件。标准的Java SDK中有一个ClassLoader类，借助它可以装载想要的Class文件，每个ClassLoader对象在初始化时必须指定Class文件的路径
+没有使用过ClassLoader的读者可能会问：“在过去的程序开发中，当我们需">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android插件化探索（一），类加载器DexClassLoader">
+<meta property="og:url" content="http://www.maplejaw.com/2016/05/24/Android插件化探索（一），类加载器DexClassLoader/index.html">
+<meta property="og:site_name" content="maplejaw的技术博客">
+<meta property="og:description" content="本文部分内容参考自《Android内核剖析》
+
+基本概念在Java环境中，有个概念叫做“类加载器”（ClassLoader）,其作用是动态装载Class文件。标准的Java SDK中有一个ClassLoader类，借助它可以装载想要的Class文件，每个ClassLoader对象在初始化时必须指定Class文件的路径
+没有使用过ClassLoader的读者可能会问：“在过去的程序开发中，当我们需">
+<meta property="og:updated_time" content="2016-05-24T13:34:46.241Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android插件化探索（一），类加载器DexClassLoader">
+<meta name="twitter:description" content="本文部分内容参考自《Android内核剖析》
+
+基本概念在Java环境中，有个概念叫做“类加载器”（ClassLoader）,其作用是动态装载Class文件。标准的Java SDK中有一个ClassLoader类，借助它可以装载想要的Class文件，每个ClassLoader对象在初始化时必须指定Class文件的路径
+没有使用过ClassLoader的读者可能会问：“在过去的程序开发中，当我们需">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Android插件化探索（一），类加载器DexClassLoader | maplejaw的技术博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">maplejaw的技术博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android插件化探索（一），类加载器DexClassLoader
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-24T21:31:02+08:00" content="2016-05-24">
+              2016-05-24
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/24/Android插件化探索（一），类加载器DexClassLoader/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/24/Android插件化探索（一），类加载器DexClassLoader/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文部分内容参考自《Android内核剖析》</p>
+</blockquote>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>在Java环境中，有个概念叫做“类加载器”（ClassLoader）,其作用是动态装载Class文件。标准的Java SDK中有一个ClassLoader类，借助它可以装载想要的Class文件，每个ClassLoader对象在初始化时必须指定Class文件的路径</p>
+<p>没有使用过ClassLoader的读者可能会问：“在过去的程序开发中，当我们需要某个类时，只需使用import关键字包含该类就可以了，为什么还要类加载器呢？”简单的讲，import中所引用的类文件有两个特点：</p>
+<ul>
+<li>必须存在于本地，当程序运行时需要该类时，内部类装载器会自动装载该类，这对程序员来讲是透明的，即程序员感知不到这一过程。</li>
+<li>编译时必须在现场，否则编译不过会因为找不到引用文件而正常编译。</li>
+</ul>
+<a id="more"></a>
+<p>但在有些情况下，所需的类却不能满足以上两个条件。比如当该类时从远程下载并在本地执行时，典型的例子就是通过浏览器中的AppleLet执行的Java程序，这些要执行的程序是在服务器端。另一种情况是，要引用的Class文件不方便在编译时直接参与，而只能运行时动态调用。举例来讲，在Android Framework中，所包含的Class文件是一些通用的类文件，但对于一些设备商而言，他们需要扩充Framework，扩充的具体工作包括两点：</p>
+<ul>
+<li>需要增加一些额外的类文件，这些类文件提供厂商自定义的功能，这些文件一般以独立的Jar包存在。</li>
+<li>需要修改Framework中的已有类文件，比如WindowManagerServcie类，在该类中添加使用自定义Jar包中的代码。使用自定义Jar包的常用方法是使用import关键字包含的自定义的类，但为了保持和原生Framework的兼容性、对于原生Framework最少化修改，可以使类装载器动态装载自定义Jar包。</li>
+</ul>
+<p>这就是使用ClassLoader的原因。</p>
+<p>在一般情况下，应用程序不需要创建一个全新的ClassLoader对象，而是使用当前环境已经存在的ClassLoader。因为Javad的Runtime环境在初始化时，其内部会创建一个ClassLoader对象用于加载Runtime所需的各种Java类。</p>
+<p>每个ClassLoader必须有一个父ClassLoader，在装载Class文件时，子ClassLoader会先请求父ClassLoader加载该Class文件，只有当其父ClassLoader找不到该Class文件时，子ClassLoader才会继续装载该类，这是一种安全机制。关系ClassLoader的内部过程，大家可以参考《Inside the Java Virtual Machine》一书，作者为Bill Venners,相关链接如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.artima.com/insidejvm/ed2/index.html</span><br></pre></td></tr></table></figure></p>
+<p>对于Android的应用程序，本质上虽然也是用Java开发，并且使用标准的Java编译器编译出Class文件，但最终的APK文件中包含的却是dex类型的文件。dex文件是将所需的所有Class文件重新打包，打包的规则不是简单的压缩，而是完全对Class文件内部的各种函数表、变量表等进行优化，并产生一个新的文件，这就是dex文件。由于dex文件是一种经过优化的Class文件，因此要加载这样特殊的Class文件就需要特殊的类装载器，这就是DexClassLoader，Android SDK中提供的DexClassLoader类就是出于这个目的。</p>
+<h2 id="初始API"><a href="#初始API" class="headerlink" title="初始API"></a>初始API</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//DexClassLoader的构造方法</span></span><br><span class="line">DexClassLoader (String dexPath, </span><br><span class="line">                String optimizedDirectory, </span><br><span class="line">                String libraryPath, </span><br><span class="line">                ClassLoader parent)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>dexPath：  指目标类所在的jar/apk文件路径, 多个路径使用 File.pathSeparator分隔, Android里面默认为 “:” </li>
+<li>optimizedDirectory： 解压出的dex文件的存放路径，以免被注入攻击，不可存放在外置存储。<br>下面来看DexClassLoader的使用方法。</li>
+<li>libraryPath ：目标类中的C/C++库存放路径。</li>
+<li>parent： 父类装载器</li>
+</ul>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>DexClassLoader的使用方法一般有两种：</p>
+<ol>
+<li>从已安装的apk中读取dex</li>
+<li>从apk文件中读取dex</li>
+</ol>
+<p>假如有两个APK，一个是宿主APK，叫作HOST，一个是插件APK，叫作Plugin。Plugin中有一个类叫PluginClass，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PluginClass</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PluginClass</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Log.d(<span class="string">"JG"</span>,<span class="string">"初始化PluginClass"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">function</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a+b;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在如果想调用插件APK中PluginClass内的方法，应该怎么办？</p>
+<h3 id="从已安装的apk中读取dex"><a href="#从已安装的apk中读取dex" class="headerlink" title="从已安装的apk中读取dex"></a>从已安装的apk中读取dex</h3><p>先来看第一种方法，这种方法必须建一个Activity，在清单文件中配置Action.<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">activity</span> <span class="attr">android:name</span>=<span class="string">".MainActivity"</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">             <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"com.maplejaw.plugin"</span>/&gt;</span></span><br><span class="line">         <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后在宿主APK中如下使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line">   * 这种方式用于从已安装的apk中读取，必须要有一个activity，且需要配置ACTION</span><br><span class="line">   */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">useDexClassLoader</span><span class="params">()</span></span>&#123;</span><br><span class="line">      <span class="comment">//创建一个意图，用来找到指定的apk</span></span><br><span class="line">      Intent intent = <span class="keyword">new</span> Intent(<span class="string">"com.maplejaw.plugin"</span>);</span><br><span class="line">      <span class="comment">//获得包管理器</span></span><br><span class="line">      PackageManager pm = getPackageManager();</span><br><span class="line">      List&lt;ResolveInfo&gt; resolveinfoes =  pm.queryIntentActivities(intent, <span class="number">0</span>);</span><br><span class="line">      <span class="keyword">if</span>(resolveinfoes.size()==<span class="number">0</span>)&#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//获得指定的activity的信息</span></span><br><span class="line">      ActivityInfo actInfo = resolveinfoes.get(<span class="number">0</span>).activityInfo;</span><br><span class="line"></span><br><span class="line">      <span class="comment">//获得包名</span></span><br><span class="line">      String packageName = actInfo.packageName;</span><br><span class="line">      <span class="comment">//获得apk的目录或者jar的目录</span></span><br><span class="line">      String apkPath = actInfo.applicationInfo.sourceDir;</span><br><span class="line">      <span class="comment">//dex解压后的目录,注意，这个用宿主程序的目录，android中只允许程序读取写自己</span></span><br><span class="line">      <span class="comment">//目录下的文件</span></span><br><span class="line">      String dexOutputDir = getApplicationInfo().dataDir;</span><br><span class="line"></span><br><span class="line">      <span class="comment">//native代码的目录</span></span><br><span class="line">      String libPath = actInfo.applicationInfo.nativeLibraryDir;</span><br><span class="line"></span><br><span class="line">      <span class="comment">//创建类加载器，把dex加载到虚拟机中</span></span><br><span class="line">      DexClassLoader calssLoader = <span class="keyword">new</span> DexClassLoader(apkPath, dexOutputDir, libPath,</span><br><span class="line">              <span class="keyword">this</span>.getClass().getClassLoader());</span><br><span class="line"></span><br><span class="line">      <span class="comment">//利用反射调用插件包内的类的方法</span></span><br><span class="line"></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          Class&lt;?&gt; clazz = calssLoader.loadClass(packageName+<span class="string">".PluginClass"</span>);</span><br><span class="line"></span><br><span class="line">          Object obj = clazz.newInstance();</span><br><span class="line">          Class[] param = <span class="keyword">new</span> Class[<span class="number">2</span>];</span><br><span class="line">          param[<span class="number">0</span>] = Integer.TYPE;</span><br><span class="line">          param[<span class="number">1</span>] = Integer.TYPE;</span><br><span class="line"></span><br><span class="line">          Method method = clazz.getMethod(<span class="string">"function"</span>, param);</span><br><span class="line"></span><br><span class="line">          Integer ret = (Integer)method.invoke(obj, <span class="number">12</span>,<span class="number">34</span>);</span><br><span class="line"></span><br><span class="line">          Log.d(<span class="string">"JG"</span>, <span class="string">"返回的调用结果为:"</span> + ret);</span><br><span class="line"></span><br><span class="line">      &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">          e.printStackTrace();</span><br><span class="line">      &#125; </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们安装完两个APK后，在宿主中就可以直接调用，调用示例如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">btnClick</span><span class="params">(View view)</span></span>&#123;</span><br><span class="line">    useDexClassLoader();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看出控制台打印结果如下。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">05-24 14:43:12.239 4068-4068/com.maplejaw.host D/JG: 初始化PluginClass</span><br><span class="line">05-24 14:43:12.240 4068-4068/com.maplejaw.host D/JG: 返回的调用结果为: 46</span><br></pre></td></tr></table></figure></p>
+<h3 id="从apk文件中读取dex"><a href="#从apk文件中读取dex" class="headerlink" title="从apk文件中读取dex"></a>从apk文件中读取dex</h3><p>这种方法由于并不需要安装，所以不需要通过Intent从activity中解析信息。换言之，这种方法不需要创建Activity。无需配置清单文件。我们只需要打包一个apk，然后放到SD卡中即可。<br>核心代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//apk路径</span></span><br><span class="line">String path=Environment.getExternalStorageDirectory().getAbsolutePath()+<span class="string">"/1.apk"</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">useDexClassLoader</span><span class="params">(String path)</span></span>&#123;</span><br><span class="line">  </span><br><span class="line">    File codeDir=getDir(<span class="string">"dex"</span>, Context.MODE_PRIVATE);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建类加载器，把dex加载到虚拟机中</span></span><br><span class="line">    DexClassLoader calssLoader = <span class="keyword">new</span> DexClassLoader(path, codeDir.getAbsolutePath(), <span class="keyword">null</span>,</span><br><span class="line">            <span class="keyword">this</span>.getClass().getClassLoader());</span><br><span class="line"></span><br><span class="line">    <span class="comment">//利用反射调用插件包内的类的方法</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Class&lt;?&gt; clazz = calssLoader.loadClass(<span class="string">"com.maplejaw.plugin.PluginClass"</span>);</span><br><span class="line"></span><br><span class="line">        Object obj = clazz.newInstance();</span><br><span class="line">        Class[] param = <span class="keyword">new</span> Class[<span class="number">2</span>];</span><br><span class="line">        param[<span class="number">0</span>] = Integer.TYPE;</span><br><span class="line">        param[<span class="number">1</span>] = Integer.TYPE;</span><br><span class="line"></span><br><span class="line">        Method method = clazz.getMethod(<span class="string">"function"</span>, param);</span><br><span class="line"></span><br><span class="line">        Integer ret = (Integer)method.invoke(obj, <span class="number">12</span>,<span class="number">21</span>);</span><br><span class="line"></span><br><span class="line">        Log.d(<span class="string">"JG"</span>, <span class="string">"返回的调用结果为: "</span> + ret);</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">05</span>-<span class="number">24</span> <span class="number">14</span>:<span class="number">45</span>:<span class="number">12.239</span> <span class="number">4068</span>-<span class="number">4068</span>/com.maplejaw.host D/JG: 初始化PluginClass</span><br><span class="line"><span class="number">05</span>-<span class="number">24</span> <span class="number">14</span>:<span class="number">45</span>:<span class="number">12.240</span> <span class="number">4068</span>-<span class="number">4068</span>/com.maplejaw.host D/JG: 返回的调用结果为: <span class="number">33</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="插件概念"><a href="#插件概念" class="headerlink" title="插件概念"></a>插件概念</h2><p>插件是一个逻辑概念，而不是什么技术标准。总的来讲插件的概念包含以下意思：</p>
+<ul>
+<li>插件不能独立运行，必须运行与一个宿主程序中，即由宿主程序去调用插件程序。</li>
+<li>插件一般可以独立安装。</li>
+<li>宿主程序中可以管理不同的插件，包或查看插件的多少，禁用和使用某个插件，如果多个插件功能是互斥的，则可以切换插件。</li>
+<li>宿主程序应该保证参见的向下兼容性，即新版本的宿主程序可以运行较老版本的插件，或者说较老版本的插件能够在新版本的宿主程序中运行。</li>
+<li>由于ClassLoader具有动态装载程序的特点，因此，可以使用该技术来实现一种插件架构。</li>
+</ul>
+<h2 id="插件架构化"><a href="#插件架构化" class="headerlink" title="插件架构化"></a>插件架构化</h2><p>通过ClassLoader装载的类，调用其内部函数的过程有点繁琐，使用反射构造Method对象、构造参数等等。那么，有没有一种方法，既能通过动态装载，利用动态装载的灵活性，又能像直接类引用那样方便地调用其函数？答案是有的，接口（Interface）。</p>
+<p>首先定义一个interface接口，interface仅仅定义函数的输入输出，不定义函数的具体实现。该interface类一方面存在于Plugin项目中，另一方面存在于HOST宿主项目中。</p>
+<p>这种方法，需保证接口的完整类名（包名+类名）是一样的，否则将会报如下异常。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.lang.ClassCastException: com.maplejaw.plugin.PluginClass cannot be cast to com.maplejaw.host.Comm</span><br></pre></td></tr></table></figure></p>
+<p>我们应该保证两者的完整类名是一致的。一般会建一个插件接口库，给两个项目分别引用即可。又或者，在两个工程中创建一个同样名字的用于存放插件接口的包，然后把插件接口类统一放到那个包下即可。</p>
+<p>接口定义如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Comm</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">function</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现将PluginClass修改成如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PluginClass</span> <span class="keyword">implements</span> <span class="title">Comm</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PluginClass</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Log.d(<span class="string">"JG"</span>,<span class="string">"初始化PluginClass"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">function</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a+b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>相应的调用核心代码修改如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Class&lt;?&gt; clazz = calssLoader.loadClass(pacageName+<span class="string">".PluginClass"</span>);</span><br><span class="line">Comm obj = (Comm) clazz.newInstance();</span><br><span class="line">Integer integer=obj.function(<span class="number">33</span>,<span class="number">44</span>);</span><br><span class="line">Log.d(<span class="string">"JG"</span>, <span class="string">"返回的调用结果为:"</span> + integer);</span><br></pre></td></tr></table></figure></p>
+<p>打印结果如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">05-24 16:17:22.033 12963-12963/com.maplejaw.host D/JG: 初始化PluginClass</span><br><span class="line">05-24 16:17:22.035 12963-12963/com.maplejaw.host D/JG: 返回的调用结果为:77</span><br></pre></td></tr></table></figure></p>
+<h2 id="获取资源文件"><a href="#获取资源文件" class="headerlink" title="获取资源文件"></a>获取资源文件</h2><p>在了解了ClassLoader的基本用法后，那么问题来了，如果想访问插件中的资源文件怎么办？<br>获取资源的方式比较简单，首先得知道名字，这些名字最好要事先约定好，根据名字获取相应的id，最后用id取相应资源。Android中提供的获取Resource得API：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Resources res= pm.getResourcesForApplication(packageName);</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>取图片资源<br>首先在插件APK中的drawable文件夹中放进图片a.jpg。然后在宿主APK中编写核心代码如下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">useDexClassLoader</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//创建一个意图，用来找到指定的apk</span></span><br><span class="line">    Intent intent = <span class="keyword">new</span> Intent(<span class="string">"com.maplejaw.plugin"</span>);</span><br><span class="line">    <span class="comment">//获得包管理器</span></span><br><span class="line">    PackageManager pm = getPackageManager();</span><br><span class="line">    List&lt;ResolveInfo&gt; resolveinfoes =  pm.queryIntentActivities(intent, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span>(resolveinfoes.size()==<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//获得指定的activity的信息</span></span><br><span class="line">    ActivityInfo actInfo = resolveinfoes.get(<span class="number">0</span>).activityInfo;</span><br><span class="line">    <span class="comment">//获得包名</span></span><br><span class="line">    String packageName = actInfo.packageName;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Resources res= pm.getResourcesForApplication(packageName);</span><br><span class="line">        <span class="keyword">int</span> id=res.getIdentifier(<span class="string">"a"</span>,<span class="string">"drawable"</span>,packageName);<span class="comment">//根据名字取id</span></span><br><span class="line">        mImageView.setImageDrawable(res.getDrawable(id));<span class="comment">//设置给ImageView</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (PackageManager.NameNotFoundException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>取String<br>比如插件APK中的string中写了author信息。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">string</span> <span class="attr">name</span>=<span class="string">"author"</span>&gt;</span>maplejaw<span class="tag">&lt;/<span class="name">string</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>取出author信息</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Resources res= pm.getResourcesForApplication(packageName);</span><br><span class="line"><span class="keyword">int</span> id=res.getIdentifier(<span class="string">"author"</span>,<span class="string">"string"</span>,packageName);</span><br><span class="line">Log.d(<span class="string">"JG"</span>, res.getString(id));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>取颜色</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Resources res= pm.getResourcesForApplication(packageName);</span><br><span class="line"><span class="keyword">int</span> id=res.getIdentifier(<span class="string">"colorPrimary"</span>,<span class="string">"color"</span>,packageName);</span><br><span class="line">mImageView.setBackgroundColor(  res.getColor(id));</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="源码解读"><a href="#源码解读" class="headerlink" title="源码解读"></a>源码解读</h2><p>从上面的例子可以看出，一般使用<code>Class&lt;?&gt; clazz = calssLoader.loadClass(&quot;com.maplejaw.plugin.PluginClass&quot;);</code>来加载类，那么这个类做了什么呢？</p>
+<p>由于DexClassLoader继承自BaseDexClassLoader，且遵循着双亲委托，那我们先来看下BaseDexClassLoader中的源码。<br>构造方法如下，可见一个DexClassLoader包含一个DexPathList。DexPathList用一个来存放dex信息的列表<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">BaseDexClassLoader</span><span class="params">(String dexPath, File optimizedDirectory,</span><br><span class="line">            String libraryPath, ClassLoader parent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(parent);</span><br><span class="line">        <span class="keyword">this</span>.pathList = <span class="keyword">new</span> DexPathList(<span class="keyword">this</span>, dexPath, libraryPath, optimizedDirectory);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们来简单看一下DexPathList的源码。<br>属性列表如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DEX_SUFFIX = <span class="string">".dex"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//一个ClassLoader对象</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> ClassLoader definingContext;</span><br><span class="line">  <span class="comment">//一个存放dex元素列表，Element是DexPathList的一个内部类</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> Element[] dexElements;</span><br><span class="line">  <span class="comment">//本地库目录列表</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> File[] nativeLibraryDirectories;</span><br><span class="line">  <span class="comment">//创建dexElements抛出的异常集合</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> IOException[] dexElementsSuppressedExceptions;</span><br></pre></td></tr></table></figure></p>
+<p>Element内部类的构造方法如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">     <span class="keyword">private</span> <span class="keyword">final</span> File file;</span><br><span class="line">     <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">boolean</span> isDirectory;</span><br><span class="line">     <span class="keyword">private</span> <span class="keyword">final</span> File zip;</span><br><span class="line">     <span class="keyword">private</span> <span class="keyword">final</span> DexFile dexFile;</span><br><span class="line">     </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Element</span><span class="params">(File file, <span class="keyword">boolean</span> isDirectory, File zip, DexFile dexFile)</span> </span>&#123;</span><br><span class="line">         <span class="keyword">this</span>.file = file;</span><br><span class="line">         <span class="keyword">this</span>.isDirectory = isDirectory;</span><br><span class="line">         <span class="keyword">this</span>.zip = zip;</span><br><span class="line">         <span class="keyword">this</span>.dexFile = dexFile;</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure></p>
+<p>DexPathList的构造方法如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">DexPathList</span><span class="params">(ClassLoader definingContext, String dexPath,</span><br><span class="line">        String libraryPath, File optimizedDirectory)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//..</span></span><br><span class="line">   <span class="comment">//省略了异常相关源码</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//直接赋值ClassLoader对象</span></span><br><span class="line">    <span class="keyword">this</span>.definingContext = definingContext;</span><br><span class="line">     </span><br><span class="line">     <span class="comment">//赋值数组，splitDexPath将多个路径拆分成集合，makeDexElements根据路径遍历存取</span></span><br><span class="line">    <span class="keyword">this</span>.dexElements = makeDexElements(splitDexPath(dexPath), optimizedDirectory,suppressedExceptions);</span><br><span class="line">      <span class="comment">//..</span></span><br><span class="line">     <span class="comment">//省略了异常相关源码</span></span><br><span class="line">     </span><br><span class="line">      <span class="comment">//赋值本地库目录集合</span></span><br><span class="line">    <span class="keyword">this</span>.nativeLibraryDirectories = splitLibraryPath(libraryPath);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们来看看makeDexElements方法，看看dexElements数组是怎么赋值的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Element[] makeDexElements(ArrayList&lt;File&gt; files, File optimizedDirectory, ArrayList&lt;IOException&gt; suppressedExceptions) &#123;</span><br><span class="line">        ArrayList&lt;Element&gt; elements = <span class="keyword">new</span> ArrayList&lt;Element&gt;();</span><br><span class="line">        <span class="comment">//开始遍历保存到dexElements集合</span></span><br><span class="line">        <span class="keyword">for</span> (File file : files) &#123;</span><br><span class="line">            File zip = <span class="keyword">null</span>;</span><br><span class="line">            DexFile dex = <span class="keyword">null</span>;</span><br><span class="line">            String name = file.getName();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (file.isDirectory()) &#123;</span><br><span class="line">                <span class="comment">// We support directories for looking up resources.</span></span><br><span class="line">                <span class="comment">// This is only useful for running libcore tests.</span></span><br><span class="line">                elements.add(<span class="keyword">new</span> Element(file, <span class="keyword">true</span>, <span class="keyword">null</span>, <span class="keyword">null</span>));</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (file.isFile())&#123;</span><br><span class="line">                <span class="keyword">if</span> (name.endsWith(DEX_SUFFIX)) &#123;</span><br><span class="line">                        dex = loadDexFile(file, optimizedDirectory);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    zip = file;</span><br><span class="line">                   dex = loadDexFile(file, optimizedDirectory);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                System.logW(<span class="string">"ClassLoader referenced unknown path: "</span> + file);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> ((zip != <span class="keyword">null</span>) || (dex != <span class="keyword">null</span>)) &#123;</span><br><span class="line">                elements.add(<span class="keyword">new</span> Element(file, <span class="keyword">false</span>, zip, dex));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> elements.toArray(<span class="keyword">new</span> Element[elements.size()]);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们现在回到<code>Class&lt;?&gt; clazz = calssLoader.loadClass(&quot;com.maplejaw.plugin.PluginClass&quot;);</code>，从ClassLoader类中找到<code>loadClass</code>源码，如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//loadClass(String)</span></span><br><span class="line"> <span class="keyword">public</span> Class&lt;?&gt; loadClass(String className) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">     <span class="keyword">return</span> loadClass(className, <span class="keyword">false</span>);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>内部调用了loadClass的重载方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//loadClass(String,boolean)</span></span><br><span class="line"> <span class="keyword">protected</span> Class&lt;?&gt; loadClass(String className, <span class="keyword">boolean</span> resolve) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">       Class&lt;?&gt; clazz = findLoadedClass(className);<span class="comment">//从已装载过的类中找。</span></span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> (clazz == <span class="keyword">null</span>) &#123;</span><br><span class="line">           ClassNotFoundException suppressed = <span class="keyword">null</span>;</span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">               clazz = parent.loadClass(className, <span class="keyword">false</span>);<span class="comment">//由父类装载</span></span><br><span class="line">           &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">               suppressed = e;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="keyword">if</span> (clazz == <span class="keyword">null</span>) &#123;</span><br><span class="line">               <span class="keyword">try</span> &#123;</span><br><span class="line">                   clazz = findClass(className);<span class="comment">//由子类装载</span></span><br><span class="line">               &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">                   e.addSuppressed(suppressed);</span><br><span class="line">                   <span class="keyword">throw</span> e;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> clazz;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，该方法分三步装载类：</p>
+<ul>
+<li>从已装载过的类中找</li>
+<li>如果从已装载过的列表中找不到，则从父类装载</li>
+<li>如果父类找不到，从子类装载</li>
+</ul>
+<p>先来看看findLoadedClass（已装载过的类）源码如下,最终调用虚拟机的装载器去寻找。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">protected</span> <span class="keyword">final</span> Class&lt;?&gt; findLoadedClass(String className) &#123;</span><br><span class="line">    ClassLoader loader;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span> == BootClassLoader.getInstance())</span><br><span class="line">        loader = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        loader = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">return</span> VMClassLoader.findLoadedClass(loader, className);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由于第一次装载一定会走findClass这个方法，我们来看下源码，可以看出，最终会去pathList中寻找<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> Class&lt;?&gt; findClass(String name)  &#123;</span><br><span class="line">   <span class="comment">//..</span></span><br><span class="line">   <span class="comment">//省略了部分源码</span></span><br><span class="line">    Class c = pathList.findClass(name, suppressedExceptions);</span><br><span class="line">    <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">//..</span></span><br><span class="line">     <span class="comment">//省略了抛出异常的源码</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>找到DexPathList的findClass方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Class <span class="title">findClass</span><span class="params">(String name, List&lt;Throwable&gt; suppressed)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">for</span> (Element element : dexElements) &#123;<span class="comment">//这里进行遍历查询</span></span><br><span class="line">           DexFile dex = element.dexFile;</span><br><span class="line"></span><br><span class="line">           <span class="keyword">if</span> (dex != <span class="keyword">null</span>) &#123;</span><br><span class="line">              <span class="comment">//从DexFile中试图加载Class，从这里看出，从第一个开始遍历，如果查到就返回，这就是热修复的基本原理。</span></span><br><span class="line">               Class clazz = dex.loadClassBinaryName(name, definingContext, suppressed);</span><br><span class="line">               <span class="keyword">if</span> (clazz != <span class="keyword">null</span>) &#123;</span><br><span class="line">                   <span class="keyword">return</span> clazz;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="comment">//..</span></span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>由于SDK中无法直接查看DexClassLoader相关源码。这里把源码链接贴出来。方便大家阅读。</p>
+<ul>
+<li><a href="http://androidxref.com/5.1.0_r1/xref/libcore/dalvik/src/main/java/dalvik/system/" target="_blank" rel="external">DexClassLoader相关源码链接</a></li>
+</ul>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+            <a href="/tags/源码解读/" rel="tag">#源码解读</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/22/IntentService意图服务-源码解读/" rel="next" title="IntentService意图服务 源码解读">
+                <i class="fa fa-chevron-left"></i> IntentService意图服务 源码解读
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/24/Android插件化探索（一），类加载器DexClassLoader/"
+           data-title="Android插件化探索（一），类加载器DexClassLoader" data-url="http://www.maplejaw.com/2016/05/24/Android插件化探索（一），类加载器DexClassLoader/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.jpeg"
+               alt="maplejaw" />
+          <p class="site-author-name" itemprop="name">maplejaw</p>
+          <p class="site-description motion-element" itemprop="description">不忘初心，方得始终</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/maplejaw" target="_blank" title="github">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始API"><span class="nav-number">2.</span> <span class="nav-text">初始API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用方法"><span class="nav-number">3.</span> <span class="nav-text">使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#从已安装的apk中读取dex"><span class="nav-number">3.1.</span> <span class="nav-text">从已安装的apk中读取dex</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从apk文件中读取dex"><span class="nav-number">3.2.</span> <span class="nav-text">从apk文件中读取dex</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件概念"><span class="nav-number">4.</span> <span class="nav-text">插件概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件架构化"><span class="nav-number">5.</span> <span class="nav-text">插件架构化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取资源文件"><span class="nav-number">6.</span> <span class="nav-text">获取资源文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码解读"><span class="nav-number">7.</span> <span class="nav-text">源码解读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">8.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">maplejaw</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"maplejaw"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
