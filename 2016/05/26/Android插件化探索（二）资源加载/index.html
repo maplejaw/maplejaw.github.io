@@ -1,0 +1,669 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,插件化,资源加载" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前情提要在探索资源加载方式之前，我们先来看看上一篇中没细讲的东西。还没看过的建议先看上一篇Android插件化探索（一）类加载器DexClassLoader。
+PathClassLoader和DexClassLoader的区别DexClassLoader的源码如下：1234567public class DexClassLoader extends BaseDexClassLoader &amp;#123">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android插件化探索（二）资源加载">
+<meta property="og:url" content="http://www.maplejaw.com/2016/05/26/Android插件化探索（二）资源加载/index.html">
+<meta property="og:site_name" content="maplejaw的技术博客">
+<meta property="og:description" content="前情提要在探索资源加载方式之前，我们先来看看上一篇中没细讲的东西。还没看过的建议先看上一篇Android插件化探索（一）类加载器DexClassLoader。
+PathClassLoader和DexClassLoader的区别DexClassLoader的源码如下：1234567public class DexClassLoader extends BaseDexClassLoader &amp;#123">
+<meta property="og:updated_time" content="2016-05-26T12:11:44.697Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android插件化探索（二）资源加载">
+<meta name="twitter:description" content="前情提要在探索资源加载方式之前，我们先来看看上一篇中没细讲的东西。还没看过的建议先看上一篇Android插件化探索（一）类加载器DexClassLoader。
+PathClassLoader和DexClassLoader的区别DexClassLoader的源码如下：1234567public class DexClassLoader extends BaseDexClassLoader &amp;#123">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Android插件化探索（二）资源加载 | maplejaw的技术博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">maplejaw的技术博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android插件化探索（二）资源加载
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-26T20:06:39+08:00" content="2016-05-26">
+              2016-05-26
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/26/Android插件化探索（二）资源加载/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/26/Android插件化探索（二）资源加载/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h2><p>在探索资源加载方式之前，我们先来看看上一篇中没细讲的东西。还没看过的建议先看上一篇<a href="http://www.maplejaw.com/2016/05/24/Android%E6%8F%92%E4%BB%B6%E5%8C%96%E6%8E%A2%E7%B4%A2%EF%BC%88%E4%B8%80%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8DexClassLoader/">Android插件化探索（一）类加载器DexClassLoader</a>。</p>
+<h3 id="PathClassLoader和DexClassLoader的区别"><a href="#PathClassLoader和DexClassLoader的区别" class="headerlink" title="PathClassLoader和DexClassLoader的区别"></a>PathClassLoader和DexClassLoader的区别</h3><p>DexClassLoader的源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DexClassLoader</span> <span class="keyword">extends</span> <span class="title">BaseDexClassLoader</span> </span>&#123;</span><br><span class="line">    <span class="comment">//支持从任何地方的apk/jar/dex中读取</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DexClassLoader</span><span class="params">(String dexPath, String optimizedDirectory,</span><br><span class="line">            String libraryPath, ClassLoader parent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(dexPath, <span class="keyword">new</span> File(optimizedDirectory), libraryPath, parent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>PathClassLoader的源码如下，没有指定optimizedDirectory所以只能加载已安装的APK，因为已安装的APK会将dex解压到了/data/dalvik-cache/目录下，PathClassLoader会到这里去找。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PathClassLoader</span> <span class="keyword">extends</span> <span class="title">BaseDexClassLoader</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">PathClassLoader</span><span class="params">(String dexPath, ClassLoader parent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(dexPath, <span class="keyword">null</span>, <span class="keyword">null</span>, parent);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">PathClassLoader</span><span class="params">(String dexPath, String libraryPath,</span><br><span class="line">            ClassLoader parent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(dexPath, <span class="keyword">null</span>, libraryPath, parent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是本人本着不作不死的性格，修改Plugin类如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">useDexClassLoader</span><span class="params">(String path)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建类加载器，把dex加载到虚拟机中</span></span><br><span class="line">    PathClassLoader calssLoader = <span class="keyword">new</span> PathClassLoader(path, <span class="keyword">null</span>,</span><br><span class="line">            <span class="keyword">this</span>.getClass().getClassLoader());</span><br><span class="line"></span><br><span class="line">    <span class="comment">//利用反射调用插件包内的类的方法</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Class&lt;?&gt; clazz = calssLoader.loadClass(<span class="string">"com.maplejaw.hotplugin.PluginClass"</span>);</span><br><span class="line">        Comm obj = （Comm）clazz.newInstance();</span><br><span class="line">        Integer ret = obj.function( <span class="number">12</span>,<span class="number">21</span>);</span><br><span class="line">        Log.d(<span class="string">"JG"</span>, <span class="string">"返回的调用结果： "</span> + ret);</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在4.4和5.0上分别做了试验从SD卡上加载dex，发现提示略有差别。<br>Android 4.4：直接提示找不到该类<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.lang.ClassNotFoundException: Didn<span class="string">'t find class "com.maplejaw.hotplugin.PluginClass" on path: DexPathList[[zip file "/storage/sdcard/2.apk"],nativeLibraryDirectories=[/vendor/lib, /system/lib]]</span></span><br></pre></td></tr></table></figure></p>
+<p>Android 5.0：可以发现在加载该类之前，系统尝试将dex写到/data/dalvik-cache/下，由于权限问题而失败。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">05-25 04:07:02.291 31699-31699/com.maplejaw.hotfix E/dalvikvm: Dex cache directory isn<span class="string">'t writable: /data/dalvik-cache</span><br><span class="line">05-25 04:07:02.291 31699-31699/com.maplejaw.hotfix I/dalvikvm: Unable to open or create cache for /storage/sdcard/2.apk (/data/dalvik-cache/storage@sdcard@2.apk@classes.dex)</span><br><span class="line">05-25 04:07:02.291 31699-31699/com.maplejaw.hotfix W/System.err: java.lang.ClassNotFoundException: Didn'</span>t find class <span class="string">"com.maplejaw.hotplugin.PluginClass"</span> on path: DexPathList[[zip file <span class="string">"/storage/sdcard/2.apk"</span>],nativeLibraryDirectories=[/vendor/lib, /system/lib]]</span><br></pre></td></tr></table></figure></p>
+<p>但是！！！笔者此时默默的掏出了大红米（Android 5.0）测试了一番。居然发现可以调用正常，也就是说，MIUI成功将dex写到了/data/dalvik-cache/下，所以如果你手持MIUI发现PathClassLoader可以加载外部dex时，务必冷静，用模拟器试试。</p>
+<h3 id="双亲委托"><a href="#双亲委托" class="headerlink" title="双亲委托"></a>双亲委托</h3><p>什么叫双亲委托？<br>为了更好的保证 JAVA 平台的安全。在此模型下，当一个装载器被请求加载某个类时，先委托自己的 parent 去装载，如果 parent 能装载，则返回这个类对应的 Class 对象，否则，递归委托给父类的父类装载。当所有父类装载器都装载失败时，才由当前装载器装载。在此模型下，用户自定义的类装载器，不可能装载应该由父亲装载的可靠类，从而防止不可靠甚至恶意的代码代替本应该由父亲装载器装载的可靠代码。</p>
+<p>在JVM中预定义了的三种类型类加载器：</p>
+<ul>
+<li>启动（Bootstrap）类加载器：是用本地代码实现的类装入器，它负责将 <java_runtime_home>/lib下面的类库加载到内存中（比如rt.jar）。由于引导类加载器涉及到虚拟机本地实现细节，开发者无法直接获取到启动类加载器的引用，所以不允许直接通过引用进行操作。</java_runtime_home></li>
+<li>标准扩展（Extension）类加载器：是由 Sun 的 ExtClassLoader（sun.misc.Launcher\$ExtClassLoader）实现的。它负责将&lt; Java_Runtime_Home &gt;/lib/ext或者由系统变量 java.ext.dir指定位置中的类库加载到内存中。开发者可以直接使用标准扩展类加载器。</li>
+<li>系统（System）类加载器：是由 Sun 的 AppClassLoader（sun.misc.Launcher\$AppClassLoader）实现的。它负责将系统类路径（CLASSPATH）中指定的类库加载到内存中。开发者可以直接使用系统类加载器。</li>
+</ul>
+<p>委派机制：自定义的ClassLoader-&gt;AppClassLoader-&gt;ExtClassLoader-&gt;BootstrapClassLoader</p>
+<p>那么Android中的委派机制是怎么样的呢？</p>
+<ul>
+<li>BootClassLoader： 加载系统类库</li>
+<li>PathClassLoader： 加载已安装apk中的dex中的类</li>
+<li>DexClassLoader：  加载外部和内部apk中的类</li>
+</ul>
+<p>委派机制：DexClassLoader-&gt;PathClassLoader-&gt;BootClassLoader。</p>
+<p>我们可以打印出其委派机制：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ClassLoader classLoader=<span class="keyword">new</span> DexClassLoader(apkPath,getApplicationInfo().dataDir,libPath,getClassLoader());</span><br><span class="line"> <span class="keyword">try</span> &#123;</span><br><span class="line">           Class&lt;?&gt; clazz = calssLoader.loadClass(<span class="string">"com.maplejaw.hotplugin.PluginClass"</span>);</span><br><span class="line">           Comm obj = （Comm）clazz.newInstance();</span><br><span class="line">           Integer ret = obj.function( <span class="number">12</span>,<span class="number">21</span>);</span><br><span class="line">           </span><br><span class="line">           <span class="keyword">while</span>(classLoader != <span class="keyword">null</span>)&#123;</span><br><span class="line">               Log.d(<span class="string">"JG"</span>, <span class="string">"类加载器:"</span>+classLoader);</span><br><span class="line">               classLoader = classLoader.getParent();</span><br><span class="line">           &#125;</span><br><span class="line">             Log.d(<span class="string">"JG"</span>, <span class="string">"返回的调用结果： "</span> + ret);</span><br></pre></td></tr></table></figure></p>
+<p>结果如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">05-25 09:09:11.330 9100-9100/com.maplejaw.hotfix D/JG: 初始化PluginClass</span><br><span class="line"></span><br><span class="line">05-25 09:09:11.330 9100-9100/com.maplejaw.hotfix D/JG: 类加载器:dalvik.system.DexClassLoader[DexPathList[[zip file <span class="string">"/data/app/com.maplejaw.hotplugin-2/base.apk"</span>],nativeLibraryDirectories=[/data/app/com.maplejaw.hotplugin-2/lib/x86_64, /vendor/lib64, /system/lib64]]]</span><br><span class="line"></span><br><span class="line">05-25 09:09:11.330 9100-9100/com.maplejaw.hotfix D/JG: 类加载器:dalvik.system.PathClassLoader[DexPathList[[zip file <span class="string">"/data/app/com.maplejaw.hotfix-2/base.apk"</span>],nativeLibraryDirectories=[/data/app/com.maplejaw.hotfix-2/lib/x86_64, /vendor/lib64, /system/lib64]]]</span><br><span class="line"></span><br><span class="line">05-25 09:09:11.330 9100-9100/com.maplejaw.hotfix D/JG: 类加载器:java.lang.BootClassLoader@7<span class="built_in">cd</span>98df</span><br><span class="line"></span><br><span class="line">05-25 09:09:11.330 9100-9100/com.maplejaw.hotfix D/JG: 返回的调用结果： 33</span><br></pre></td></tr></table></figure></p>
+<p>看到这里，应该可以明白上一篇中提到的<code>java.lang.IllegalAccessError: Class ref in pre-verified class resolved to unexpected implementation</code>中因为同一加载器加载不同dex中相同的类引发的错误了吧。</p>
+<h2 id="资源加载"><a href="#资源加载" class="headerlink" title="资源加载"></a>资源加载</h2><p>在上一篇中，提到了通过资源名字，然后获取id，最后获取资源的思路。先来回顾一下。</p>
+<h3 id="getResourcesForApplication"><a href="#getResourcesForApplication" class="headerlink" title="getResourcesForApplication"></a>getResourcesForApplication</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//首先，通过包名获取该包名的Resources对象</span></span><br><span class="line">Resources res= pm.getResourcesForApplication(packageName);</span><br><span class="line"><span class="comment">//根据约定好的名字，去取资源id；</span></span><br><span class="line"><span class="keyword">int</span> id=res.getIdentifier(<span class="string">"a"</span>,<span class="string">"drawable"</span>,packageName);<span class="comment">//根据名字取id</span></span><br><span class="line"><span class="comment">//根据资源id，取出资源</span></span><br><span class="line">Drawable drawable=res.getDrawable(id)</span><br></pre></td></tr></table></figure>
+<p>这种方式有个特点，就是得清楚每一个资源的名字。但也从侧面提现了，这种方式不够灵活。那么，有没有一种方法，可以简化这一过程呢？</p>
+<p>根据这种方式的特点，尝试着写了几个测试例子。</p>
+<p>不就是要资源吗，直接在插件中把资源提供给宿主不就行了。修改PluginClass如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Drawable <span class="title">getImage</span><span class="params">(Context context)</span></span>&#123;</span><br><span class="line">      <span class="keyword">return</span> context.getResources().getDrawable(R.drawable.a);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>宿主核心代码修改如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Class&lt;?&gt; clazz = classLoader.loadClass(packageName+<span class="string">".PluginClass"</span>);</span><br><span class="line">Comm obj = (Comm) clazz.newInstance();</span><br><span class="line">Drawable drawable=obj.getImage(<span class="keyword">this</span>)</span><br><span class="line">mImageView.setImageDrawable(drawable);</span><br></pre></td></tr></table></figure></p>
+<p>运行测试，没有报错，反而读到了宿主APK下的一个图片，应该是资源id和宿主中的id重复了。于是多拷了几个图片到插件drawable目录，仍然什么都读不到。于是仔细回头看了看代码。发现了这一句<code>context.getResources()</code>,可以看出拿到的是宿主APK的Resources对象,怀着好奇心，顺藤摸瓜找到了源码。在ContextImpl的源码中，发现如下：<br>可以从字面意思看出一个包一个Resources。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">ContextImpl</span><span class="params">(ContextImpl container, ActivityThread mainThread,</span><br><span class="line">        LoadedApk packageInfo, ...)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">        <span class="comment">//省略了部分源码</span></span><br><span class="line">    Resources resources = packageInfo.getResources(mainThread);</span><br><span class="line">    mResources = resources;</span><br><span class="line">      <span class="comment">//...</span></span><br><span class="line">        <span class="comment">//省略了部分源码</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="keyword">public</span> Resources <span class="title">getResources</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mResources;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>既然一个包一个Resources，那我们换种思路，就用插件包的Resources去加载资源。修改PluginClass如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> Drawable <span class="title">getImage</span><span class="params">(Resources res)</span></span>&#123;</span><br><span class="line">   <span class="keyword">return</span> res.getDrawable(R.drawable.a);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后修改宿主的核心代码,测试通过。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Class&lt;?&gt; clazz = classLoader.loadClass(packageName+<span class="string">".PluginClass"</span>);</span><br><span class="line">Comm obj = (Comm) clazz.newInstance();</span><br><span class="line">Resources res=pm.getResourcesForApplication(packageName);</span><br><span class="line">Drawable drawable=obj.getDrawable(res)</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，这种方法比第一种方法要灵活不少，不需要知道每张图片的名字，只需插件实现相关接口即可。</p>
+<h3 id="AssetManager"><a href="#AssetManager" class="headerlink" title="AssetManager"></a>AssetManager</h3><p>但是，有没有别的方式了？答案当然是肯定的，Android里有一个类叫AssetManager！在介绍AssetManager之前我们来看看getResource的源码。我们知道，调用getResource,会调用LoadedApk的getResources。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">ContextImpl</span><span class="params">(ContextImpl container, ActivityThread mainThread,</span><br><span class="line">        LoadedApk packageInfo, ...)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">        <span class="comment">//省略了部分源码</span></span><br><span class="line">    Resources resources = packageInfo.getResources(mainThread);</span><br><span class="line">    mResources = resources;</span><br><span class="line">      <span class="comment">//...</span></span><br><span class="line">     <span class="comment">//省略了部分源码</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>那么就来看看LoadedApk的getResources源码。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Resources <span class="title">getResources</span><span class="params">(ActivityThread mainThread)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mResources == <span class="keyword">null</span>) &#123;</span><br><span class="line">        mResources = mainThread.getTopLevelResources(mResDir, mSplitResDirs, mOverlayDirs,</span><br><span class="line">                mApplicationInfo.sharedLibraryFiles, Display.DEFAULT_DISPLAY, <span class="keyword">null</span>, <span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> mResources;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，LoadedApk会调用ActivityThread去加载。最终在ResourcesManager中找到了真身。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Resources <span class="title">getTopLevelResources</span><span class="params">(String resDir, String[] splitResDirs,</span><br><span class="line">           String[] overlayDirs, String[] libDirs, <span class="keyword">int</span> displayId,</span><br><span class="line">           Configuration overrideConfiguration, CompatibilityInfo compatInfo)</span> </span>&#123;</span><br><span class="line">      </span><br><span class="line">       Resources r;</span><br><span class="line">      </span><br><span class="line">          <span class="comment">//...</span></span><br><span class="line">           <span class="comment">//省略了部分源码</span></span><br><span class="line">       AssetManager assets = <span class="keyword">new</span> AssetManager();</span><br><span class="line">    </span><br><span class="line">       <span class="keyword">if</span> (resDir != <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">if</span> (assets.addAssetPath(resDir) == <span class="number">0</span>) &#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> (splitResDirs != <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">for</span> (String splitResDir : splitResDirs) &#123;</span><br><span class="line">               <span class="keyword">if</span> (assets.addAssetPath(splitResDir) == <span class="number">0</span>) &#123;</span><br><span class="line">                   <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> (overlayDirs != <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">for</span> (String idmapPath : overlayDirs) &#123;</span><br><span class="line">               assets.addOverlayPath(idmapPath);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> (libDirs != <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">for</span> (String libDir : libDirs) &#123;</span><br><span class="line">               <span class="keyword">if</span> (libDir.endsWith(<span class="string">".apk"</span>)) &#123;</span><br><span class="line">                 </span><br><span class="line">                   <span class="keyword">if</span> (assets.addAssetPath(libDir) == <span class="number">0</span>) &#123;</span><br><span class="line">                       Log.w(TAG, <span class="string">"Asset path '"</span> + libDir +</span><br><span class="line">                               <span class="string">"' does not exist or contains no resources."</span>);</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">          <span class="comment">//...</span></span><br><span class="line">           <span class="comment">//省略了部分源码</span></span><br><span class="line">         r = <span class="keyword">new</span> Resources(assets, dm, config, compatInfo);</span><br><span class="line">     </span><br><span class="line">           <span class="keyword">return</span> r;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>代码有点长，但是很显然，最终的资源加载交给了AssetManager，<code>assets.addAssetPath(libDir)</code>添加资源目录，然后new了一个Resources对象返回。</p>
+<p>那我们现在通过反射来模仿系统的写法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">loadResources</span><span class="params">(String dexPath)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        AssetManager assetManager = AssetManager.class.newInstance();</span><br><span class="line">        Method addAssetPath = assetManager.getClass().getMethod(<span class="string">"addAssetPath"</span>, String.class);</span><br><span class="line">        addAssetPath.invoke(assetManager, dexPath);</span><br><span class="line">        Resources superRes = <span class="keyword">super</span>.getResources();</span><br><span class="line">        mResources = <span class="keyword">new</span> Resources(assetManager, superRes.getDisplayMetrics(),superRes.getConfiguration());</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后重写getResources方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Resources <span class="title">getResources</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> mResources == <span class="keyword">null</span> ? <span class="keyword">super</span>.getResources() : mResources;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>核心代码修改如下，<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//先加载插件资源</span></span><br><span class="line">  loadResources(apkPath);</span><br><span class="line">  </span><br><span class="line"><span class="comment">//核心代码调用</span></span><br><span class="line">  Class&lt;?&gt; clazz = classLoader.loadClass(packageName+<span class="string">".PluginClass"</span>);</span><br><span class="line">  Comm obj = (Comm) clazz.newInstance();</span><br><span class="line">  mImageView.setImageDrawable(obj.getDrawable(getgetResources));</span><br></pre></td></tr></table></figure></p>
+<p>成功将资源加载到宿主APK，测试通过。<br>当然，为了使通用性更强，不因主题的差异而导致效果不一样，上面的代码一般会这么写<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">//反射加载资源</span></span><br><span class="line">  <span class="keyword">private</span> AssetManager mAssetManager;</span><br><span class="line">  <span class="keyword">private</span> Resources mResources;</span><br><span class="line">  <span class="keyword">private</span> Resources.Theme mTheme;</span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">loadResources</span><span class="params">(String dexPath)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          AssetManager assetManager = AssetManager.class.newInstance();</span><br><span class="line">          Method addAssetPath = assetManager.getClass().getMethod(<span class="string">"addAssetPath"</span>, String.class);</span><br><span class="line">          addAssetPath.invoke(assetManager, dexPath);</span><br><span class="line">          mAssetManager = assetManager;</span><br><span class="line">      &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">          e.printStackTrace();</span><br><span class="line">      &#125;</span><br><span class="line">      Resources superRes = <span class="keyword">super</span>.getResources();</span><br><span class="line">      mResources = <span class="keyword">new</span> Resources(mAssetManager, superRes.getDisplayMetrics(),superRes.getConfiguration());</span><br><span class="line">      mTheme = mResources.newTheme();</span><br><span class="line">      mTheme.setTo(<span class="keyword">super</span>.getTheme());</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="comment">//重写方法</span></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> AssetManager <span class="title">getAssets</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> mAssetManager == <span class="keyword">null</span> ? <span class="keyword">super</span>.getAssets() : mAssetManager;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Resources <span class="title">getResources</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> mResources == <span class="keyword">null</span> ? <span class="keyword">super</span>.getResources() : mResources;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line">  <span class="keyword">public</span> Resources.<span class="function">Theme <span class="title">getTheme</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> mTheme == <span class="keyword">null</span> ? <span class="keyword">super</span>.getTheme() : mTheme;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="换皮肤原理"><a href="#换皮肤原理" class="headerlink" title="换皮肤原理"></a>换皮肤原理</h2><p>换皮肤一般有两种方式。</p>
+<h3 id="约定好资源名字"><a href="#约定好资源名字" class="headerlink" title="约定好资源名字"></a>约定好资源名字</h3><p>这种方式非常简单，基本不需要修改什么代码。只需两部就来完成。<br>假如我们有一个图片菜单，在宿主和插件中都叫a.png。</p>
+<p>设置菜单图片的代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mImageMenu.setImageDrawable(getResources().getDrawable(R.drawable.a));</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>重写getResources</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> Resources <span class="title">getResources</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     <span class="keyword">return</span> mResources == <span class="keyword">null</span> ? <span class="keyword">super</span>.getResources() : mResources;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取Resources对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loadResources或getResourcesForApplication</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这样在需要加载皮肤的地方loadResources，然后重写加载就能实现换肤功能。</p>
+<h3 id="不约定资源名字"><a href="#不约定资源名字" class="headerlink" title="不约定资源名字"></a>不约定资源名字</h3><p>这种方式主要通过接口的方式进行调用。让不同的皮肤插件进行调用。</p>
+<ul>
+<li><p>实现插件接口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Drawable <span class="title">getImageMenu</span><span class="params">(Resources res)</span></span>&#123;</span><br><span class="line">       <span class="keyword">return</span> res.getDrawable(R.drawable.a);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重写getResources</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> Resources <span class="title">getResources</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     <span class="keyword">return</span> mResources == <span class="keyword">null</span> ? <span class="keyword">super</span>.getResources() : mResources;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取Resources对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loadResources或getResourcesForApplication</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置菜单图片</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Class&lt;?&gt; clazz = classLoader.loadClass(packageName+<span class="string">".PluginClass"</span>);</span><br><span class="line">Comm obj = (Comm) clazz.newInstance();</span><br><span class="line"> </span><br><span class="line">mImageMenu.setImageDrawable(obj.getImageMenu(getResources()));</span><br></pre></td></tr></table></figure>
+<p>或者如下写法，通过Context来获取资源</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//PluginClass接口类</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> Drawable <span class="title">getImage</span><span class="params">(Context context)</span></span>&#123;</span><br><span class="line">       <span class="keyword">return</span> context.getResources().getDrawable(R.drawable.a);</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line"> <span class="comment">//宿主类。加载图片。 </span></span><br><span class="line">mImageMenu.setImageDrawable(obj.getImage(<span class="keyword">this</span>));</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>从上面可以看出，约定资源名字这种方法，可以少写好多接口。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>由于本人水平有限，如有错误敬请指出。</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+            <a href="/tags/插件化探索/" rel="tag">#插件化探索</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/24/Android插件化探索（一）类加载器DexClassLoader/" rel="next" title="Android插件化探索（一）类加载器DexClassLoader">
+                <i class="fa fa-chevron-left"></i> Android插件化探索（一）类加载器DexClassLoader
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/26/Android插件化探索（二）资源加载/"
+           data-title="Android插件化探索（二）资源加载" data-url="http://www.maplejaw.com/2016/05/26/Android插件化探索（二）资源加载/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.jpeg"
+               alt="maplejaw" />
+          <p class="site-author-name" itemprop="name">maplejaw</p>
+          <p class="site-description motion-element" itemprop="description">不忘初心，方得始终</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/maplejaw" target="_blank" title="github">
+                  
+                    <i class="fa fa-github"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前情提要"><span class="nav-number">1.</span> <span class="nav-text">前情提要</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PathClassLoader和DexClassLoader的区别"><span class="nav-number">1.1.</span> <span class="nav-text">PathClassLoader和DexClassLoader的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委托"><span class="nav-number">1.2.</span> <span class="nav-text">双亲委托</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源加载"><span class="nav-number">2.</span> <span class="nav-text">资源加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#getResourcesForApplication"><span class="nav-number">2.1.</span> <span class="nav-text">getResourcesForApplication</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AssetManager"><span class="nav-number">2.2.</span> <span class="nav-text">AssetManager</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#换皮肤原理"><span class="nav-number">3.</span> <span class="nav-text">换皮肤原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#约定好资源名字"><span class="nav-number">3.1.</span> <span class="nav-text">约定好资源名字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不约定资源名字"><span class="nav-number">3.2.</span> <span class="nav-text">不约定资源名字</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">4.</span> <span class="nav-text">最后</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">maplejaw</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"maplejaw"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
