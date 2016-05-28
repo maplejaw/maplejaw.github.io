@@ -229,6 +229,111 @@
             
               
                 
+                <a class="post-title-link" href="/2016/05/28/Android插件化探索（三）免安装运行Activity（上）/" itemprop="url">
+                  Android插件化探索（三）免安装运行Activity（上）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-28T21:20:41+08:00" content="2016-05-28">
+              2016-05-28
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/28/Android插件化探索（三）免安装运行Activity（上）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/28/Android插件化探索（三）免安装运行Activity（上）/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><a href="http://www.maplejaw.com/2016/05/24/Android%E6%8F%92%E4%BB%B6%E5%8C%96%E6%8E%A2%E7%B4%A2%EF%BC%88%E4%B8%80%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8DexClassLoader/">【Android插件化探索（一）类加载器DexClassLoader】</a><br><a href="http://www.maplejaw.com/2016/05/26/Android%E6%8F%92%E4%BB%B6%E5%8C%96%E6%8E%A2%E7%B4%A2%EF%BC%88%E4%BA%8C%EF%BC%89%E8%B5%84%E6%BA%90%E5%8A%A0%E8%BD%BD/">【Android插件化探索（二）资源加载】</a></p>
+<h2 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h2><p>在上一篇中有一个细节没有提到，那就是getResourcesForApplication和AssetManager的区别。</p>
+<h3 id="getResourcesForApplication"><a href="#getResourcesForApplication" class="headerlink" title="getResourcesForApplication"></a>getResourcesForApplication</h3><p>getResourcesForApplication(String packageName)，很显然需要传入一个包名，换言之，这个插件必须已经被安装在系统内，然后才能通过包名来获取资源。你可能会想，不安装照样可以获取包名啊。的确，通过<code>pm.getPackageArchiveInfo()</code>可以获取安装包信息。但是，这些包都是没有在PMS中注册的。如果仍然这样获取，会提示如下错误。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android.content.pm.PackageManager<span class="variable">$NameNotFoundException</span>: com.maplejaw.hotplugin</span><br></pre></td></tr></table></figure></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/05/28/Android插件化探索（三）免安装运行Activity（上）/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/26/Android插件化探索（二）资源加载/" itemprop="url">
                   Android插件化探索（二）资源加载
                 </a>
@@ -1175,113 +1280,13 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/24/一个图片选择库/" itemprop="url">
-                  一个图片选择库
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-24T13:44:18+08:00" content="2016-04-24">
-              2016-04-24
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/24/一个图片选择库/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/24/一个图片选择库/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>撸了一个高仿微信、QQ图片选择库，支持单选，多选，预览，拍照。<a href="https://github.com/maplejaw/ImagePicker"><strong>ImagePicker</strong></a></p>
-<h2 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h2><p><img src="https://raw.githubusercontent.com/maplejaw/ImagePicker/master/image/image1.png" width="60%" /><br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/24/一个图片选择库/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1320,7 +1325,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-count">11</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
