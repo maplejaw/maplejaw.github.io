@@ -96,7 +96,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/开源库/" style="font-size: 10px;">开源库</a> <a href="/tags/插件化探索/" style="font-size: 15px;">插件化探索</a> <a href="/tags/源码解读/" style="font-size: 17.5px;">源码解读</a> <a href="/tags/知识整理/" style="font-size: 12.5px;">知识整理</a> <a href="/tags/自定义View/" style="font-size: 10px;">自定义View</a>
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/开源库/" style="font-size: 10px;">开源库</a> <a href="/tags/插件化探索/" style="font-size: 15px;">插件化探索</a> <a href="/tags/源码解读/" style="font-size: 17.5px;">源码解读</a> <a href="/tags/知识整理/" style="font-size: 12.5px;">知识整理</a> <a href="/tags/自定义View/" style="font-size: 10px;">自定义View</a>
 					</div>
 				</section>
 				
@@ -151,6 +151,70 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-JAVA-8-Lambda表达式完全解析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/08/JAVA-8-Lambda表达式完全解析/" class="article-date">
+  	<time datetime="2016-05-08T14:16:14.000Z" itemprop="datePublished">2016-05-08</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/08/JAVA-8-Lambda表达式完全解析/">JAVA 8 Lambda表达式完全解析</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="JAVA8-新特性"><a href="#JAVA8-新特性" class="headerlink" title="JAVA8 新特性"></a>JAVA8 新特性</h2><blockquote>
+<p>在学习JAVA8 Lambda之前，必须先了解一下JAVA8中与Lambda相关的新特性，不然对于一些概念会感到比较陌生。</p>
+</blockquote>
+<p>1、 接口的默认方法和静态方法<br>Java 8允许我们给接口添加一个默认方法，用<code>default</code>修饰即可。默认方法可以重写，也可以不用重写。这就是和抽象方法的区别，在用法上，没有其他区别。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IMyInterface</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">onMethond</span><span class="params">(String str)</span></span>;<span class="comment">//这是一个抽象方法</span></span><br><span class="line">	<span class="function"><span class="keyword">default</span> String <span class="title">onDefalutMethod</span><span class="params">()</span></span>&#123;<span class="comment">//这是一个默认方法	</span></span><br><span class="line">		<span class="keyword">return</span> <span class="string">"这是一个默认方法"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//重写默认方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyImpl1</span> <span class="keyword">implements</span> <span class="title">IMyInterface</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMethond</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">onDefalutMethod</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"重写默认方法"</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//不重写默认方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyImpl2</span> <span class="keyword">implements</span> <span class="title">IMyInterface</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMethond</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此外Java 8还允许我们给接口添加一个静态方法，用<code>static</code>修饰即可。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IMyInterface</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">onMethond</span><span class="params">(String str)</span></span>;<span class="comment">//这是一个抽象方法</span></span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">default</span> String <span class="title">onDefalutMethod</span><span class="params">()</span></span>&#123;<span class="comment">//这是一个默认方法	</span></span><br><span class="line">		<span class="keyword">return</span> <span class="string">"这是一个默认方法"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">static</span> String <span class="title">onStaticMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"这是一个静态方法"</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lambda/">lambda</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/05/08/JAVA-8-Lambda表达式完全解析/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-Android中常见的XML解析方式" class="article article-type-post" itemscope itemprop="blogPost">
   
