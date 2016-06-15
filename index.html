@@ -152,6 +152,66 @@
 
       <div class="body-wrap">
   
+    <article id="post-Android-Universal-Image-Loader-源码解读" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/15/Android-Universal-Image-Loader-源码解读/" class="article-date">
+  	<time datetime="2016-06-15T11:08:55.000Z" itemprop="datePublished">2016-06-15</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/15/Android-Universal-Image-Loader-源码解读/">Android-Universal-Image-Loader 源码解读</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Android-Universal-Image-Loader是一个强大而又灵活的用于加载、缓存、显示图片的Android库。它提供了大量的配置选项，使用起来非常方便。<br><img src="http://static.zybuluo.com/maplejaw/oaqcya7ahgvf0bbwzmdbhehr/image_1al8q6r8k4sv1v1gqll3ot1bd49.png" alt="image_1al8q6r8k4sv1v1gqll3ot1bd49.png-332.8kB"></p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码解读/">源码解读</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/15/Android-Universal-Image-Loader-源码解读/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Python3-学习手册（一）-基本数据类型" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -691,76 +751,6 @@
       
         <p class="article-more-link">
           <a  href="/2016/05/18/AsyncTask异步任务-源码解读/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Handler消息机制-源码解读" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/05/15/Handler消息机制-源码解读/" class="article-date">
-  	<time datetime="2016-05-15T06:37:47.000Z" itemprop="datePublished">2016-05-15</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/15/Handler消息机制-源码解读/">Handler消息机制 源码解读</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="Handler消息机制的作用"><a href="#Handler消息机制的作用" class="headerlink" title="Handler消息机制的作用"></a>Handler消息机制的作用</h3><p>大家知道子线程没有办法对UI界面上的内容进行操作，如果操作，将抛出异常，为了让子线程能间接操作UI界面，Android中引入了Handler消息传递机制，通过Handler切换到主线程进行UI操作。</p>
-<h3 id="Handler、Looper、MessageQueue、Message的关系是什么？"><a href="#Handler、Looper、MessageQueue、Message的关系是什么？" class="headerlink" title="Handler、Looper、MessageQueue、Message的关系是什么？"></a>Handler、Looper、MessageQueue、Message的关系是什么？</h3><ul>
-<li><p>Handler用于发送和处理消息。而发出的Message经过一系列的周转后，最终会传递回Handler中，最后更新UI。 </p>
-</li>
-<li><p>Message是在线程之间传递的消息，它可以在内部携带少量的信息，用于在不同线程之前交换数据。 </p>
-</li>
-<li><p>MessageQueue是消息队列，用于存放Message。Message在消息队列中，等待Looper取出。每个线程中只会有一个MessageQueue对象。 </p>
-</li>
-<li><p>Looper是每个线程中的MessageQueue的管家，调用Looper的loop()方法后，就会进入一个无限循环中，每当MessageQueue中存在一个Message，Looper对象就会将其取出，传递到Handler中进行处理。每个线程中只会有一个Looper对象。</p>
-</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码解读/">源码解读</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/05/15/Handler消息机制-源码解读/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
