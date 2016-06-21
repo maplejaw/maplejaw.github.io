@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Android Matrix矩阵详解 | maplejaw的技术博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Android中有两个比较重要的矩阵，ColorMatrix和Matrix。ColorMatrix用来改变bitmap的颜色和透明度，Matrix用来对bitmap平移、缩放、错切。
+ColorMatrix(色彩矩阵)Android中Bitmap色彩用了一个[R, G, B, A]，4*1的矩阵来保存。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Matrix矩阵详解">
+<meta property="og:url" content="http://www.maplejaw.com/2016/06/21/Android-Matrix矩阵详解/index.html">
+<meta property="og:site_name" content="maplejaw的技术博客">
+<meta property="og:description" content="Android中有两个比较重要的矩阵，ColorMatrix和Matrix。ColorMatrix用来改变bitmap的颜色和透明度，Matrix用来对bitmap平移、缩放、错切。
+ColorMatrix(色彩矩阵)Android中Bitmap色彩用了一个[R, G, B, A]，4*1的矩阵来保存。">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/4jr9kmzkg6bt36cinohnzfso/image_1al1ljmtjdjfb2f12fb1aku1t6o13.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/xs5l0a5j0hqyuxd7w0sktbm8/image_1al1lctohqcr4rflnr103ij7mm.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/anoq9oxyj1a2if3mh9er2qcv/image_1alm721n317ds1j9uigg1nvmd1k9.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/vcw8psj8p7hjnxbw0633s2tx/image_1al1m1jvlk9fi1n12dr1kg1kk81g.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/uoue1mtlcuo1jlqkk1jcq99z/image_1al1nirqafabpm1f24fpd1cnk2n.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/9jpd3dfw5yignqsxddgyhvb8/image_1alm7iacech41osilg81v021nug13.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/f8zg3ou2i3o8uryplyjkebk7/1.gif">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/urr3rq50nslpzci5hgj2yhiq/image_1al4hanss62c10nr1mjevkf1pk912.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/45vq3iclj8cbd5hrndmung7n/image_1al4hhdi9rmi13el15dh8cd9ns1f.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/9zy607hoeo1818ymysbvrzmm/1.gif">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/i70ybdajho33krppggv8v7v7/1.gif">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/1a43v0jcr4oj1gaiaae4lmio/image_1almh3cbj1vnntrbrdm1702coe2a.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/xmiay2mq3tbtdt1n6lunvcc7/image_1alovtm7opj311go1spk2mmft6m.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/tv4v4bzz7qxtjlqdt1d2d4d8/image_1almfosbk111l186nsuscqdqet13.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/nd4jva6dgo9wonj7q88ev1t4/image_1almfu6po1fern6b8l4cl617j1g.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/b3kixn8xk7et1687k2vsclli/image_1almg1sjf1oj178o19t2ditekv1t.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/gts4akwa3rdijjf754cylota/image_1alma4slvs83gke1dnkhll1dkv1g.png">
+<meta property="og:updated_time" content="2016-06-21T11:33:21.746Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Matrix矩阵详解">
+<meta name="twitter:description" content="Android中有两个比较重要的矩阵，ColorMatrix和Matrix。ColorMatrix用来改变bitmap的颜色和透明度，Matrix用来对bitmap平移、缩放、错切。
+ColorMatrix(色彩矩阵)Android中Bitmap色彩用了一个[R, G, B, A]，4*1的矩阵来保存。">
+<meta name="twitter:image" content="http://static.zybuluo.com/maplejaw/4jr9kmzkg6bt36cinohnzfso/image_1al1ljmtjdjfb2f12fb1aku1t6o13.png">
+  
+    <link rel="alternative" href="/atom.xml" title="maplejaw的技术博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/uploads/avatar.jpeg" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">maplejaw</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">不忘初心，方得始终</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">归档</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/maplejaw" title="github">github</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/开源库/" style="font-size: 10px;">开源库</a> <a href="/tags/插件化探索/" style="font-size: 15px;">插件化探索</a> <a href="/tags/源码解读/" style="font-size: 17.5px;">源码解读</a> <a href="/tags/知识整理/" style="font-size: 12.5px;">知识整理</a> <a href="/tags/自定义View/" style="font-size: 10px;">自定义View</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">maplejaw</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img src="/uploads/avatar.jpeg" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">maplejaw</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">不忘初心，方得始终</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">归档</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/maplejaw" title="github">github</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-Android-Matrix矩阵详解" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/21/Android-Matrix矩阵详解/" class="article-date">
+  	<time datetime="2016-06-21T11:27:02.000Z" itemprop="datePublished">2016-06-21</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android Matrix矩阵详解
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Android中有两个比较重要的矩阵，ColorMatrix和Matrix。ColorMatrix用来改变bitmap的颜色和透明度，Matrix用来对bitmap平移、缩放、错切。</p>
+<h2 id="ColorMatrix-色彩矩阵"><a href="#ColorMatrix-色彩矩阵" class="headerlink" title="ColorMatrix(色彩矩阵)"></a>ColorMatrix(色彩矩阵)</h2><p>Android中Bitmap色彩用了一个[R, G, B, A]，4*1的矩阵来保存。<br><img src="http://static.zybuluo.com/maplejaw/4jr9kmzkg6bt36cinohnzfso/image_1al1ljmtjdjfb2f12fb1aku1t6o13.png" alt="image_1al1ljmtjdjfb2f12fb1aku1t6o13.png-3kB"></p>
+<a id="more"></a>
+<p>如果想改变一个Bitmap的色彩该怎么办？现在来了解下ColorMatrix的相关知识。ColorMatrix 是一个4*5的矩阵。<br><img src="http://static.zybuluo.com/maplejaw/xs5l0a5j0hqyuxd7w0sktbm8/image_1al1lctohqcr4rflnr103ij7mm.png" alt="image_1al1lctohqcr4rflnr103ij7mm.png-7.6kB"><br>我们用[R’, G’, B’, A’]来保存新的bitmap色彩，4*5必须和5*1矩阵相乘才能得到4*1矩阵，于是运算关系如下：<br><img src="http://static.zybuluo.com/maplejaw/anoq9oxyj1a2if3mh9er2qcv/image_1alm721n317ds1j9uigg1nvmd1k9.png" alt="image_1alm721n317ds1j9uigg1nvmd1k9.png-15.5kB"><br>根据矩阵乘法通过如下运算，便能如下求出一个新的色彩矩阵了。<br> <img src="http://static.zybuluo.com/maplejaw/vcw8psj8p7hjnxbw0633s2tx/image_1al1m1jvlk9fi1n12dr1kg1kk81g.png" alt=""><br> 为什么要使用4*5矩阵而不是4*4矩阵?。因为只有4*5矩阵可以单独改变一种颜色值。比如你改变e,只会影响R’。</p>
+<p>ColorMatrix的默认矩阵如下图所示<br><img src="http://static.zybuluo.com/maplejaw/uoue1mtlcuo1jlqkk1jcq99z/image_1al1nirqafabpm1f24fpd1cnk2n.png" alt="image_1al1nirqafabpm1f24fpd1cnk2n.png-4.2kB"><br>可以看出，进行色彩变换运算后色彩值仍然不变。<br><img src="http://static.zybuluo.com/maplejaw/9jpd3dfw5yignqsxddgyhvb8/image_1alm7iacech41osilg81v021nug13.png" alt="image_1alm7iacech41osilg81v021nug13.png-25.2kB"><br>知道ColorMatrix的运算原理后，我们就可以做很多事情了。</p>
+<h3 id="黑白图片"><a href="#黑白图片" class="headerlink" title="黑白图片"></a>黑白图片</h3><p>黑白图片的去色原理：只要把RGB三通道的色彩信息设置成一样；即：R＝G＝B，那么图像就变成了灰色，并且，为了保证图像亮度不变，同一个通道中的R+G+B应该接近1。<br>在matlab中按照 0.2989 R，0.5870 G 和 0.1140 B 的比例构成像素灰度值。<br>在OpenCV中按照 0.299 R， 0.587 G 和 0.114 B 的比例构成像素灰度值。<br>在Android中按照0.213 R，0.715 G 和 0.072 B 的比例构成像素灰度值。<br>这些比例主要是根据人眼中三种不同的感光细胞的感光强度比例分配的，因此并没有一个确切值，不同工具调试出来的效果也不尽相同。</p>
+<p>知道了RGB相关配色后，相关核心代码如下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">private</span> Bitmap <span class="title">handleColorMatrix</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Canvas canvas = <span class="keyword">new</span> Canvas(mTempBmp); <span class="comment">// 创建一个画布</span></span><br><span class="line">        Paint paint = <span class="keyword">new</span> Paint(); <span class="comment">// 新建paint</span></span><br><span class="line">        paint.setAntiAlias(<span class="keyword">true</span>); <span class="comment">//抗锯齿</span></span><br><span class="line">        <span class="comment">//黑白</span></span><br><span class="line">       ColorMatrix colorMatrix = <span class="keyword">new</span> ColorMatrix(<span class="keyword">new</span> <span class="keyword">float</span>[]&#123;  </span><br><span class="line">        <span class="number">0.213f</span>, <span class="number">0.715f</span>, <span class="number">0.072f</span>, <span class="number">0</span>, <span class="number">0</span>,  </span><br><span class="line">        <span class="number">0.213f</span>, <span class="number">0.715f</span>, <span class="number">0.072f</span>, <span class="number">0</span>, <span class="number">0</span>,  </span><br><span class="line">        <span class="number">0.213f</span>, <span class="number">0.715f</span>, <span class="number">0.072f</span>, <span class="number">0</span>, <span class="number">0</span>,  </span><br><span class="line">        <span class="number">0</span>,       <span class="number">0</span>,    <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>,  </span><br><span class="line">&#125;); </span><br><span class="line">        paint.setColorFilter(<span class="keyword">new</span> ColorMatrixColorFilter(colorMatrix));<span class="comment">// 设置颜色变换效果</span></span><br><span class="line">        canvas.drawBitmap(mOriginBmp, <span class="number">0</span>, <span class="number">0</span>, paint);</span><br><span class="line">        <span class="keyword">return</span> mTempBmp;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行测试效果如下。<br><img src="http://static.zybuluo.com/maplejaw/f8zg3ou2i3o8uryplyjkebk7/1.gif" alt="1.gif-95.4kB"></p>
+<h3 id="色彩偏移和缩放"><a href="#色彩偏移和缩放" class="headerlink" title="色彩偏移和缩放"></a>色彩偏移和缩放</h3><p><img src="http://static.zybuluo.com/maplejaw/urr3rq50nslpzci5hgj2yhiq/image_1al4hanss62c10nr1mjevkf1pk912.png" alt="image_1al4hanss62c10nr1mjevkf1pk912.png-5kB"><br>我们可以通过增加最后一列的值来相应增加或减少某种颜色的值。<br><img src="http://static.zybuluo.com/maplejaw/45vq3iclj8cbd5hrndmung7n/image_1al4hhdi9rmi13el15dh8cd9ns1f.png" alt="image_1al4hhdi9rmi13el15dh8cd9ns1f.png-6.2kB"><br>也可以通过改变对角线上的比例来进行色彩缩放。<br>比如给红色增加20.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ColorMatrix colorMatrix = <span class="keyword">new</span> ColorMatrix(<span class="keyword">new</span> <span class="keyword">float</span>[]&#123;</span><br><span class="line">        <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">20</span>,</span><br><span class="line">        <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>,</span><br><span class="line">        <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>,</span><br><span class="line">        <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://static.zybuluo.com/maplejaw/9zy607hoeo1818ymysbvrzmm/1.gif" alt="1.gif-125.7kB"><br>给绿色扩大到1.2倍。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ColorMatrix colorMatrix = <span class="keyword">new</span> ColorMatrix(<span class="keyword">new</span> <span class="keyword">float</span>[]&#123;</span><br><span class="line">        <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>,</span><br><span class="line">        <span class="number">0</span>, <span class="number">1.2f</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>,</span><br><span class="line">        <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>,</span><br><span class="line">        <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://static.zybuluo.com/maplejaw/i70ybdajho33krppggv8v7v7/1.gif" alt="1.gif-128.8kB"><br>此外ColorMatrix提供了一个<code>setScale</code>来进行色彩缩放。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">/**</span><br><span class="line"> * Set this colormatrix to scale by the specified values.</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setScale</span><span class="params">(<span class="keyword">float</span> rScale, <span class="keyword">float</span> gScale, <span class="keyword">float</span> bScale,</span><br><span class="line">                     <span class="keyword">float</span> aScale)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">float</span>[] a = mArray;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">19</span>; i &gt; <span class="number">0</span>; --i) &#123;</span><br><span class="line">        a[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    a[<span class="number">0</span>] = rScale;</span><br><span class="line">    a[<span class="number">6</span>] = gScale;</span><br><span class="line">    a[<span class="number">12</span>] = bScale;</span><br><span class="line">    a[<span class="number">18</span>] = aScale;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="色彩饱和度"><a href="#色彩饱和度" class="headerlink" title="色彩饱和度"></a>色彩饱和度</h3><p>ColorMatrix提供了一个<code>setSaturation</code>通过改变对角线上的比例来改变饱和度。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * Set the matrix to affect the saturation of colors.</span><br><span class="line"> *</span><br><span class="line"> * <span class="doctag">@param</span> sat  饱和度的值，取值0,1</span><br><span class="line"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSaturation</span><span class="params">(<span class="keyword">float</span> sat)</span> </span>&#123;</span><br><span class="line">    reset();</span><br><span class="line">    <span class="keyword">float</span>[] m = mArray;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">float</span> invSat = <span class="number">1</span> - sat;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">float</span> R = <span class="number">0.213f</span> * invSat;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">float</span> G = <span class="number">0.715f</span> * invSat;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">float</span> B = <span class="number">0.072f</span> * invSat;</span><br><span class="line"></span><br><span class="line">    m[<span class="number">0</span>] = R + sat; m[<span class="number">1</span>] = G;       m[<span class="number">2</span>] = B;</span><br><span class="line">    m[<span class="number">5</span>] = R;       m[<span class="number">6</span>] = G + sat; m[<span class="number">7</span>] = B;</span><br><span class="line">    m[<span class="number">10</span>] = R;      m[<span class="number">11</span>] = G;      m[<span class="number">12</span>] = B + sat;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，当sat取值为0时，即是黑白图片。</p>
+<h3 id="色彩旋转"><a href="#色彩旋转" class="headerlink" title="色彩旋转"></a>色彩旋转</h3><p>看到旋转一词，可能有点蒙，何为色彩旋转？我们可以将RGB看做是一个坐标系（r,g,b）。<br>那么坐标系如下。<br><img src="http://static.zybuluo.com/maplejaw/1a43v0jcr4oj1gaiaae4lmio/image_1almh3cbj1vnntrbrdm1702coe2a.png" alt="image_1almh3cbj1vnntrbrdm1702coe2a.png-8.6kB"><br>所以，我们可以把一个色彩值看成三维空间里的一个点，色彩值的三个分量可以看成该点的坐标（三维坐标）。假如，我们现在需要围绕蓝色轴进行旋转，我们对着蓝色箭头观察由红色和绿色构造的平面。然后顺时针旋转α度。<br><img src="http://static.zybuluo.com/maplejaw/xmiay2mq3tbtdt1n6lunvcc7/image_1alovtm7opj311go1spk2mmft6m.png" alt="image_1alovtm7opj311go1spk2mmft6m.png-20.2kB"><br>在图中，我们可以看到，在旋转后，原R在R轴的分量变为:R*cosα，且原G分量在旋转后在R轴上也有了分量，所以我们要加上这部分分量，因此最终的结果为R’=R*cosα+G*sinα，同理，在计算G’时，因为R的分量落在了负轴上，所以我们要减去这部分，故G’=G*cosα-R*sinα;<br>于是，我们可以求出矩阵如下。<br><img src="http://static.zybuluo.com/maplejaw/tv4v4bzz7qxtjlqdt1d2d4d8/image_1almfosbk111l186nsuscqdqet13.png" alt="image_1almfosbk111l186nsuscqdqet13.png-7.4kB"><br>同理，围绕红色轴旋转的矩阵如下。<br><img src="http://static.zybuluo.com/maplejaw/nd4jva6dgo9wonj7q88ev1t4/image_1almfu6po1fern6b8l4cl617j1g.png" alt="image_1almfu6po1fern6b8l4cl617j1g.png-7.1kB"><br>围绕绿色轴旋转的矩阵如下。<br><img src="http://static.zybuluo.com/maplejaw/b3kixn8xk7et1687k2vsclli/image_1almg1sjf1oj178o19t2ditekv1t.png" alt="image_1almg1sjf1oj178o19t2ditekv1t.png-7.4kB"></p>
+<p>同样，ColorMatrix提供了一个<code>setRotate(int axis, float degrees)</code>来进行色彩旋转。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setRotate</span><span class="params">(<span class="keyword">int</span> axis, <span class="keyword">float</span> degrees)</span> </span>&#123;</span><br><span class="line">    reset();</span><br><span class="line">    <span class="keyword">double</span> radians = degrees * Math.PI / <span class="number">180</span>d;</span><br><span class="line">    <span class="keyword">float</span> cosine = (<span class="keyword">float</span>) Math.cos(radians);</span><br><span class="line">    <span class="keyword">float</span> sine = (<span class="keyword">float</span>) Math.sin(radians);</span><br><span class="line">    <span class="keyword">switch</span> (axis) &#123;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">case</span> <span class="number">0</span>:  <span class="comment">// 围绕红色轴旋转</span></span><br><span class="line">        mArray[<span class="number">6</span>] = mArray[<span class="number">12</span>] = cosine;</span><br><span class="line">        mArray[<span class="number">7</span>] = sine;</span><br><span class="line">        mArray[<span class="number">11</span>] = -sine;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>:   <span class="comment">// 围绕绿色轴旋转</span></span><br><span class="line">        mArray[<span class="number">0</span>] = mArray[<span class="number">12</span>] = cosine;</span><br><span class="line">        mArray[<span class="number">2</span>] = -sine;</span><br><span class="line">        mArray[<span class="number">10</span>] = sine;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">case</span> <span class="number">2</span>:  <span class="comment">// 围绕蓝色色轴旋转</span></span><br><span class="line">        mArray[<span class="number">0</span>] = mArray[<span class="number">6</span>] = cosine;</span><br><span class="line">        mArray[<span class="number">1</span>] = sine;</span><br><span class="line">        mArray[<span class="number">5</span>] = -sine;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Matrix-矩阵"><a href="#Matrix-矩阵" class="headerlink" title="Matrix(矩阵)"></a>Matrix(矩阵)</h2><p>介绍完ColorMatrix，现在来看看Matrix。Android中Bitmap的每一个像素点用x,y坐标表示。同样，在经过平移旋转等运算后，我们需要用一个新坐标x’,y’来表示。Matrix是一个3<em>3的矩阵。至于为什么是3</em>3，同样，需要单独进行偏移。于是运算关系如下。<br><img src="http://static.zybuluo.com/maplejaw/gts4akwa3rdijjf754cylota/image_1alma4slvs83gke1dnkhll1dkv1g.png" alt="image_1alma4slvs83gke1dnkhll1dkv1g.png-35.2kB"><br>关于Matrix的内容,<a href="http://www.cnblogs.com/qiengo/archive/2012/06/30/2570874.html这篇介绍的非常详细，原理和ColorMatrix基本差不多，这类知识关键在于矩阵的计算上，这里就不赘述了，下面例举出常用api。" target="_blank" rel="external">http://www.cnblogs.com/qiengo/archive/2012/06/30/2570874.html这篇介绍的非常详细，原理和ColorMatrix基本差不多，这类知识关键在于矩阵的计算上，这里就不赘述了，下面例举出常用api。</a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">setTranslate<span class="comment">//设置平移矩阵</span></span><br><span class="line">setScale <span class="comment">//设置缩放矩阵</span></span><br><span class="line">setRotate <span class="comment">//设置旋转矩阵。</span></span><br><span class="line">setSkew <span class="comment">//设置错切矩阵</span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">preTranslate(<span class="keyword">float</span> dx, <span class="keyword">float</span> dy) <span class="comment">//先乘平移矩阵，M' = M * T(dx, dy)</span></span><br><span class="line">preScale(<span class="keyword">float</span> sx, <span class="keyword">float</span> sy) <span class="comment">//先乘缩放矩阵，M' = M * S(sx, sy)</span></span><br><span class="line">preRotate(<span class="keyword">float</span> degrees, <span class="keyword">float</span> px, <span class="keyword">float</span> py)<span class="comment">//先乘旋转矩阵，M' = M * R(degrees, px, py)</span></span><br><span class="line">preSkew(<span class="keyword">float</span> kx, <span class="keyword">float</span> ky)<span class="comment">//先乘错切矩阵，M' = M * K(kx, ky)</span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">postTranslate(<span class="keyword">float</span> dx, <span class="keyword">float</span> dy) <span class="comment">//后乘平移矩阵，M' = T(dx, dy) * M</span></span><br><span class="line">postScale(<span class="keyword">float</span> sx, <span class="keyword">float</span> sy) <span class="comment">//后乘缩放矩阵，M' = S(sx, sy) * M</span></span><br><span class="line">postRotate(<span class="keyword">float</span> degrees, <span class="keyword">float</span> px, <span class="keyword">float</span> py)<span class="comment">//后乘旋转矩阵，M' = R(degrees, px, py) * M</span></span><br><span class="line">postSkew(<span class="keyword">float</span> kx, <span class="keyword">float</span> ky)<span class="comment">//后乘错切矩阵，M' = K(kx, ky) * M</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>由于矩阵的乘法运算不满足交换律，所以Matrix先乘和后乘是有区别的，先乘就是矩阵运算中的右乘，后乘就是矩阵运算中的左乘。即<code>M&#39; = M * T(dx, dy)</code>和<code>M&#39; = T(dx, dy) * M</code>的区别。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>关于Matrix的应用，下篇分析图片缩放预览库PhotoView源码时再进行详细介绍。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/06/15/Android-Universal-Image-Loader-源码解读/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Android-Universal-Image-Loader 源码解读</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Android-Matrix矩阵详解" data-title="Android Matrix矩阵详解" data-url="http://www.maplejaw.com/2016/06/21/Android-Matrix矩阵详解/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"maplejaw"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 maplejaw
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
