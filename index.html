@@ -152,6 +152,67 @@
 
       <div class="body-wrap">
   
+    <article id="post-Gson-源码解读" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/03/Gson-源码解读/" class="article-date">
+  	<time datetime="2016-07-03T02:06:23.000Z" itemprop="datePublished">2016-07-03</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/03/Gson-源码解读/">Gson 源码解读</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>开源库地址：<a href="https://github.com/google/gson">https://github.com/google/gson</a><br>解读版本：2.7</p>
+<p>Gson是一个可以用来将Java对象转换为JSON字符串的Java库。当然，它也可以把JSON字符串转换为等价的Java对象。网上已经有了不少可将Java对象转换成JSON的开源项目。但是，大多数都要求你在Java类中加入注解，如果你无法修改源码的话就比较坑爹了，此外大多数开源库并没有对泛型提供完全的支持。于是，Gson在这两个重要的设计目标下诞生了。Gson可以作用于任意的Java对象（包括接触不到源码的），与此同时还加入了完整的泛型支持。</p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码解读/">源码解读</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/07/03/Gson-源码解读/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-PhotoView-源码解读" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -681,74 +742,6 @@
       
         <p class="article-more-link">
           <a  href="/2016/05/26/Android插件化探索（二）资源加载/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Android插件化探索（一）类加载器DexClassLoader" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/05/24/Android插件化探索（一）类加载器DexClassLoader/" class="article-date">
-  	<time datetime="2016-05-24T13:31:02.000Z" itemprop="datePublished">2016-05-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/24/Android插件化探索（一）类加载器DexClassLoader/">Android插件化探索（一）类加载器DexClassLoader</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>本文部分内容参考自《Android内核剖析》</p>
-</blockquote>
-<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>在Java环境中，有个概念叫做“类加载器”（ClassLoader）,其作用是动态装载Class文件。标准的Java SDK中有一个ClassLoader类，借助它可以装载想要的Class文件，每个ClassLoader对象在初始化时必须指定Class文件的路径</p>
-<p>没有使用过ClassLoader的读者可能会问：“在过去的程序开发中，当我们需要某个类时，只需使用import关键字包含该类就可以了，为什么还要类加载器呢？”简单的讲，import中所引用的类文件有两个特点：</p>
-<ul>
-<li>必须存在于本地，当程序运行时需要该类时，内部类装载器会自动装载该类，这对程序员来讲是透明的，即程序员感知不到这一过程。</li>
-<li>编译时必须在现场，否则编译不过会因为找不到引用文件而正常编译。</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/插件化探索/">插件化探索</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码解读/">源码解读</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/05/24/Android插件化探索（一）类加载器DexClassLoader/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
