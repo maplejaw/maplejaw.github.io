@@ -96,7 +96,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/开源库/" style="font-size: 10px;">开源库</a> <a href="/tags/插件化探索/" style="font-size: 15px;">插件化探索</a> <a href="/tags/源码解读/" style="font-size: 17.5px;">源码解读</a> <a href="/tags/知识整理/" style="font-size: 12.5px;">知识整理</a> <a href="/tags/自定义View/" style="font-size: 10px;">自定义View</a>
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/python/" style="font-size: 14px;">python</a> <a href="/tags/开源库/" style="font-size: 10px;">开源库</a> <a href="/tags/插件化探索/" style="font-size: 16px;">插件化探索</a> <a href="/tags/源码解读/" style="font-size: 18px;">源码解读</a> <a href="/tags/知识整理/" style="font-size: 12px;">知识整理</a> <a href="/tags/自定义View/" style="font-size: 10px;">自定义View</a>
 					</div>
 				</section>
 				
@@ -151,6 +151,129 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-Android插件化探索（三）免安装运行Activity（上）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/28/Android插件化探索（三）免安装运行Activity（上）/" class="article-date">
+  	<time datetime="2016-05-28T13:20:41.000Z" itemprop="datePublished">2016-05-28</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/28/Android插件化探索（三）免安装运行Activity（上）/">Android插件化探索（三）免安装运行Activity（上）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="http://www.maplejaw.com/2016/05/24/Android%E6%8F%92%E4%BB%B6%E5%8C%96%E6%8E%A2%E7%B4%A2%EF%BC%88%E4%B8%80%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8DexClassLoader/">【Android插件化探索（一）类加载器DexClassLoader】</a><br><a href="http://www.maplejaw.com/2016/05/26/Android%E6%8F%92%E4%BB%B6%E5%8C%96%E6%8E%A2%E7%B4%A2%EF%BC%88%E4%BA%8C%EF%BC%89%E8%B5%84%E6%BA%90%E5%8A%A0%E8%BD%BD/">【Android插件化探索（二）资源加载】</a></p>
+<h2 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h2><p>在上一篇中有一个细节没有提到，那就是getResourcesForApplication和AssetManager的区别。</p>
+<h3 id="getResourcesForApplication"><a href="#getResourcesForApplication" class="headerlink" title="getResourcesForApplication"></a>getResourcesForApplication</h3><p>getResourcesForApplication(String packageName)，很显然需要传入一个包名，换言之，这个插件必须已经被安装在系统内，然后才能通过包名来获取资源。你可能会想，不安装照样可以获取包名啊。的确，通过<code>pm.getPackageArchiveInfo()</code>可以获取安装包信息。但是，这些包都是没有在PMS中注册的。如果仍然这样获取，会提示如下错误。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android.content.pm.PackageManager<span class="variable">$NameNotFoundException</span>: com.maplejaw.hotplugin</span><br></pre></td></tr></table></figure></p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/插件化探索/">插件化探索</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/05/28/Android插件化探索（三）免安装运行Activity（上）/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Android插件化探索（二）资源加载" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/26/Android插件化探索（二）资源加载/" class="article-date">
+  	<time datetime="2016-05-26T12:06:39.000Z" itemprop="datePublished">2016-05-26</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/26/Android插件化探索（二）资源加载/">Android插件化探索（二）资源加载</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h2><p>在探索资源加载方式之前，我们先来看看上一篇中没细讲的东西。还没看过的建议先看上一篇<a href="http://www.maplejaw.com/2016/05/24/Android%E6%8F%92%E4%BB%B6%E5%8C%96%E6%8E%A2%E7%B4%A2%EF%BC%88%E4%B8%80%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8DexClassLoader/">Android插件化探索（一）类加载器DexClassLoader</a>。</p>
+<h3 id="PathClassLoader和DexClassLoader的区别"><a href="#PathClassLoader和DexClassLoader的区别" class="headerlink" title="PathClassLoader和DexClassLoader的区别"></a>PathClassLoader和DexClassLoader的区别</h3><p>DexClassLoader的源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DexClassLoader</span> <span class="keyword">extends</span> <span class="title">BaseDexClassLoader</span> </span>&#123;</span><br><span class="line">    <span class="comment">//支持从任何地方的apk/jar/dex中读取</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DexClassLoader</span><span class="params">(String dexPath, String optimizedDirectory,</span><br><span class="line">            String libraryPath, ClassLoader parent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(dexPath, <span class="keyword">new</span> File(optimizedDirectory), libraryPath, parent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/插件化探索/">插件化探索</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/05/26/Android插件化探索（二）资源加载/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-Android插件化探索（一）类加载器DexClassLoader" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -671,70 +794,9 @@
 
 
   
-    <article id="post-一个图片选择库" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/04/24/一个图片选择库/" class="article-date">
-  	<time datetime="2016-04-24T05:44:18.000Z" itemprop="datePublished">2016-04-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/24/一个图片选择库/">一个图片选择库</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>撸了一个高仿微信、QQ图片选择库，支持单选，多选，预览，拍照。<a href="https://github.com/maplejaw/ImagePicker"><strong>ImagePicker</strong></a></p>
-<h2 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h2><p><img src="https://raw.githubusercontent.com/maplejaw/ImagePicker/master/image/image1.png" width="60%" /><br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/开源库/">开源库</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/04/24/一个图片选择库/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 </div>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Python3 学习手册（三） 数据结构 | maplejaw的技术博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="常用的数组方法list.append(x)向数组追加元素list.extend(L)向数组list追加数组list.insert(i, x)向数组指定位置插入元素">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python3 学习手册（三） 数据结构">
+<meta property="og:url" content="http://www.maplejaw.com/2016/07/04/Python3-学习手册（三）-数据结构/index.html">
+<meta property="og:site_name" content="maplejaw的技术博客">
+<meta property="og:description" content="常用的数组方法list.append(x)向数组追加元素list.extend(L)向数组list追加数组list.insert(i, x)向数组指定位置插入元素">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/qpp0zk4fl2h4epzqf3h4wvi0/image_1amqbjfdksa8jlrr97avg1lv4m.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/z3s4z9v0vquywrbyjshecdim/image_1amqcfejh1l1irq0mj61csi1a8113.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/ri3bhyu9bfovekelj7i636oz/image_1amqchu7t5ef1lde1m2l1t5h1vtv1g.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/byhqyx7uqltx5hhm0uuqs9bb/image_1amqcl90ithd5c01ae51a7s14os1t.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/t82phkisqk7h48vu3wnx2fyc/image_1amqcp35o142h1ab11jbn8gfm7c2a.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/wvo2ze414vkmmh0mk5fwau3h/image_1amqcra0r1oeu1mcm1oqu1s4nuea2n.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/zs1t83n96o2lzois001zmtg1/image_1amqd7mb7c4130ggp3lutncf34.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/bz3dj43pzq4ckw5qnvkobrsm/image_1amqdpmtumab19rlhchkadd9j3h.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/quk8vtdh7wuxkl59vzpi1dcz/image_1amqf10o5r8jrovuqv16hh1mkv3u.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/fd0os8drjdppfym7xetcqxjm/image_1amqff5fq1vhe13p7nihh951cpd4o.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/mti9wswf2p3aq1btgsyvpkyz/image_1amqfinua1uapqppu151gfgh55.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/2byo9zbnwbjtpxbcfiaenxhs/image_1amqfabbcf7q1dm7puf1a1vomm4b.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/o9wy94qflrtowgb1nac0ty67/image_1amqrmg0tb7a11nbk01h6pqsh9.png">
+<meta property="og:updated_time" content="2016-07-04T11:47:10.451Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python3 学习手册（三） 数据结构">
+<meta name="twitter:description" content="常用的数组方法list.append(x)向数组追加元素list.extend(L)向数组list追加数组list.insert(i, x)向数组指定位置插入元素">
+<meta name="twitter:image" content="http://static.zybuluo.com/maplejaw/qpp0zk4fl2h4epzqf3h4wvi0/image_1amqbjfdksa8jlrr97avg1lv4m.png">
+  
+    <link rel="alternative" href="/atom.xml" title="maplejaw的技术博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/uploads/avatar.jpeg" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">maplejaw</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">不忘初心，方得始终</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">归档</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/maplejaw" title="github">github</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/python/" style="font-size: 14px;">python</a> <a href="/tags/开源库/" style="font-size: 10px;">开源库</a> <a href="/tags/插件化探索/" style="font-size: 16px;">插件化探索</a> <a href="/tags/源码解读/" style="font-size: 18px;">源码解读</a> <a href="/tags/知识整理/" style="font-size: 12px;">知识整理</a> <a href="/tags/自定义View/" style="font-size: 10px;">自定义View</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">maplejaw</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img src="/uploads/avatar.jpeg" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">maplejaw</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">不忘初心，方得始终</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">归档</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/maplejaw" title="github">github</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-Python3-学习手册（三）-数据结构" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/04/Python3-学习手册（三）-数据结构/" class="article-date">
+  	<time datetime="2016-07-04T11:33:53.000Z" itemprop="datePublished">2016-07-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python3 学习手册（三） 数据结构
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="常用的数组方法"><a href="#常用的数组方法" class="headerlink" title="常用的数组方法"></a>常用的数组方法</h2><p><code>list.append(x)</code>向数组追加元素<br><img src="http://static.zybuluo.com/maplejaw/qpp0zk4fl2h4epzqf3h4wvi0/image_1amqbjfdksa8jlrr97avg1lv4m.png" alt="image_1amqbjfdksa8jlrr97avg1lv4m.png-4.1kB"><br><code>list.extend(L)</code>向数组list追加数组<br><img src="http://static.zybuluo.com/maplejaw/z3s4z9v0vquywrbyjshecdim/image_1amqcfejh1l1irq0mj61csi1a8113.png" alt="image_1amqcfejh1l1irq0mj61csi1a8113.png-5.1kB"><br><code>list.insert(i, x)</code>向数组指定位置插入元素<br><img src="http://static.zybuluo.com/maplejaw/ri3bhyu9bfovekelj7i636oz/image_1amqchu7t5ef1lde1m2l1t5h1vtv1g.png" alt="image_1amqchu7t5ef1lde1m2l1t5h1vtv1g.png-3.5kB"></p>
+<a id="more"></a>
+<p><code>list.remove(x)</code>移除第一个相同元素<br><img src="http://static.zybuluo.com/maplejaw/byhqyx7uqltx5hhm0uuqs9bb/image_1amqcl90ithd5c01ae51a7s14os1t.png" alt="image_1amqcl90ithd5c01ae51a7s14os1t.png-7kB"><br><code>list.index(x)</code>获取元素的索引<br><img src="http://static.zybuluo.com/maplejaw/t82phkisqk7h48vu3wnx2fyc/image_1amqcp35o142h1ab11jbn8gfm7c2a.png" alt="image_1amqcp35o142h1ab11jbn8gfm7c2a.png-3.2kB"><br><code>list.count(x)</code>元素x出现的次数<br><img src="http://static.zybuluo.com/maplejaw/wvo2ze414vkmmh0mk5fwau3h/image_1amqcra0r1oeu1mcm1oqu1s4nuea2n.png" alt="image_1amqcra0r1oeu1mcm1oqu1s4nuea2n.png-3.1kB"><br><code>list.reverse()</code>将数组倒序<br><code>list.copy()</code>返回数组的副本<br><code>sort(key=None, reverse=False)</code>将数组排序，可指明是否反向排序<br><img src="http://static.zybuluo.com/maplejaw/zs1t83n96o2lzois001zmtg1/image_1amqd7mb7c4130ggp3lutncf34.png" alt="image_1amqd7mb7c4130ggp3lutncf34.png-7.1kB"><br><code>list.pop([i])</code>移除并返回该位置元素，如果不传位置，则表示最后一位。<br><code>list.clear()</code>清空数组</p>
+<h2 id="把数组当作栈使用"><a href="#把数组当作栈使用" class="headerlink" title="把数组当作栈使用"></a>把数组当作栈使用</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack = [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack.append(<span class="number">6</span>) <span class="comment"># 入栈</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack.append(<span class="number">7</span>) <span class="comment"># 入栈</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack</span><br><span class="line">[<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack.pop() <span class="comment"># 出栈</span></span><br><span class="line"><span class="number">7</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack</span><br><span class="line">[<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack.pop() <span class="comment"># 出栈</span></span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack.pop() <span class="comment"># 出栈</span></span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack</span><br><span class="line">[<span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="使用队列（先进先出）"><a href="#使用队列（先进先出）" class="headerlink" title="使用队列（先进先出）"></a>使用队列（先进先出）</h2><p>其中<code>from collections import deque</code>表示从collections包中导入deque函数<br><img src="http://static.zybuluo.com/maplejaw/bz3dj43pzq4ckw5qnvkobrsm/image_1amqdpmtumab19rlhchkadd9j3h.png" alt="image_1amqdpmtumab19rlhchkadd9j3h.png-11.1kB"></p>
+<h2 id="简单的创建数组"><a href="#简单的创建数组" class="headerlink" title="简单的创建数组"></a>简单的创建数组</h2><p>前面介绍的创建的数组方法如下。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>squares = []</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line"><span class="meta">... </span>    squares.append(x**<span class="number">2</span>) <span class="comment"># x**2表示x的2次幂</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>squares</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br></pre></td></tr></table></figure></p>
+<p>如何简便的创建？<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>squares = [x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">10</span>)]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>squares</span><br><span class="line">[<span class="number">0</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>, <span class="number">16</span>, <span class="number">25</span>, <span class="number">36</span>, <span class="number">49</span>, <span class="number">64</span>, <span class="number">81</span>]</span><br></pre></td></tr></table></figure></p>
+<h2 id="tuple-（元组）"><a href="#tuple-（元组）" class="headerlink" title="tuple （元组）"></a>tuple （元组）</h2><p>元组和数组非常相似，不过tuple一旦初始化后，就不能再更改，没有append,insert方法。其他方法等同于数组。元组用<code>(x,x,..)</code>表示。<br><img src="http://static.zybuluo.com/maplejaw/quk8vtdh7wuxkl59vzpi1dcz/image_1amqf10o5r8jrovuqv16hh1mkv3u.png" alt="image_1amqf10o5r8jrovuqv16hh1mkv3u.png-9kB"><br>怎么创建元组？有两种方式，见下图：<br><img src="http://static.zybuluo.com/maplejaw/fd0os8drjdppfym7xetcqxjm/image_1amqff5fq1vhe13p7nihh951cpd4o.png" alt="image_1amqff5fq1vhe13p7nihh951cpd4o.png-7.6kB"><br>怎么建立多维元组？<br><img src="http://static.zybuluo.com/maplejaw/mti9wswf2p3aq1btgsyvpkyz/image_1amqfinua1uapqppu151gfgh55.png" alt="image_1amqfinua1uapqppu151gfgh55.png-6.1kB"><br>需要注意的是，当元组中占有一个元素时，务必记得在第一个元素后追加逗号.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>t=<span class="string">'maplejaw'</span>,</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>t=(<span class="string">'maplejaw'</span>,)</span><br></pre></td></tr></table></figure></p>
+<p>在数组中创建元组：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[(x, y) <span class="keyword">for</span> x <span class="keyword">in</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>] <span class="keyword">for</span> y <span class="keyword">in</span> [<span class="number">3</span>,<span class="number">1</span>,<span class="number">4</span>] <span class="keyword">if</span> x != y]</span><br><span class="line">[(<span class="number">1</span>, <span class="number">3</span>), (<span class="number">1</span>, <span class="number">4</span>), (<span class="number">2</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">2</span>, <span class="number">4</span>), (<span class="number">3</span>, <span class="number">1</span>), (<span class="number">3</span>, <span class="number">4</span>)]</span><br></pre></td></tr></table></figure></p>
+<p>简便算法不仅可以使用for语句，还可以使用if语句。<br>等同于<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>combs = []</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> x <span class="keyword">in</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]:</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">for</span> y <span class="keyword">in</span> [<span class="number">3</span>,<span class="number">1</span>,<span class="number">4</span>]:</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">if</span> x != y:</span><br><span class="line"><span class="meta">... </span>            combs.append((x, y))</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>combs</span><br><span class="line">[(<span class="number">1</span>, <span class="number">3</span>), (<span class="number">1</span>, <span class="number">4</span>), (<span class="number">2</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">2</span>, <span class="number">4</span>), (<span class="number">3</span>, <span class="number">1</span>), (<span class="number">3</span>, <span class="number">4</span>)]</span><br></pre></td></tr></table></figure></p>
+<h2 id="del语法"><a href="#del语法" class="headerlink" title="del语法"></a>del语法</h2><p>在数组中使用del，可以移除元素。不同于<code>pop()</code>,<code>del</code> 可以移除一组元素。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="number">-1</span>, <span class="number">1</span>, <span class="number">66.25</span>, <span class="number">333</span>, <span class="number">333</span>, <span class="number">1234.5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">del</span> a[<span class="number">0</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">1</span>, <span class="number">66.25</span>, <span class="number">333</span>, <span class="number">333</span>, <span class="number">1234.5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">del</span> a[<span class="number">2</span>:<span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">1</span>, <span class="number">66.25</span>, <span class="number">1234.5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">del</span> a[:]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[]</span><br></pre></td></tr></table></figure></p>
+<p><code>del</code>还可以删除变量<br><img src="http://static.zybuluo.com/maplejaw/2byo9zbnwbjtpxbcfiaenxhs/image_1amqfabbcf7q1dm7puf1a1vomm4b.png" alt="image_1amqfabbcf7q1dm7puf1a1vomm4b.png-6.7kB"></p>
+<h2 id="dict-字典"><a href="#dict-字典" class="headerlink" title="dict 字典"></a>dict 字典</h2><p>所谓字典即Java中的Map，通常以键值对（key-value）保存。以<code>{X:Y,X:Y，...}</code>形式表示。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d = &#123;<span class="string">'name'</span>: <span class="string">'maplejaw'</span>, <span class="string">'age'</span>: <span class="number">20</span>, <span class="string">'city'</span>: <span class="string">'shanghai'</span>&#125;</span><br><span class="line">print(d[<span class="string">'name'</span>]) <span class="comment"># maplejaw</span></span><br></pre></td></tr></table></figure></p>
+<p>使用简化方式初始化。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>&#123;x: x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> (<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>)&#125;</span><br><span class="line">&#123;<span class="number">2</span>: <span class="number">4</span>, <span class="number">4</span>: <span class="number">16</span>, <span class="number">6</span>: <span class="number">36</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>还可以使用<code>dict</code>函数来初始化字典。<br>传入元素为元组的数组:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt; dict([(<span class="string">'sape'</span>, <span class="number">4139</span>), (<span class="string">'guido'</span>, <span class="number">4127</span>), (<span class="string">'jack'</span>, <span class="number">4098</span>)])</span><br><span class="line">&#123;<span class="string">'sape'</span>: <span class="number">4139</span>, <span class="string">'jack'</span>: <span class="number">4098</span>, <span class="string">'guido'</span>: <span class="number">4127</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>还可以如下形式创建：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>dict(sape=<span class="number">4139</span>, guido=<span class="number">4127</span>, jack=<span class="number">4098</span>)</span><br><span class="line">&#123;<span class="string">'sape'</span>: <span class="number">4139</span>, <span class="string">'jack'</span>: <span class="number">4098</span>, <span class="string">'guido'</span>: <span class="number">4127</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用<code>d.keys()</code>可以获取key集合。<br>使用<code>d.items()</code>遍历键值对。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">d=dict(sape=<span class="number">4139</span>, guido=<span class="number">4127</span>, jack=<span class="number">4098</span>)</span><br><span class="line"><span class="keyword">for</span> k,v <span class="keyword">in</span> d.items():</span><br><span class="line">    print(k,v)</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://static.zybuluo.com/maplejaw/o9wy94qflrtowgb1nac0ty67/image_1amqrmg0tb7a11nbk01h6pqsh9.png" alt="image_1amqrmg0tb7a11nbk01h6pqsh9.png-2.1kB"></p>
+<h2 id="Sets-集合"><a href="#Sets-集合" class="headerlink" title="Sets 集合"></a>Sets 集合</h2><p>Sets可以理解为字典中所有key的集合，所以，不会有重复值。以<code>{X,Y，...}</code>形式表示。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>basket = &#123;<span class="string">'apple'</span>, <span class="string">'orange'</span>, <span class="string">'apple'</span>, <span class="string">'pear'</span>, <span class="string">'orange'</span>, <span class="string">'banana'</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(basket)                     </span><br><span class="line">&#123;<span class="string">'orange'</span>, <span class="string">'banana'</span>, <span class="string">'pear'</span>, <span class="string">'apple'</span>&#125;  <span class="comment"># 不会有重复</span></span><br></pre></td></tr></table></figure></p>
+<p>我们可以判断集合中是不是有该key.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'orange'</span> <span class="keyword">in</span> basket      </span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">'crabgrass'</span> <span class="keyword">in</span> basket</span><br><span class="line"><span class="keyword">False</span></span><br></pre></td></tr></table></figure></p>
+<p>可以使用<code>set</code>函数来初始化集合。<code>set</code>中传入一个数组即可。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a=set([<span class="number">1</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">9</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">&#123;<span class="number">1</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">9</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用<code>add</code>来添加值，<code>remove</code>来移除值<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a=set([<span class="number">1</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">9</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.add(<span class="number">10</span>)</span><br><span class="line">&#123;<span class="number">1</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">9</span>,<span class="number">10</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.remove(<span class="number">1</span>)</span><br><span class="line">&#123;<span class="number">3</span>,<span class="number">6</span>,<span class="number">9</span>,<span class="number">10</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>两个集合之间可以求交集、并集等运算。<br>求交集：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">8</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b=&#123;<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a&amp;b  <span class="comment"># 交集</span></span><br><span class="line">&#123;<span class="number">2</span>,<span class="number">4</span>,<span class="number">8</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a|b <span class="comment"># 并集</span></span><br><span class="line">&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/07/04/Python3-学习手册（二）-流程控制语句/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Python3 学习手册（二） 流程控制语句</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Python3-学习手册（三）-数据结构" data-title="Python3 学习手册（三） 数据结构" data-url="http://www.maplejaw.com/2016/07/04/Python3-学习手册（三）-数据结构/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"maplejaw"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 maplejaw
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
