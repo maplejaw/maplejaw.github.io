@@ -152,6 +152,145 @@
 
       <div class="body-wrap">
   
+    <article id="post-HttpURLConnection-源码解读" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/22/HttpURLConnection-源码解读/" class="article-date">
+  	<time datetime="2016-07-22T13:24:30.000Z" itemprop="datePublished">2016-07-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/22/HttpURLConnection-源码解读/">HttpURLConnection 源码解读</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们知道，自Android6.0后HttpClient已经被废除，我们连接网络的选择基本在HttpURLConnection和OkHttp间抉择，本篇准备从源码角度解读HttpURLConnection。</p>
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p>HttpURLConnection的使用大体可以分为以下几步：</p>
+<ol>
+<li>初始化URL，使用<code>openConnection</code>获取连接。</li>
+<li>通过HttpURLConnection设置请求参数，<code>connect()</code>开启真正连接。</li>
+<li>通过<code>getOutputStream()</code>写入请求体（POST等）</li>
+<li>通过<code>getInputStream()</code>读取相关内容。</li>
+<li>关闭资源</li>
+</ol>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码解读/">源码解读</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/07/22/HttpURLConnection-源码解读/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Retrofit2-源码解读" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/22/Retrofit2-源码解读/" class="article-date">
+  	<time datetime="2016-07-22T12:55:59.000Z" itemprop="datePublished">2016-07-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/22/Retrofit2-源码解读/">Retrofit2 源码解读</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>Retrofit 是一个针对Java/Android类型安全的Http请求客户端。<br>基本使用如下：</p>
+<ol>
+<li><p>首先定义一个接口，抽象方法的返回值必须为<code>Call&lt;XX&gt;</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">GitHubService</span> </span>&#123;</span><br><span class="line">  <span class="meta">@GET</span>(<span class="string">"users/&#123;user&#125;/repos"</span>)</span><br><span class="line">   Call&lt;List&lt;Repo&gt;&gt; listRepos(<span class="meta">@Path</span>(<span class="string">"user"</span>) String user);<span class="comment">//默认CallAdapter返回值必须为`Call&lt;XX&gt;`。</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过Retrofit的<code>create</code>创建接口实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//初始化Retrofit</span></span><br><span class="line"> Retrofit retrofit = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line"> .baseUrl(<span class="string">"https://api.github.com/"</span>) <span class="comment">//必须以斜杠结尾</span></span><br><span class="line"> .addConverterFactory(GsonConverterFactory.create())<span class="comment">//添加Gson转换工厂</span></span><br><span class="line"> .build();</span><br><span class="line"></span><br><span class="line"><span class="comment">//通过Retrofit创建接口实现</span></span><br><span class="line">GitHubService service = retrofit.create(GitHubService.class);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>接口调用相关方法获取<code>Call&lt;XX&gt;</code>,然后就能和Okhttp一样进行同步/异步调用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Call&lt;List&lt;Repo&gt;&gt; repos = service.listRepos(<span class="string">"octocat"</span>);</span><br><span class="line"><span class="comment">//异步调用</span></span><br><span class="line">repos.enqueue(<span class="keyword">new</span> Callback&lt;List&lt;Repo&gt;&gt;() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call&lt;List&lt;Repo&gt;&gt; call, Response&lt;List&lt;Repo&gt;&gt; response)</span> </span>&#123;</span><br><span class="line">                 List&lt;String&gt; list=response.body();<span class="comment">//调用body()</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Call&lt;List&lt;Repo&gt;&gt; call, Throwable t)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"> <span class="comment">//同步调用</span></span><br><span class="line">  Response&lt;List&lt;Repo&gt;&gt; response=repos.execute();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码解读/">源码解读</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/07/22/Retrofit2-源码解读/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Python3-学习手册（三）-数据结构" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -617,128 +756,6 @@
       
         <p class="article-more-link">
           <a  href="/2016/06/06/EventBus3-源码解读/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Android插件化探索（四）免安装运行Activity（下）" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/06/05/Android插件化探索（四）免安装运行Activity（下）/" class="article-date">
-  	<time datetime="2016-06-04T16:14:21.000Z" itemprop="datePublished">2016-06-05</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/05/Android插件化探索（四）免安装运行Activity（下）/">Android插件化探索（四）免安装运行Activity（下）</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在上一篇中，我们介绍了两种免安装启动Activity的方法。但是那两种方法都有缺陷，必须在AndroidManifest.xml中注册。那么今天，我们来探索其它几种不需要在清单文件中注册的启动方式</p>
-<h2 id="静态代理启动activity"><a href="#静态代理启动activity" class="headerlink" title="静态代理启动activity"></a>静态代理启动activity</h2><p>通过前几篇的探索我们知道，通过DexClassLoader可以加载类，通过AsserManager可以加载资源。但是Activity确有一个令人苦恼的问题——生命周期。<br>我们知道宿主中的Activity都有生命周期，那我们可不可以借助宿主Activity来借尸还魂？<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/插件化探索/">插件化探索</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/06/05/Android插件化探索（四）免安装运行Activity（下）/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Picasso-源码解读" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/05/30/Picasso-源码解读/" class="article-date">
-  	<time datetime="2016-05-30T14:29:05.000Z" itemprop="datePublished">2016-05-30</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/30/Picasso-源码解读/">Picasso 源码解读</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h3><p>Picasso，一个强大的图片下载与缓存库,出自Square公司。基本使用如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Picasso.with(context).load(R.drawable.landing_screen).into(imageView1);</span><br><span class="line">Picasso.with(context).load(<span class="string">"file:///android_asset/DvpvklR.png"</span>).into(imageView2);</span><br><span class="line">Picasso.with(context).load(<span class="keyword">new</span> File(...)).into(imageView3);</span><br></pre></td></tr></table></figure></p>
-<p>也可以进行全局配置(只能配置一次)。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Picasso  picasso=<span class="keyword">new</span> Picasso.Builder(<span class="keyword">this</span>)</span><br><span class="line">                .addRequestHandler()<span class="comment">//自定义请求处理，默认已支持Drawable，Content，File等等</span></span><br><span class="line">                .defaultBitmapConfig()<span class="comment">//bitmap配置</span></span><br><span class="line">                .downloader()<span class="comment">//下载器，可选okhttp或urlconnection,也可自定义</span></span><br><span class="line">                .executor()<span class="comment">//线程池</span></span><br><span class="line">                .indicatorsEnabled()<span class="comment">//提示器</span></span><br><span class="line">                .loggingEnabled()<span class="comment">//日志</span></span><br><span class="line">                .memoryCache()<span class="comment">//自定义内存缓存策略</span></span><br><span class="line">                .requestTransformer()<span class="comment">//Request预处理</span></span><br><span class="line">                .listener()<span class="comment">//下载失败监听</span></span><br><span class="line">                .build();</span><br></pre></td></tr></table></figure></p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码解读/">源码解读</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/05/30/Picasso-源码解读/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

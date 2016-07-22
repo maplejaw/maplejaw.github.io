@@ -152,6 +152,128 @@
 
       <div class="body-wrap">
   
+    <article id="post-Android插件化探索（四）免安装运行Activity（下）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/05/Android插件化探索（四）免安装运行Activity（下）/" class="article-date">
+  	<time datetime="2016-06-04T16:14:21.000Z" itemprop="datePublished">2016-06-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/05/Android插件化探索（四）免安装运行Activity（下）/">Android插件化探索（四）免安装运行Activity（下）</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在上一篇中，我们介绍了两种免安装启动Activity的方法。但是那两种方法都有缺陷，必须在AndroidManifest.xml中注册。那么今天，我们来探索其它几种不需要在清单文件中注册的启动方式</p>
+<h2 id="静态代理启动activity"><a href="#静态代理启动activity" class="headerlink" title="静态代理启动activity"></a>静态代理启动activity</h2><p>通过前几篇的探索我们知道，通过DexClassLoader可以加载类，通过AsserManager可以加载资源。但是Activity确有一个令人苦恼的问题——生命周期。<br>我们知道宿主中的Activity都有生命周期，那我们可不可以借助宿主Activity来借尸还魂？<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/插件化探索/">插件化探索</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/06/05/Android插件化探索（四）免安装运行Activity（下）/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Picasso-源码解读" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/30/Picasso-源码解读/" class="article-date">
+  	<time datetime="2016-05-30T14:29:05.000Z" itemprop="datePublished">2016-05-30</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/05/30/Picasso-源码解读/">Picasso 源码解读</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h3><p>Picasso，一个强大的图片下载与缓存库,出自Square公司。基本使用如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Picasso.with(context).load(R.drawable.landing_screen).into(imageView1);</span><br><span class="line">Picasso.with(context).load(<span class="string">"file:///android_asset/DvpvklR.png"</span>).into(imageView2);</span><br><span class="line">Picasso.with(context).load(<span class="keyword">new</span> File(...)).into(imageView3);</span><br></pre></td></tr></table></figure></p>
+<p>也可以进行全局配置(只能配置一次)。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Picasso  picasso=<span class="keyword">new</span> Picasso.Builder(<span class="keyword">this</span>)</span><br><span class="line">                .addRequestHandler()<span class="comment">//自定义请求处理，默认已支持Drawable，Content，File等等</span></span><br><span class="line">                .defaultBitmapConfig()<span class="comment">//bitmap配置</span></span><br><span class="line">                .downloader()<span class="comment">//下载器，可选okhttp或urlconnection,也可自定义</span></span><br><span class="line">                .executor()<span class="comment">//线程池</span></span><br><span class="line">                .indicatorsEnabled()<span class="comment">//提示器</span></span><br><span class="line">                .loggingEnabled()<span class="comment">//日志</span></span><br><span class="line">                .memoryCache()<span class="comment">//自定义内存缓存策略</span></span><br><span class="line">                .requestTransformer()<span class="comment">//Request预处理</span></span><br><span class="line">                .listener()<span class="comment">//下载失败监听</span></span><br><span class="line">                .build();</span><br></pre></td></tr></table></figure></p>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码解读/">源码解读</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/05/30/Picasso-源码解读/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Android插件化探索（三）免安装运行Activity（上）" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -645,137 +767,6 @@
       
         <p class="article-more-link">
           <a  href="/2016/05/07/Android中常见的XML解析方式/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-自定义View系列（一）基本概念" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/05/05/自定义View系列（一）基本概念/" class="article-date">
-  	<time datetime="2016-05-05T11:51:00.000Z" itemprop="datePublished">2016-05-05</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/05/自定义View系列（一）基本概念/">自定义View系列（一）基本概念</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>一直对于自定义view没有进行深入研究过，最近抽空开始整理整理自定义view相关的知识，以便可以有个系统的深入的认识，也希望能够给初学者一点启示。</p>
-</blockquote>
-<p>本篇主要介绍自定义view中一些相关API以及相关知识点。</p>
-<h2 id="初识Canvas和Paint"><a href="#初识Canvas和Paint" class="headerlink" title="初识Canvas和Paint"></a>初识Canvas和Paint</h2><ul>
-<li>Paint，画笔类。<br>常用API如下：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置画笔的颜色</span></span><br><span class="line">mPaint.setColor(<span class="keyword">int</span> color);</span><br><span class="line"><span class="comment">//设置填充风格,Paint.Style.FILL(仅填充)，Paint.Style.STROKE(仅描边),Paint.Style.FILL_AND_STROKE（同时描边和填充）</span></span><br><span class="line">mPaint.setStyle();</span><br><span class="line"><span class="comment">//设置描边宽度</span></span><br><span class="line">mPaint.setStrokeWidth() </span><br><span class="line"><span class="comment">//设置字体大小</span></span><br><span class="line">mPaint.setTextSize();</span><br><span class="line"><span class="comment">//重置画笔</span></span><br><span class="line">mPaint.reset();</span><br><span class="line"><span class="comment">//设置滤镜</span></span><br><span class="line">mPaint.setColorFilter();</span><br><span class="line"><span class="comment">//设置混合模式</span></span><br><span class="line">mPaint.setXfermode();</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/自定义View/">自定义View</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/05/05/自定义View系列（一）基本概念/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-长按保存图片以及截屏的几种方式" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/04/25/长按保存图片以及截屏的几种方式/" class="article-date">
-  	<time datetime="2016-04-25T11:15:00.000Z" itemprop="datePublished">2016-04-25</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/25/长按保存图片以及截屏的几种方式/">Android ImageView长按保存图片及截屏相关知识</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>  在日常开发中，可能会需要做长按保存图片这个功能，又或者需要做个截屏分享功能。最近正好在研究这些东西，写篇博客整理一下。</p>
-</blockquote>
-<h2 id="view长按保存图片的几种方式"><a href="#view长按保存图片的几种方式" class="headerlink" title="view长按保存图片的几种方式"></a>view长按保存图片的几种方式</h2><p>如果是网络图片，我们可以直接选择将图片下载下来后保存，这种方式，简单暴力，可以直接获得原图，本质其实就是下载文件。代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span>  <span class="title">downloadBitmap</span><span class="params">(String urlString, File fileDir)</span> </span>&#123;</span><br><span class="line">    URL url = <span class="keyword">null</span>;</span><br><span class="line">    InputStream is = <span class="keyword">null</span>;</span><br><span class="line">    FileOutputStream fos = <span class="keyword">null</span>;</span><br><span class="line">    HttpURLConnection conn=<span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">boolean</span> isSuccess=<span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line"></span><br><span class="line">        url = <span class="keyword">new</span> URL(urlString);</span><br><span class="line">        <span class="comment">//开启连接</span></span><br><span class="line">       conn = (HttpURLConnection) url.openConnection();</span><br><span class="line">        <span class="comment">//设置超时的时间，5000毫秒即5秒</span></span><br><span class="line">        conn.setConnectTimeout(<span class="number">5000</span>);</span><br><span class="line">        <span class="comment">//设置获取图片的方式为GET</span></span><br><span class="line">        conn.setRequestMethod(<span class="string">"GET"</span>);</span><br><span class="line">        conn.connect();</span><br><span class="line">        <span class="comment">//响应码为200，则访问成功</span></span><br><span class="line">        <span class="keyword">if</span> (conn.getResponseCode() == <span class="number">200</span>) &#123;</span><br><span class="line">            <span class="comment">//获取连接的输入流，这个输入流就是图片的输入流</span></span><br><span class="line">            is = conn.getInputStream();</span><br><span class="line">            <span class="keyword">if</span> (!fileDir.exists()) &#123;</span><br><span class="line">                fileDir.mkdirs();</span><br><span class="line">            &#125;</span><br><span class="line">            String fileName = urlString.substring(urlString.lastIndexOf(<span class="string">"/"</span>) + <span class="number">1</span>); <span class="comment">//根据链接获取文件名</span></span><br><span class="line">            File file = <span class="keyword">new</span> File(fileDir, fileName);</span><br><span class="line">            fos = <span class="keyword">new</span> FileOutputStream(file);</span><br><span class="line">            <span class="keyword">int</span> len;</span><br><span class="line">            <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            <span class="comment">//将输入流写入到我们定义好的文件中</span></span><br><span class="line">            <span class="keyword">while</span> ((len = is.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                fos.write(buffer, <span class="number">0</span>, len);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//将缓冲刷入文件</span></span><br><span class="line">            fos.flush();</span><br><span class="line">            isSuccess=<span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(fos!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                fos.close();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(is!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                is.close();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(conn!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                conn.disconnect();</span><br><span class="line">            &#125;</span><br><span class="line">           </span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> isSuccess;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/知识整理/">知识整理</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/04/25/长按保存图片以及截屏的几种方式/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

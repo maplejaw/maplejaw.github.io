@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>HttpURLConnection 源码解读 | maplejaw的技术博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="我们知道，自Android6.0后HttpClient已经被废除，我们连接网络的选择基本在HttpURLConnection和OkHttp间抉择，本篇准备从源码角度解读HttpURLConnection。
+基本使用HttpURLConnection的使用大体可以分为以下几步：
+
+初始化URL，使用openConnection获取连接。
+通过HttpURLConnection设置请求参数，conne">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HttpURLConnection 源码解读">
+<meta property="og:url" content="http://www.maplejaw.com/2016/07/22/HttpURLConnection-源码解读/index.html">
+<meta property="og:site_name" content="maplejaw的技术博客">
+<meta property="og:description" content="我们知道，自Android6.0后HttpClient已经被废除，我们连接网络的选择基本在HttpURLConnection和OkHttp间抉择，本篇准备从源码角度解读HttpURLConnection。
+基本使用HttpURLConnection的使用大体可以分为以下几步：
+
+初始化URL，使用openConnection获取连接。
+通过HttpURLConnection设置请求参数，conne">
+<meta property="og:updated_time" content="2016-07-22T13:26:31.540Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HttpURLConnection 源码解读">
+<meta name="twitter:description" content="我们知道，自Android6.0后HttpClient已经被废除，我们连接网络的选择基本在HttpURLConnection和OkHttp间抉择，本篇准备从源码角度解读HttpURLConnection。
+基本使用HttpURLConnection的使用大体可以分为以下几步：
+
+初始化URL，使用openConnection获取连接。
+通过HttpURLConnection设置请求参数，conne">
+  
+    <link rel="alternative" href="/atom.xml" title="maplejaw的技术博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/uploads/avatar.jpeg" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">maplejaw</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">不忘初心，方得始终</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">归档</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/maplejaw" title="github">github</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/python/" style="font-size: 14px;">python</a> <a href="/tags/开源库/" style="font-size: 10px;">开源库</a> <a href="/tags/插件化探索/" style="font-size: 16px;">插件化探索</a> <a href="/tags/源码解读/" style="font-size: 18px;">源码解读</a> <a href="/tags/知识整理/" style="font-size: 12px;">知识整理</a> <a href="/tags/自定义View/" style="font-size: 10px;">自定义View</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">maplejaw</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img src="/uploads/avatar.jpeg" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">maplejaw</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">不忘初心，方得始终</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">归档</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/maplejaw" title="github">github</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-HttpURLConnection-源码解读" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/22/HttpURLConnection-源码解读/" class="article-date">
+  	<time datetime="2016-07-22T13:24:30.000Z" itemprop="datePublished">2016-07-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      HttpURLConnection 源码解读
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码解读/">源码解读</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们知道，自Android6.0后HttpClient已经被废除，我们连接网络的选择基本在HttpURLConnection和OkHttp间抉择，本篇准备从源码角度解读HttpURLConnection。</p>
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p>HttpURLConnection的使用大体可以分为以下几步：</p>
+<ol>
+<li>初始化URL，使用<code>openConnection</code>获取连接。</li>
+<li>通过HttpURLConnection设置请求参数，<code>connect()</code>开启真正连接。</li>
+<li>通过<code>getOutputStream()</code>写入请求体（POST等）</li>
+<li>通过<code>getInputStream()</code>读取相关内容。</li>
+<li>关闭资源</li>
+</ol>
+<a id="more"></a>
+<p>以下是一个使用HttpURLConnection以GET方式读取字符串的例子。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取字符串</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">loadStringFromURL</span><span class="params">(String urlString)</span> </span>&#123;</span><br><span class="line">    HttpURLConnection httpConn = <span class="keyword">null</span>;</span><br><span class="line">    InputStream is=<span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 创建url对象</span></span><br><span class="line">        URL urlObj = <span class="keyword">new</span> URL(urlString);</span><br><span class="line">        <span class="comment">// 创建HttpURLConnection对象，通过这个对象打开跟远程服务器之间的连接</span></span><br><span class="line">        httpConn = (HttpURLConnection) urlObj.openConnection();</span><br><span class="line">        httpConn.connect();<span class="comment">//连接</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 判断跟服务器的连接状态。如果是200，则说明连接正常，服务器有响应</span></span><br><span class="line">        <span class="keyword">if</span> (httpConn.getResponseCode() == <span class="number">200</span>) &#123;</span><br><span class="line">            is=httpConn.getInputStream();<span class="comment">//获取输入流</span></span><br><span class="line">            ByteArrayOutputStream baos=<span class="keyword">new</span> ByteArrayOutputStream();<span class="comment">//内存流无需关闭，也根本无法关闭</span></span><br><span class="line">            <span class="keyword">int</span> len;</span><br><span class="line">            <span class="keyword">byte</span>[] buffer=<span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">            <span class="keyword">while</span>((len=is.read(buffer))!=-<span class="number">1</span>)&#123;</span><br><span class="line">                baos.write(buffer,<span class="number">0</span>,len);<span class="comment">//写入到内存</span></span><br><span class="line">            &#125;</span><br><span class="line">           </span><br><span class="line">            <span class="keyword">return</span> baos.toString(<span class="string">"utf-8"</span>);<span class="comment">//从内存中读出</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 关闭流</span></span><br><span class="line">            <span class="keyword">if</span>(is!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                is.close();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(httpConn!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                httpConn.disconnect();</span><br><span class="line">            &#125;</span><br><span class="line">           </span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>POST请求需要注意的两个地方在于：</p>
+<ol>
+<li><code>httpConn.setDoOutput(true)</code>必须设置为可写</li>
+<li><code>setRequestMethod(&quot;POST&quot;)</code>必须指明请求为POST</li>
+<li><code>getOutputStream()</code>将参数写入请求体<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">httpConn = (HttpURLConnection) urlObj.openConnection();</span><br><span class="line">httpConn.setDoOutput(<span class="keyword">true</span>);<span class="comment">//设置为可写</span></span><br><span class="line">httpConn.setRequestMethod(<span class="string">"POST"</span>);<span class="comment">//指明为POST请求</span></span><br><span class="line">httpConn.connect();<span class="comment">//连接</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>完整源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//map为表单参数</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">doPost</span><span class="params">(String url, Map&lt;String, String&gt; map)</span> </span>&#123;</span><br><span class="line">    HttpURLConnection httpConn = <span class="keyword">null</span>;</span><br><span class="line">    BufferedInputStream bis = <span class="keyword">null</span>;</span><br><span class="line">    DataOutputStream dos = <span class="keyword">null</span>;</span><br><span class="line">    ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 实例化URL对象。调用URL有参构造方法，参数是一个url地址；</span></span><br><span class="line">        URL urlObj = <span class="keyword">new</span> URL(url);</span><br><span class="line">        <span class="comment">// 调用URL对象的openConnection()方法，创建HttpURLConnection对象；</span></span><br><span class="line">        httpConn = (HttpURLConnection) urlObj.openConnection();</span><br><span class="line">        <span class="comment">// 调用HttpURLConnection对象setDoOutput(true)、setDoInput(true)、setRequestMethod("POST")；</span></span><br><span class="line">        httpConn.setDoOutput(<span class="keyword">true</span>);</span><br><span class="line">        httpConn.setRequestMethod(<span class="string">"POST"</span>);</span><br><span class="line">        <span class="comment">// 设置Http请求头信息；（Accept、Connection、Accept-Encoding、Cache-Control、Content-Type、User-Agent）</span></span><br><span class="line">        httpConn.setUseCaches(<span class="keyword">false</span>);</span><br><span class="line">        httpConn.setRequestProperty(<span class="string">"Connection"</span>, <span class="string">"Keep-Alive"</span>);</span><br><span class="line">        httpConn.setRequestProperty(<span class="string">"Accept"</span>, <span class="string">"*/*"</span>);</span><br><span class="line">        httpConn.setRequestProperty(<span class="string">"Accept-Encoding"</span>, <span class="string">"gzip, deflate"</span>);</span><br><span class="line">        httpConn.setRequestProperty(<span class="string">"Cache-Control"</span>, <span class="string">"no-cache"</span>);</span><br><span class="line">        httpConn.setRequestProperty(<span class="string">"Content-Type"</span>,<span class="string">"application/x-www-form-urlencoded"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 调用HttpURLConnection对象的connect()方法，建立与服务器的真实连接；</span></span><br><span class="line">        httpConn.connect();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 调用HttpURLConnection对象的getOutputStream()方法构建输出流对象；</span></span><br><span class="line">        dos = <span class="keyword">new</span> DataOutputStream(httpConn.getOutputStream());</span><br><span class="line">        <span class="comment">// 获取表单数据，写入到输出流对象</span></span><br><span class="line">        String params=<span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (map != <span class="keyword">null</span> &amp;&amp; !map.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">for</span> (Map.Entry&lt;String, String&gt; entry : map.entrySet()) &#123;</span><br><span class="line">                String key = entry.getKey();</span><br><span class="line">                String value = map.get(key);</span><br><span class="line">                <span class="keyword">if</span>(params==<span class="keyword">null</span>)&#123;</span><br><span class="line">                    params=key+<span class="string">"="</span>+ URLEncoder.encode(value,CHAR_SET);</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    params+=<span class="string">"&amp;"</span>+key+<span class="string">"="</span>+ URLEncoder.encode(value,CHAR_SET);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(params!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            dos.writeBytes(params);<span class="comment">//写入请求体中</span></span><br><span class="line">            dos.flush();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 调用HttpURLConnection对象的getInputStream()方法构建输入流对象；</span></span><br><span class="line">        <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">8</span> * <span class="number">1024</span>];</span><br><span class="line">        <span class="keyword">int</span> len ;</span><br><span class="line">        <span class="comment">// 调用HttpURLConnection对象的getResponseCode()获取客户端与服务器端的连接状态码。如果是200，则执行以下操作，否则返回null；</span></span><br><span class="line">        <span class="keyword">if</span> (httpConn.getResponseCode() == <span class="number">200</span>) &#123;</span><br><span class="line">            bis = <span class="keyword">new</span> BufferedInputStream(httpConn.getInputStream());</span><br><span class="line">            <span class="keyword">while</span> ((len = bis.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                baos.write(buffer, <span class="number">0</span>, len);</span><br><span class="line">            &#125;</span><br><span class="line">            baos.flush();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 将输入流转成字节数组，返回给客户端。</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> String(baos.toByteArray(), CHAR_SET);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(dos!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                dos.close();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(bis!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                bis.close();</span><br><span class="line">            &#125;</span><br><span class="line">            baos.close();</span><br><span class="line">            <span class="keyword">if</span>(httpConn!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                httpConn.disconnect();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="源码解读"><a href="#源码解读" class="headerlink" title="源码解读"></a>源码解读</h2><h3 id="通过URL获取连接"><a href="#通过URL获取连接" class="headerlink" title="通过URL获取连接"></a>通过URL获取连接</h3><p>在了解URL如何使用之前，先来了解一下URL的构成；<br><a href="http://username:password@host:8080/directory/file?query#ref" target="_blank" rel="external">http://username:password@host:8080/directory/file?query#ref</a>;</p>
+<table>
+<thead>
+<tr>
+<th>组成</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Protocol</td>
+<td>http</td>
+</tr>
+<tr>
+<td>Authority</td>
+<td>username:password@host:8080</td>
+</tr>
+<tr>
+<td>User Info</td>
+<td>username:password</td>
+</tr>
+<tr>
+<td>Host</td>
+<td>host</td>
+</tr>
+<tr>
+<td>Port</td>
+<td>8080</td>
+</tr>
+<tr>
+<td>File</td>
+<td>/directory/file?query</td>
+</tr>
+<tr>
+<td>Path</td>
+<td>/directory/file</td>
+</tr>
+<tr>
+<td>Query</td>
+<td>query</td>
+</tr>
+<tr>
+<td>Ref</td>
+<td>ref</td>
+</tr>
+</tbody>
+</table>
+<p>URL的核心构造方法如下，<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> URLStreamHandlerFactory streamHandlerFactory;</span><br><span class="line"></span><br><span class="line"> <span class="comment">//key为protocol，value为URLStreamHandler，用来获取连接</span></span><br><span class="line"> <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Hashtable&lt;String, URLStreamHandler&gt; streamHandlers</span><br><span class="line">         = <span class="keyword">new</span> Hashtable&lt;String, URLStreamHandler&gt;();</span><br><span class="line"></span><br><span class="line"> <span class="keyword">transient</span> URLStreamHandler streamHandler;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="title">URL</span><span class="params">(String spec)</span> <span class="keyword">throws</span> MalformedURLException </span>&#123;</span><br><span class="line">     <span class="keyword">this</span>((URL) <span class="keyword">null</span>, spec, <span class="keyword">null</span>);</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="title">URL</span><span class="params">(URL context, String spec, URLStreamHandler handler)</span> <span class="keyword">throws</span> MalformedURLException </span>&#123;</span><br><span class="line">     <span class="comment">//..</span></span><br><span class="line">     <span class="comment">//省略了部分源码</span></span><br><span class="line">     protocol = UrlUtils.getSchemePrefix(spec);<span class="comment">//获取协议</span></span><br><span class="line">      </span><br><span class="line">     <span class="keyword">if</span> (streamHandler == <span class="keyword">null</span>) &#123;</span><br><span class="line">         setupStreamHandler();<span class="comment">//设置URLStreamHandler</span></span><br><span class="line">         <span class="keyword">if</span> (streamHandler == <span class="keyword">null</span>) &#123;</span><br><span class="line">             <span class="keyword">throw</span> <span class="keyword">new</span> MalformedURLException(<span class="string">"Unknown protocol: "</span> + protocol);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="comment">//通过URLStreamHandler解析URL</span></span><br><span class="line">     <span class="keyword">try</span> &#123;</span><br><span class="line">         streamHandler.parseURL(<span class="keyword">this</span>, spec, schemeSpecificPartStart, spec.length());<span class="comment">//解析URL组成成分</span></span><br><span class="line">     &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">         <span class="keyword">throw</span> <span class="keyword">new</span> MalformedURLException(e.toString());</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看出，构造方法主要做了两件事情。首先根据协议(protocol)来获取一个URLStreamHandler对象，然后调用了<code>streamHandler.parseURL</code>来解析URL，这一流程可能看的一头雾水。那么接下来来看下面这个个方法，就能明白URLStreamHandler的重要性了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> URLConnection <span class="title">openConnection</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> streamHandler.openConnection(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>通过<code>streamHandler.openConnection</code>就可以获取一个URLConnection对象。<br>URLStreamHandler是一个抽象类，用来处理URL通信。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">URLStreamHandler</span> </span>&#123;</span><br><span class="line">    <span class="comment">//..</span></span><br><span class="line">    <span class="comment">//省略了部分源码</span></span><br><span class="line">    <span class="comment">//获取URLConnection</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> URLConnection <span class="title">openConnection</span><span class="params">(URL u)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//解析URL，主要对spec进行解析，然后将各个构成赋值给URL</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">parseURL</span><span class="params">(URL url, String spec, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> != url.streamHandler) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> SecurityException(<span class="string">"Only a URL's stream handler is permitted to mutate it"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (end &lt; start) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> StringIndexOutOfBoundsException(spec, start, end - start);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">        <span class="comment">//省略了解析构成的源码</span></span><br><span class="line">        <span class="comment">//设置给URL</span></span><br><span class="line">        setURL(url, url.getProtocol(), host, port, authority, userInfo, path, query, ref);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>既然URLStreamHandler那么重要，那要怎么获取到这个对象呢？答案就在<code>setupStreamHandler</code>中。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setupStreamHandler</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">     streamHandler = streamHandlers.get(protocol);<span class="comment">//检查hash表中有没有保存</span></span><br><span class="line">     <span class="keyword">if</span> (streamHandler != <span class="keyword">null</span>) &#123;</span><br><span class="line">         <span class="keyword">return</span>;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//如果有工厂，就通过工厂创建</span></span><br><span class="line">     <span class="keyword">if</span> (streamHandlerFactory != <span class="keyword">null</span>) &#123;</span><br><span class="line">         streamHandler = streamHandlerFactory.createURLStreamHandler(protocol);</span><br><span class="line">         <span class="keyword">if</span> (streamHandler != <span class="keyword">null</span>) &#123;</span><br><span class="line">             <span class="comment">//创建成功就缓存到哈希表中</span></span><br><span class="line">             streamHandlers.put(protocol, streamHandler);</span><br><span class="line">             <span class="keyword">return</span>;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     </span><br><span class="line">     <span class="comment">//检查java.protocol.handler.pkgs包中有没有，有就创建</span></span><br><span class="line">     String packageList = System.getProperty(<span class="string">"java.protocol.handler.pkgs"</span>);</span><br><span class="line">     ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();</span><br><span class="line">     <span class="keyword">if</span> (packageList != <span class="keyword">null</span> &amp;&amp; contextClassLoader != <span class="keyword">null</span>) &#123;</span><br><span class="line">         <span class="keyword">for</span> (String packageName : packageList.split(<span class="string">"\\|"</span>)) &#123;</span><br><span class="line">             <span class="comment">//遍历包名</span></span><br><span class="line">             String className = packageName + <span class="string">"."</span> + protocol + <span class="string">".Handler"</span>;</span><br><span class="line">             <span class="keyword">try</span> &#123;</span><br><span class="line">                 <span class="comment">//加载相应类</span></span><br><span class="line">                 Class&lt;?&gt; c = contextClassLoader.loadClass(className);</span><br><span class="line">                 streamHandler = (URLStreamHandler) c.newInstance();</span><br><span class="line">                 <span class="comment">//创造实例</span></span><br><span class="line">                 <span class="keyword">if</span> (streamHandler != <span class="keyword">null</span>) &#123;</span><br><span class="line">                     <span class="comment">//创建成功就缓存到哈希表中</span></span><br><span class="line">                     streamHandlers.put(protocol, streamHandler);</span><br><span class="line">                 &#125;</span><br><span class="line">                 <span class="keyword">return</span>;</span><br><span class="line">             &#125; <span class="keyword">catch</span> (IllegalAccessException ignored) &#123;</span><br><span class="line">             &#125; <span class="keyword">catch</span> (InstantiationException ignored) &#123;</span><br><span class="line">             &#125; <span class="keyword">catch</span> (ClassNotFoundException ignored) &#123;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">   </span><br><span class="line">     <span class="comment">//根据协议创建</span></span><br><span class="line">     <span class="keyword">if</span> (protocol.equals(<span class="string">"file"</span>)) &#123;</span><br><span class="line">         <span class="comment">//file</span></span><br><span class="line">         streamHandler = <span class="keyword">new</span> FileHandler();</span><br><span class="line">     &#125; <span class="keyword">else</span> <span class="keyword">if</span> (protocol.equals(<span class="string">"ftp"</span>)) &#123;</span><br><span class="line">        <span class="comment">//ftp</span></span><br><span class="line">         streamHandler = <span class="keyword">new</span> FtpHandler();</span><br><span class="line">     &#125; <span class="keyword">else</span> <span class="keyword">if</span> (protocol.equals(<span class="string">"http"</span>)) &#123;</span><br><span class="line">         <span class="comment">//http</span></span><br><span class="line">         <span class="keyword">try</span> &#123;</span><br><span class="line">             String name = <span class="string">"com.android.okhttp.HttpHandler"</span>;</span><br><span class="line">             streamHandler = (URLStreamHandler) Class.forName(name).newInstance();</span><br><span class="line">         &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">             <span class="keyword">throw</span> <span class="keyword">new</span> AssertionError(e);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125; <span class="keyword">else</span> <span class="keyword">if</span> (protocol.equals(<span class="string">"https"</span>)) &#123;</span><br><span class="line">       <span class="comment">//htts</span></span><br><span class="line">         <span class="keyword">try</span> &#123;</span><br><span class="line">             String name = <span class="string">"com.android.okhttp.HttpsHandler"</span>;</span><br><span class="line">             streamHandler = (URLStreamHandler) Class.forName(name).newInstance();</span><br><span class="line">         &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">             <span class="keyword">throw</span> <span class="keyword">new</span> AssertionError(e);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125; <span class="keyword">else</span> <span class="keyword">if</span> (protocol.equals(<span class="string">"jar"</span>)) &#123;</span><br><span class="line">         <span class="comment">//jar</span></span><br><span class="line">         streamHandler = <span class="keyword">new</span> JarHandler();</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">if</span> (streamHandler != <span class="keyword">null</span>) &#123;</span><br><span class="line">         <span class="comment">//放入hash表</span></span><br><span class="line">         streamHandlers.put(protocol, streamHandler);</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>setupStreamHandler()</code>用于获取相应的URLStreamHandler，可以看出，首先回去hashtable中获取是否缓存过，然后通过工厂创建，接着检查<code>java.protocol.handler.pkgs</code>包中有没有，最后会根据协议创建对应的URLStreamHandler，可以看出，在Android新版源码中（据说是4.4开始）底层的Http协议请求使用的是Okhttp。<br><code>HttpHandler</code>的源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpHandler</span> <span class="keyword">extends</span> <span class="title">URLStreamHandler</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">protected</span> URLConnection <span class="title">openConnection</span><span class="params">(URL url)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> OkHttpClient().open(url);<span class="comment">//通过Okhttp获取URLConnection</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">protected</span> URLConnection <span class="title">openConnection</span><span class="params">(URL url, Proxy proxy)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (url == <span class="keyword">null</span> || proxy == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"url == null || proxy == null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> OkHttpClient().setProxy(proxy).open(url);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">getDefaultPort</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">80</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由于本篇只是解读HttpURLConnection，我们更关心的是HttpURLConnection相关源码，可以看出，通过<code>HttpURLConnectionImpl</code>创建了一个URLConnection。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpHandler</span> <span class="keyword">extends</span> <span class="title">URLStreamHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">protected</span> URLConnection <span class="title">openConnection</span><span class="params">(URL u)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HttpURLConnectionImpl(u, getDefaultPort());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">protected</span> URLConnection <span class="title">openConnection</span><span class="params">(URL url, Proxy proxy)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (url == <span class="keyword">null</span> || proxy == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"url == null || proxy == null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HttpURLConnectionImpl(url, getDefaultPort(), proxy);<span class="comment">//HttpURLConnection的实现类</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">getDefaultPort</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">80</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>HttpURLConnectionImpl继承于HttpURLConnection。关于HttpURLConnectionImpl的源码后面再说。我们现在只需知道，通过HttpHandler获取到了URLConnection，下面先来看看HttpURLConnection的相关使用。</p>
+<h3 id="HttpURLConnection的使用"><a href="#HttpURLConnection的使用" class="headerlink" title="HttpURLConnection的使用"></a>HttpURLConnection的使用</h3><p>HttpURLConnection继承于URLConnection，是一个抽象类，实现源码在HttpURLConnectionImpl中<br>URLConnection的属性如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="keyword">protected</span> URL url;<span class="comment">//URL对象</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> String contentType;<span class="comment">//内容MIME类型</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> defaultAllowUserInteraction;<span class="comment">//默认允许用户交互</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> defaultUseCaches = <span class="keyword">true</span>;<span class="comment">//默认使用缓存</span></span><br><span class="line"></span><br><span class="line">ContentHandler defaultHandler = <span class="keyword">new</span> DefaultContentHandler();<span class="comment">//内容处理器，将URLConnection转为Object</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">long</span> lastModified = -<span class="number">1</span>;<span class="comment">//最后修改时间</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">long</span> ifModifiedSince;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">boolean</span> useCaches = defaultUseCaches;<span class="comment">//是否使用缓存，默认为true</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">boolean</span> connected; <span class="comment">//是否已经连接到远程资源的标识</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">boolean</span> doOutput; <span class="comment">//允许发送数据，默认为false</span></span><br><span class="line"></span><br><span class="line">   </span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">boolean</span> doInput = <span class="keyword">true</span>;<span class="comment">//允许接收数据，默认true</span></span><br><span class="line"></span><br><span class="line">   </span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">boolean</span> allowUserInteraction = defaultAllowUserInteraction;<span class="comment">//允许用户交互</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> ContentHandlerFactory contentHandlerFactory; <span class="comment">//ContentHandler的工厂</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> readTimeout = <span class="number">0</span>; <span class="comment">//读超时</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> connectTimeout = <span class="number">0</span>; <span class="comment">//连接超时</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> Hashtable&lt;String, Object&gt; contentHandlers = <span class="keyword">new</span> Hashtable&lt;String, Object&gt;();<span class="comment">//缓存ContentHandler的哈希表</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> FileNameMap fileNameMap; <span class="comment">//一个根据文件扩展名来判定内容MIME类型的接口</span></span><br></pre></td></tr></table></figure></p>
+<p>HttpURLConnection的属性如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CHUNK_LENGTH = <span class="number">1024</span>;<span class="comment">//默认段长度</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//允许用户使用的连接类型</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] PERMITTED_USER_METHODS = &#123;</span><br><span class="line">        <span class="string">"OPTIONS"</span>,</span><br><span class="line">        <span class="string">"GET"</span>,</span><br><span class="line">        <span class="string">"HEAD"</span>,</span><br><span class="line">        <span class="string">"POST"</span>,</span><br><span class="line">        <span class="string">"PUT"</span>,</span><br><span class="line">        <span class="string">"DELETE"</span>,</span><br><span class="line">        <span class="string">"TRACE"</span></span><br><span class="line">        <span class="comment">// Note: we don't allow users to specify "CONNECT"</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"> <span class="comment">//默认连接类型为GET</span></span><br><span class="line"><span class="keyword">protected</span> String method = <span class="string">"GET"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 响应码</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * &lt;li&gt;1xx: 临时响应&lt;/li&gt;</span><br><span class="line"> * &lt;li&gt;2xx: 成功&lt;/li&gt;</span><br><span class="line"> * &lt;li&gt;3xx: 重定向&lt;/li&gt;</span><br><span class="line"> * &lt;li&gt;4xx: 客户端错误&lt;/li&gt;</span><br><span class="line"> * &lt;li&gt;5xx: 服务器错误&lt;/li&gt;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">int</span> responseCode = -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//响应消息，与responseCode相对应</span></span><br><span class="line"><span class="keyword">protected</span> String responseMessage;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> <span class="comment">//允许重定向？默认为true</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">boolean</span> instanceFollowRedirects = followRedirects;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> followRedirects = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//HTTP 数据段长度。-1表示不使用</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">int</span> chunkLength = -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//请求体的长度，如果超过 int的表示范围(2 GiB)，就会返回int的最大值</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">int</span> fixedContentLength = -<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"> <span class="comment">//请求体的长度</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">long</span> fixedContentLengthLong = -<span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
+<p>看完以上两个类后，接下来去HttpURLConnectionImpl中看看HttpURLConnection的实现，狗仔方法如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HttpURLConnectionImpl</span> <span class="keyword">extends</span> <span class="title">HttpURLConnection</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> defaultPort;<span class="comment">//端口</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Proxy proxy;<span class="comment">//代理</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> RawHeaders rawRequestHeaders = <span class="keyword">new</span> RawHeaders();<span class="comment">//请求头</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> redirectionCount;<span class="comment">//重连次数</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> IOException httpEngineFailure;</span><br><span class="line">    <span class="keyword">protected</span> HttpEngine httpEngine;<span class="comment">//Http请求引擎</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">HttpURLConnectionImpl</span><span class="params">(URL url, <span class="keyword">int</span> port)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(url);</span><br><span class="line">        defaultPort = port;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">HttpURLConnectionImpl</span><span class="params">(URL url, <span class="keyword">int</span> port, Proxy proxy)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(url, port);</span><br><span class="line">        <span class="keyword">this</span>.proxy = proxy;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们知道，可以给Http请求设置请求头。那么源码又是怎么实现的呢？<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">setRequestProperty</span><span class="params">(String field, String newValue)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (connected) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Cannot set request property after connection is made"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (field == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"field == null"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    rawRequestHeaders.set(field, newValue);<span class="comment">//可以看出，内部调用了rawRequestHeaders.set</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">addRequestProperty</span><span class="params">(String field, String value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (connected) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Cannot add request property after connection is made"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (field == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"field == null"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    rawRequestHeaders.add(field, value);<span class="comment">//可以看出，内部调用了rawRequestHeaders.add</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>真正的逻辑代码在<code>RawHeaders</code>类中，源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(String fieldName, String value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (fieldName == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"fieldName == null"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    namesAndValues.add(fieldName);<span class="comment">//属性名，namesAndValues为List&lt;String&gt;</span></span><br><span class="line">    namesAndValues.add(value.trim());<span class="comment">//值，namesAndValues为List&lt;String&gt;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(String fieldName, String value)</span> </span>&#123;</span><br><span class="line">    removeAll(fieldName);<span class="comment">//移除已存在的头</span></span><br><span class="line">    add(fieldName, value);<span class="comment">//添加</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>add和set的区别在于头是否唯一。上面的逻辑主要讲键值对依次加入List中。当然最终会转换为String<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toHeaderString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    StringBuilder result = <span class="keyword">new</span> StringBuilder(<span class="number">256</span>);</span><br><span class="line">    result.append(statusLine).append(<span class="string">"\r\n"</span>);<span class="comment">//追加请求行</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; namesAndValues.size(); i += <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="comment">//追加请求头</span></span><br><span class="line">        result.append(namesAndValues.get(i)).append(<span class="string">": "</span>)</span><br><span class="line">                .append(namesAndValues.get(i + <span class="number">1</span>)).append(<span class="string">"\r\n"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    result.append(<span class="string">"\r\n"</span>);</span><br><span class="line">    <span class="keyword">return</span> result.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在设置完一系列请求头后，使用<code>connect</code>开启连接。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">connect</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    initHttpEngine();<span class="comment">//初始化引擎</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        httpEngine.sendRequest();<span class="comment">//发送请求</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        httpEngineFailure = e;</span><br><span class="line">        <span class="keyword">throw</span> e;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>connect()中的源码主要做了两件事，首先初始化引擎，然后发送请求。<br><code>initHttpEngine()</code>源码如下，将connected标志位设成true，然后检查有没有开启<code>doOutput</code>,如果开启了，就强制设置GET请求方法转为POST等可以写入请求体的方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initHttpEngine</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (httpEngineFailure != <span class="keyword">null</span>) &#123;</span><br><span class="line">          <span class="keyword">throw</span> httpEngineFailure;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (httpEngine != <span class="keyword">null</span>) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      connected = <span class="keyword">true</span>;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> (doOutput) &#123;</span><br><span class="line">              <span class="keyword">if</span> (method == HttpEngine.GET) &#123;</span><br><span class="line">                  method = HttpEngine.POST;</span><br><span class="line">              &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method != HttpEngine.POST &amp;&amp; method != HttpEngine.PUT) &#123;</span><br><span class="line">                  <span class="keyword">throw</span> <span class="keyword">new</span> ProtocolException(method + <span class="string">" does not support writing"</span>);</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          httpEngine = newHttpEngine(method, rawRequestHeaders, <span class="keyword">null</span>, <span class="keyword">null</span>);<span class="comment">//初始化HttpEngine</span></span><br><span class="line">      &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">          httpEngineFailure = e;</span><br><span class="line">          <span class="keyword">throw</span> e;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line"><span class="comment">//初始化HttpEngine</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> HttpEngine <span class="title">newHttpEngine</span><span class="params">(String method, RawHeaders requestHeaders,</span><br><span class="line">          HttpConnection connection, RetryableOutputStream requestBody)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> HttpEngine(<span class="keyword">this</span>, method, requestHeaders, connection, requestBody);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>关于<code>HttpEngine</code>的源码这里不做深究，只需了解<code>newHttpEngine</code>初始化完毕后,就可以通过<code>sendRequest()</code>发送请求了。</p>
+<p>而Android4.4以上，内部改为Okhttp实现，源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> HttpEngine <span class="title">newHttpEngine</span><span class="params">(String method, Connection connection,</span><br><span class="line">    RetryableSink requestBody, Response priorResponse)</span> </span>&#123;</span><br><span class="line">   <span class="comment">//构建Request</span></span><br><span class="line">   Request.Builder builder = <span class="keyword">new</span> Request.Builder()</span><br><span class="line">       .url(getURL())</span><br><span class="line">       .method(method, <span class="keyword">null</span>);</span><br><span class="line">   Headers headers = requestHeaders.build();</span><br><span class="line">   <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; headers.size(); i++) &#123;</span><br><span class="line">     <span class="comment">//添加头</span></span><br><span class="line">     builder.addHeader(headers.name(i), headers.value(i));</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">boolean</span> bufferRequestBody = <span class="keyword">false</span>;</span><br><span class="line">   <span class="keyword">if</span> (HttpMethod.hasRequestBody(method)) &#123;</span><br><span class="line">     <span class="keyword">if</span> (fixedContentLength != -<span class="number">1</span>) &#123;</span><br><span class="line">       builder.header(<span class="string">"Content-Length"</span>, Long.toString(fixedContentLength));</span><br><span class="line">     &#125; <span class="keyword">else</span> <span class="keyword">if</span> (chunkLength &gt; <span class="number">0</span>) &#123;</span><br><span class="line">       builder.header(<span class="string">"Transfer-Encoding"</span>, <span class="string">"chunked"</span>);</span><br><span class="line">     &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       bufferRequestBody = <span class="keyword">true</span>;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   Request request = builder.build();</span><br><span class="line">    <span class="comment">//初始化OkHttpClient</span></span><br><span class="line">   OkHttpClient engineClient = client;</span><br><span class="line">   <span class="keyword">if</span> (engineClient.getOkResponseCache() != <span class="keyword">null</span> &amp;&amp; !getUseCaches()) &#123;</span><br><span class="line">     engineClient = client.clone().setOkResponseCache(<span class="keyword">null</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">new</span> HttpEngine(engineClient, request, bufferRequestBody, connection, <span class="keyword">null</span>, requestBody,</span><br><span class="line">       priorResponse);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>如果你还分不清请求行、请求头和请求体等，建议阅读<a href="http://www.jianshu.com/p/e544b7a76dac" target="_blank" rel="external">你应该知道的HTTP基础知识</a>这篇文章，写得非常好。<br>本期解读到此结束，下一期，OkHttp3。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/07/22/Retrofit2-源码解读/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Retrofit2 源码解读</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="HttpURLConnection-源码解读" data-title="HttpURLConnection 源码解读" data-url="http://www.maplejaw.com/2016/07/22/HttpURLConnection-源码解读/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"maplejaw"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 maplejaw
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
