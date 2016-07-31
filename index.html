@@ -152,6 +152,82 @@
 
       <div class="body-wrap">
   
+    <article id="post-OkHttp3-源码解读" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/31/OkHttp3-源码解读/" class="article-date">
+  	<time datetime="2016-07-31T11:54:47.000Z" itemprop="datePublished">2016-07-31</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/31/OkHttp3-源码解读/">OkHttp3 源码解读</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>开源库地址：<a href="https://github.com/square/okhttp">https://github.com/square/okhttp</a><br>解读版本：3.4.1</p>
+<p>Okhttp是目前非常流行的网络请求库，出自Square公司。对于该库的使用，相信大家已经比较熟悉了。今天，我将从源码角度对Okhttp3进行剖析。</p>
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p>Okhttp的使用可以分为四步：</p>
+<ol>
+<li><p>初始化客户端（实际应用中应当保持单例）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取一个客户端</span></span><br><span class="line">OkHttpClient client = <span class="keyword">new</span> OkHttpClient.Builder()</span><br><span class="line">                 ...</span><br><span class="line">                .build();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>构建Request</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">//构建一个Request</span></span><br><span class="line">Request request = <span class="keyword">new</span> Request.Builder()</span><br><span class="line">     .url(url)</span><br><span class="line">     .build();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>获取Call对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">//获取Call对象</span></span><br><span class="line">Call call=client.newCall(request);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>发送请求（execute同步/enqueue异步）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//同步调用</span></span><br><span class="line"> Response response = call.execute();</span><br><span class="line"></span><br><span class="line"><span class="comment">//异步调用</span></span><br><span class="line">call.enqueue(<span class="keyword">new</span> Callback() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Call call, IOException e)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call call, Response response)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码解读/">源码解读</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/07/31/OkHttp3-源码解读/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-HttpURLConnection-源码解读" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -696,66 +772,6 @@
       
         <p class="article-more-link">
           <a  href="/2016/06/13/Python3-学习手册（一）-基本数据类型/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-EventBus3-源码解读" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/06/06/EventBus3-源码解读/" class="article-date">
-  	<time datetime="2016-06-06T11:27:46.000Z" itemprop="datePublished">2016-06-06</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/06/EventBus3-源码解读/">EventBus3 源码解读</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>EventBus是一款针对Android优化的发布/订阅事件总线库。简便了Activities, Fragments, 以及background threads之间的通信，使发送者与订阅者之间有效解耦。<br><img src="http://static.zybuluo.com/maplejaw/3hkz1fvwzzwd9225zhcrnmpf/image_1ak28ro9staoi6p139u1bcg3889.png" alt="image_1ak28ro9staoi6p139u1bcg3889.png-43.9kB"><br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码解读/">源码解读</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/06/06/EventBus3-源码解读/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
