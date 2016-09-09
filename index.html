@@ -96,7 +96,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/python/" style="font-size: 14px;">python</a> <a href="/tags/开源库/" style="font-size: 10px;">开源库</a> <a href="/tags/插件化探索/" style="font-size: 16px;">插件化探索</a> <a href="/tags/源码解读/" style="font-size: 18px;">源码解读</a> <a href="/tags/知识整理/" style="font-size: 12px;">知识整理</a> <a href="/tags/自定义View/" style="font-size: 10px;">自定义View</a>
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/RxJava/" style="font-size: 12px;">RxJava</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/python/" style="font-size: 14px;">python</a> <a href="/tags/开源库/" style="font-size: 10px;">开源库</a> <a href="/tags/插件化探索/" style="font-size: 16px;">插件化探索</a> <a href="/tags/源码解读/" style="font-size: 18px;">源码解读</a> <a href="/tags/知识整理/" style="font-size: 12px;">知识整理</a> <a href="/tags/自定义View/" style="font-size: 10px;">自定义View</a>
 					</div>
 				</section>
 				
@@ -151,6 +151,70 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-RxJava2-x-浅析" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/09/09/RxJava2-x-浅析/" class="article-date">
+  	<time datetime="2016-09-09T13:31:47.000Z" itemprop="datePublished">2016-09-09</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/09/RxJava2-x-浅析/">RxJava2.x 浅析</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>作者： <a href="http://blog.csdn.net/maplejaw_">maplejaw</a><br>开源库地址：<a href="https://github.com/ReactiveX/RxJava">https://github.com/ReactiveX/RxJava</a><br>版本: <code>compile &#39;io.reactivex.rxjava2:rxjava:2.0.0-RC1&#39;</code></p>
+</blockquote>
+<p>前段时间阅读了RxJava1.x的源码，刚好RxJava2.x也发布了RC版，为了迎接10月底的正式版，趁热打铁，本篇将对RxJava2.x进行一个简单的剖析。</p>
+<h2 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h2><p>在RxJava1.x中，最熟悉的莫过于Observable这个类了，笔者刚使用RxJava2.x时，创建一个<code>Observable</code>后，顿时是懵逼的。因为我们熟悉的<code>Subscriber</code>居然没影了，取而代之的是<code>ObservableEmitter</code>,俗称发射器。此外，由于没有了<code>Subscriber</code>的踪影，我们创建观察者时需使用<code>Observer</code>。而<code>Observer</code>也不是我们熟悉的那个<code>Observer</code>,其回调的<code>Disposable</code>参数更是让人摸不到头脑。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RxJava/">RxJava</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/09/09/RxJava2-x-浅析/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-RxJava操作符完全解析" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -256,7 +320,7 @@
       
       
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码解读/">源码解读</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RxJava/">RxJava</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码解读/">源码解读</a></li></ul>
 	</div>
 
       
@@ -720,67 +784,6 @@
       
         <p class="article-more-link">
           <a  href="/2016/06/27/PhotoView-源码解读/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Android-Matrix矩阵详解" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/06/21/Android-Matrix矩阵详解/" class="article-date">
-  	<time datetime="2016-06-21T11:27:02.000Z" itemprop="datePublished">2016-06-21</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/21/Android-Matrix矩阵详解/">Android Matrix矩阵详解</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Android中有两个比较重要的矩阵，ColorMatrix和Matrix。ColorMatrix用来改变bitmap的颜色和透明度，Matrix用来对bitmap平移、缩放、错切。</p>
-<h2 id="ColorMatrix-色彩矩阵"><a href="#ColorMatrix-色彩矩阵" class="headerlink" title="ColorMatrix(色彩矩阵)"></a>ColorMatrix(色彩矩阵)</h2><p>Android中Bitmap色彩用了一个[R, G, B, A]，4*1的矩阵来保存。<br><img src="http://static.zybuluo.com/maplejaw/4jr9kmzkg6bt36cinohnzfso/image_1al1ljmtjdjfb2f12fb1aku1t6o13.png" alt="image_1al1ljmtjdjfb2f12fb1aku1t6o13.png-3kB"></p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/06/21/Android-Matrix矩阵详解/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
