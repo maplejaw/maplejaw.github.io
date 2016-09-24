@@ -152,6 +152,66 @@
 
       <div class="body-wrap">
   
+    <article id="post-使用ConstraintLayout构建一个灵活的布局" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/09/22/使用ConstraintLayout构建一个灵活的布局/" class="article-date">
+  	<time datetime="2016-09-22T09:16:57.000Z" itemprop="datePublished">2016-09-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/22/使用ConstraintLayout构建一个灵活的布局/">使用ConstraintLayout构建一个灵活的布局</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>ConstraintLayout允许你在不使用任何嵌套的情况下创建大型而又复杂的布局。它与RelativeLayout非常相似，所有的view都依赖于兄弟控件和父控件的相对关系。但是，ConstraintLayout比RelativeLayout更加灵活且在Android Studio的布局编辑器中更易于使用。<br>由于ConstraintLayout所能做的一切都可以从布局编辑器的可视化工具中直接获取，所以你可以完全使用拖拽的方式来构建布局。此外，ConstraintLayout可以兼容到Android 2.3 (API9)，所以我们不用担心兼容上的问题。<br>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a  href="/2016/09/22/使用ConstraintLayout构建一个灵活的布局/#more">more >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-RxJava2-x-浅析" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -216,10 +276,10 @@
 
 
   
-    <article id="post-RxJava操作符完全解析" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-RxJava操作符大全" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/08/31/RxJava操作符完全解析/" class="article-date">
+      <a href="/2016/08/31/RxJava操作符大全/" class="article-date">
   	<time datetime="2016-08-31T15:05:48.000Z" itemprop="datePublished">2016-08-31</time>
 </a>
     </div>
@@ -233,7 +293,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/31/RxJava操作符完全解析/">RxJava操作符完全解析</a>
+      <a class="article-title" href="/2016/08/31/RxJava操作符大全/">RxJava操作符大全</a>
     </h1>
   
 
@@ -242,15 +302,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>开源库地址：<a href="https://github.com/ReactiveX/RxJava">https://github.com/ReactiveX/RxJava</a><br>解读版本：1.1.8</p>
-<blockquote>
-<p>本篇只解析标准包中的操作符。对于扩展包，如有需求，请读者自行查阅文档。</p>
+        <blockquote>
+<p>作者： <a href="http://www.maplejaw.com">maplejaw</a><br>本篇只解析标准包中的操作符。对于扩展包，由于使用率较低，如有需求，请读者自行查阅文档。</p>
 </blockquote>
 <h2 id="创建操作"><a href="#创建操作" class="headerlink" title="创建操作"></a>创建操作</h2><p>以下操作符用于创建Observable。</p>
 <ul>
-<li><strong>create</strong>： 使用OnSubscribe从头创建一个Observable，这种方法比较简单，就不举例子了。需要注意的是，使用该方法创建时，建议在OnSubscribe#call方法中检查订阅状态，以便及时停止发射数据或者运算。</li>
-<li><strong>from</strong>： 将一个Iterable, 一个Future, 或者一个数组，内部通过代理的方式转换成一个Observable。Future转换为<code>OnSubscribe</code>是通过<code>OnSubscribeToObservableFuture</code>进行的，Iterable转换通过<code>OnSubscribeFromIterable</code>进行。数组通过<code>OnSubscribeFromArray</code>转换。<br>  <img src="http://static.zybuluo.com/maplejaw/1a7gi8os6u4kgk7aahzmj1d0/image_1arcl6d0a1iej60e6ccp48qic9.png" alt="image_1arcl6d0a1iej60e6ccp48qic9.png-20.8kB"></li>
-<li><strong>just</strong>： 将一个或多个对象转换成发射这个或这些对象的一个Observable。如果是单个对象，内部创建的是<code>ScalarSynchronousObservable</code>对象。如果是多个对象，则是调用了from方法创建。
+<li><strong>create</strong>： 使用OnSubscribe从头创建一个Observable，这种方法比较简单。需要注意的是，使用该方法创建时，建议在OnSubscribe#call方法中检查订阅状态，以便及时停止发射数据或者运算。  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    </span><br><span class="line">Observable.create(<span class="keyword">new</span> Observable.OnSubscribe&lt;String&gt;() &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Subscriber&lt;? <span class="keyword">super</span> String&gt; subscriber)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        subscriber.onNext(<span class="string">"item1"</span>);</span><br><span class="line">        subscriber.onNext(<span class="string">"item2"</span>);</span><br><span class="line">        subscriber.onCompleted();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
       
     </div>
     
@@ -265,7 +324,7 @@
 
       
         <p class="article-more-link">
-          <a  href="/2016/08/31/RxJava操作符完全解析/#more">more >></a>
+          <a  href="/2016/08/31/RxJava操作符大全/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -724,66 +783,6 @@
       
         <p class="article-more-link">
           <a  href="/2016/07/03/Gson-源码解读/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-PhotoView-源码解读" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/06/27/PhotoView-源码解读/" class="article-date">
-  	<time datetime="2016-06-27T15:35:29.000Z" itemprop="datePublished">2016-06-27</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/27/PhotoView-源码解读/">PhotoView 源码解读</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>开源库地址：<a href="https://github.com/chrisbanes/PhotoView">https://github.com/chrisbanes/PhotoView</a><br>PhotoView是一个用来帮助开发者轻松实现ImageView缩放的库。开发者可以轻易控制对图片的缩放旋等等操作。<br><img src="http://static.zybuluo.com/maplejaw/hi1r0j8hcwjurkvobsoq4xvi/image_1akkgdkg01saq1l01jdvaaqeeh9.png" alt="image_1akkgdkg01saq1l01jdvaaqeeh9.png-11.6kB"><br>PhotoView的使用极其简单，而且提供了两种方案。可以使用普通的ImageView，也可以使用该库中提供的ImageView（PhotoView）。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码解读/">源码解读</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/06/27/PhotoView-源码解读/#more">more >></a>
         </p>
       
       <div class="clearfix"></div>

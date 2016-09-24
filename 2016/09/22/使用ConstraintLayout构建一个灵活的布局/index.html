@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>使用ConstraintLayout构建一个灵活的布局 | maplejaw的技术博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="简介ConstraintLayout允许你在不使用任何嵌套的情况下创建大型而又复杂的布局。它与RelativeLayout非常相似，所有的view都依赖于兄弟控件和父控件的相对关系。但是，ConstraintLayout比RelativeLayout更加灵活且在Android Studio的布局编辑器中更易于使用。由于ConstraintLayout所能做的一切都可以从布局编辑器的可视化工具中直接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用ConstraintLayout构建一个灵活的布局">
+<meta property="og:url" content="http://www.maplejaw.com/2016/09/22/使用ConstraintLayout构建一个灵活的布局/index.html">
+<meta property="og:site_name" content="maplejaw的技术博客">
+<meta property="og:description" content="简介ConstraintLayout允许你在不使用任何嵌套的情况下创建大型而又复杂的布局。它与RelativeLayout非常相似，所有的view都依赖于兄弟控件和父控件的相对关系。但是，ConstraintLayout比RelativeLayout更加灵活且在Android Studio的布局编辑器中更易于使用。由于ConstraintLayout所能做的一切都可以从布局编辑器的可视化工具中直接">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/5a93vrcvk7ezche9rachuz40/image_1at3qdkjc1cuv1cdd15kkvlr9tqm.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/8qe2s7vu3cvp4uwvbnm22osq/image_1at84l0i316io9ssvsf148hpaum.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/xamddqgc49cho8odhs9co3th/image_1at84t7re14b618kg1ki7bc11dad9.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/lpnco2q3k8cwp0c7y2pi49bd/1.gif">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/6gcrajy0gvmlqk7h61bexkpo/1.gif">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/pmxt1ydldmon8wompuer5xja/1.gif">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/b85moaveoytcbv7q2fg0cfad/1.gif">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/17j4t98kof34euz64obaei3o/1.gif">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/ku5va522lqpjohe0gk25x4gk/image_1at8b2o181gjf1muotr516tm1fam2i.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/jgj4juudmrrg91am3o4p88j9/1.gif">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/zts4olisdqv8x7qj49kfcuru/image_1at8e09921psd13p15uqnn91db843.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/ley92zci0klszp71dqkg1y6b/1.gif">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/hh1s4abbcyxo0tz7xsrbl2pd/image_1at8eouph1hfi1aqb1gv98todh05m.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/m41b1gc19esqboii68033aef/image_1at8fg5gsga11por01hvi1bk863.png">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/kuuxjkn52oiktzk0iecnqof1/1.gif">
+<meta property="og:image" content="http://static.zybuluo.com/maplejaw/ey03797x2v2ip2fwdqc96m3r/image_1at8gttga639a5j1mr4pntq16s.png">
+<meta property="og:updated_time" content="2016-09-24T08:45:16.186Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用ConstraintLayout构建一个灵活的布局">
+<meta name="twitter:description" content="简介ConstraintLayout允许你在不使用任何嵌套的情况下创建大型而又复杂的布局。它与RelativeLayout非常相似，所有的view都依赖于兄弟控件和父控件的相对关系。但是，ConstraintLayout比RelativeLayout更加灵活且在Android Studio的布局编辑器中更易于使用。由于ConstraintLayout所能做的一切都可以从布局编辑器的可视化工具中直接">
+<meta name="twitter:image" content="http://static.zybuluo.com/maplejaw/5a93vrcvk7ezche9rachuz40/image_1at3qdkjc1cuv1cdd15kkvlr9tqm.png">
+  
+    <link rel="alternative" href="/atom.xml" title="maplejaw的技术博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/uploads/avatar.jpeg" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">maplejaw</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">不忘初心，方得始终</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">归档</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/maplejaw" title="github">github</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/RxJava/" style="font-size: 12px;">RxJava</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/lambda/" style="font-size: 10px;">lambda</a> <a href="/tags/python/" style="font-size: 14px;">python</a> <a href="/tags/开源库/" style="font-size: 10px;">开源库</a> <a href="/tags/插件化探索/" style="font-size: 16px;">插件化探索</a> <a href="/tags/源码解读/" style="font-size: 18px;">源码解读</a> <a href="/tags/知识整理/" style="font-size: 12px;">知识整理</a> <a href="/tags/自定义View/" style="font-size: 10px;">自定义View</a>
+					</div>
+				</section>
+				
+				
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">maplejaw</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img src="/uploads/avatar.jpeg" class="js-avatar" style="width: 100%;height: 100%;opacity: 1;">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">maplejaw</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">不忘初心，方得始终</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">归档</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/maplejaw" title="github">github</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-使用ConstraintLayout构建一个灵活的布局" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/09/22/使用ConstraintLayout构建一个灵活的布局/" class="article-date">
+  	<time datetime="2016-09-22T09:16:57.000Z" itemprop="datePublished">2016-09-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用ConstraintLayout构建一个灵活的布局
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>ConstraintLayout允许你在不使用任何嵌套的情况下创建大型而又复杂的布局。它与RelativeLayout非常相似，所有的view都依赖于兄弟控件和父控件的相对关系。但是，ConstraintLayout比RelativeLayout更加灵活且在Android Studio的布局编辑器中更易于使用。<br>由于ConstraintLayout所能做的一切都可以从布局编辑器的可视化工具中直接获取，所以你可以完全使用拖拽的方式来构建布局。此外，ConstraintLayout可以兼容到Android 2.3 (API9)，所以我们不用担心兼容上的问题。<br><a id="more"></a></p>
+<h2 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h2><p>想要在ConstraintLayout中定义一个View的位置，你至少需要添加两个约束：一个水平方向，一个竖直方向。当然，你可以添加更多的约束。<br>如果你没有指定某个方向上的约束，那么该View将会在坐标(0,0)或（x，0）或（0，y）处显示（这取决于你没有指定哪个方向的约束）。<br>如下图，TextViewC没有指定垂直方向的约束，虽然在预览时你看到的效果没有问题，但是运行后会发现，该View的显示坐标为（x，0）。<br><img src="http://static.zybuluo.com/maplejaw/5a93vrcvk7ezche9rachuz40/image_1at3qdkjc1cuv1cdd15kkvlr9tqm.png" alt="image_1at3qdkjc1cuv1cdd15kkvlr9tqm.png-126.8kB"></p>
+<p>所以在使用约束时务必要检查下布局文件有没有提示约束问题。</p>
+<h2 id="如何使用ConstraintLayout"><a href="#如何使用ConstraintLayout" class="headerlink" title="如何使用ConstraintLayout"></a>如何使用ConstraintLayout</h2><p>首先去<code>SDK Tools</code>中勾选<code>Show Package Details</code>安装相应的ConstraintLayout版本（<code>ConstraintLayout for Android</code>和<code>Solver for ConstraintLayout</code>）。<br><img src="http://static.zybuluo.com/maplejaw/8qe2s7vu3cvp4uwvbnm22osq/image_1at84l0i316io9ssvsf148hpaum.png" alt="image_1at84l0i316io9ssvsf148hpaum.png-89.3kB"><br>然后在模块的<code>build.gradle</code>中如下引用即可（记得改为你安装的版本号）。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    compile <span class="string">'com.android.support.constraint:constraint-layout:1.0.0-alpha8'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用ConstraintLayout有两种方式，一种是直接创建一个新布局，然后将根节点修改为<code>android.support.constraint.ConstraintLayout</code>。另一种是将原来的布局右键转换为ConstraintLayout.<br><img src="http://static.zybuluo.com/maplejaw/xamddqgc49cho8odhs9co3th/image_1at84t7re14b618kg1ki7bc11dad9.png" alt="image_1at84t7re14b618kg1ki7bc11dad9.png-21.9kB"></p>
+<h2 id="添加约束"><a href="#添加约束" class="headerlink" title="添加约束"></a>添加约束</h2><h3 id="Parent-constraint"><a href="#Parent-constraint" class="headerlink" title="Parent constraint"></a>Parent constraint</h3><p>所谓父约束，即连接View的某一边到父布局的边缘。如下图，指定该View距父布局的左边缘为128dp<br><img src="http://static.zybuluo.com/maplejaw/lpnco2q3k8cwp0c7y2pi49bd/1.gif" alt="1.gif-242.4kB"></p>
+<h3 id="Position-constraint"><a href="#Position-constraint" class="headerlink" title="Position constraint"></a>Position constraint</h3><p>位置约束，该约束主要用于控制两个View的相对位置，即控制两个View在水平和竖直方向展示的先后顺序。如下图，Button被约束于ImageView的下方64dp处。<br><img src="http://static.zybuluo.com/maplejaw/6gcrajy0gvmlqk7h61bexkpo/1.gif" alt="1.gif-311.7kB"></p>
+<h3 id="Alignment-constraint"><a href="#Alignment-constraint" class="headerlink" title="Alignment constraint"></a>Alignment constraint</h3><p>对齐约束，用于对齐两个View的相同边缘。如下图，我们将ImageView和Button的左边缘进行对齐。<br><img src="http://static.zybuluo.com/maplejaw/pmxt1ydldmon8wompuer5xja/1.gif" alt="1.gif-321.4kB"><br>当然，我们还可以做一下偏移对准，如下为，Button相对于ImageView 40dp的偏移对齐。这40dp的约束是通过Margin来实现的。<br><img src="http://static.zybuluo.com/maplejaw/b85moaveoytcbv7q2fg0cfad/1.gif" alt="1.gif-53.7kB"></p>
+<h3 id="Baseline-alignment-constraint"><a href="#Baseline-alignment-constraint" class="headerlink" title="Baseline alignment constraint"></a>Baseline alignment constraint</h3><p>基准线对齐，该对齐方式主要用于文字之间。使用该约束，我们可以将两个View中的文字做基准线对齐操作。<br><img src="http://static.zybuluo.com/maplejaw/17j4t98kof34euz64obaei3o/1.gif" alt="1.gif-251.5kB"></p>
+<h3 id="Constrain-to-a-guideline"><a href="#Constrain-to-a-guideline" class="headerlink" title="Constrain to a guideline"></a>Constrain to a guideline</h3><p>引导线约束，我们可以添加一个水平或者竖直的引导线来粘附约束。开发者可以放心。你的guideline是不会被用户看见的。<br><img src="http://static.zybuluo.com/maplejaw/ku5va522lqpjohe0gk25x4gk/image_1at8b2o181gjf1muotr516tm1fam2i.png" alt="image_1at8b2o181gjf1muotr516tm1fam2i.png-37.9kB"><br>点击guideline边缘的圆圈，用于切换guideline位置的测量模式（百分比/dp）。<br><img src="http://static.zybuluo.com/maplejaw/jgj4juudmrrg91am3o4p88j9/1.gif" alt="1.gif-513.5kB"></p>
+<h3 id="使用自动连接和推断约束"><a href="#使用自动连接和推断约束" class="headerlink" title="使用自动连接和推断约束"></a>使用自动连接和推断约束</h3><p>我们还可以使用自动连接（Autoconnect）和推断约束（Infer Constraints）功能，使用之前，先了解下这两者的区别。<br>推断约束，我们只需要点击一下推断约束按钮，它将会扫面整个布局以确定最有效的的约束关系，然后自动创建元素之间的约束。<br>自动连接，仅仅为你刚加入的View创建一个约束（后期拖动不会改变约束），它仅仅根据最近的元素来创建约束。<br><img src="http://static.zybuluo.com/maplejaw/zts4olisdqv8x7qj49kfcuru/image_1at8e09921psd13p15uqnn91db843.png" alt="image_1at8e09921psd13p15uqnn91db843.png-11.1kB"><br>演示如下：<br><img src="http://static.zybuluo.com/maplejaw/ley92zci0klszp71dqkg1y6b/1.gif" alt="1.gif-473.9kB"></p>
+<h3 id="调整View的尺寸"><a href="#调整View的尺寸" class="headerlink" title="调整View的尺寸"></a>调整View的尺寸</h3><p>通过布局编辑器的右边栏，我们可以通过调节View的相关尺寸。<br><img src="http://static.zybuluo.com/maplejaw/hh1s4abbcyxo0tz7xsrbl2pd/image_1at8eouph1hfi1aqb1gv98todh05m.png" alt="image_1at8eouph1hfi1aqb1gv98todh05m.png-19.5kB"><br>View尺寸有三种，固定尺寸，WrapContent，AnySize。对应图如下（固定尺寸就是上图中的直线段）。<br><img src="http://static.zybuluo.com/maplejaw/m41b1gc19esqboii68033aef/image_1at8fg5gsga11por01hvi1bk863.png" alt="image_1at8fg5gsga11por01hvi1bk863.png-5.7kB"><br>其中AnySize类似于LinearLayout中尺寸为<code>0dp</code>,<code>layout_weight</code>为<code>1</code>的情况。会将尺寸扩展到当前约束下的所有空间。</p>
+<p>调节约束偏向，则在于如果一个View的两端指定了约束，我们可以调节约束偏向来控制位置权重。<br>演示图如下：（下图View中左边缘和右边缘都指定了约束）<br><img src="http://static.zybuluo.com/maplejaw/kuuxjkn52oiktzk0iecnqof1/1.gif" alt="1.gif-1153.2kB"></p>
+<p>此外，我们可以给每个View指定默认Margin。当然，可以单独在Properties右边栏中进行调整。<br><img src="http://static.zybuluo.com/maplejaw/ey03797x2v2ip2fwdqc96m3r/image_1at8gttga639a5j1mr4pntq16s.png" alt="image_1at8gttga639a5j1mr4pntq16s.png-13.4kB"></p>
+<blockquote>
+<p>ps: 需要注意的是在ConstraintLayout中不要使用<code>match_parent</code>而应使用AnySize<code>0dp</code>,</p>
+</blockquote>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>参考资料：<a href="https://developer.android.com/training/constraint-layout/index.html?utm_campaign=android%20studio_launch_2.2_091916&amp;utm_source=anddev&amp;utm_medium=blog" target="_blank" rel="external">Build a Responsive UI with ConstraintLayout</a>。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/09/09/RxJava2-x-浅析/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">RxJava2.x 浅析</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="使用ConstraintLayout构建一个灵活的布局" data-title="使用ConstraintLayout构建一个灵活的布局" data-url="http://www.maplejaw.com/2016/09/22/使用ConstraintLayout构建一个灵活的布局/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"maplejaw"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 maplejaw
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
